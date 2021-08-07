@@ -1,0 +1,35 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace Fidelity.Models
+{
+    public class APIResult<T>
+    {
+        /// <summary>
+        /// Operation Success
+        /// </summary>
+        public bool Success { get; set; } = true;
+
+        /// <summary>
+        /// Error Message
+        /// </summary>
+        public string Message { get; set; }
+
+        /// <summary>
+        /// Http Status
+        /// </summary>
+        public int Status { get; set; }
+
+        /// <summary>
+        /// Http Count
+        /// </summary>
+        public int Count { get; set; }
+
+        /// <summary>
+        /// Object Return
+        /// </summary>
+        public T Object { get; set; }
+    }
+}

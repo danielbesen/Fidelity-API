@@ -15,7 +15,7 @@ namespace Fidelity.Controllers
     {
         //public async Task<JsonResult> Get()
         //{
-        //    try
+        //    try PEPPA PIG POLICIAL
         //    {
         //        dynamic json = new string[] { "Teste", "Teste 2" };
         //        return new JsonResult() { Data = json, JsonRequestBehavior = JsonRequestBehavior.AllowGet };

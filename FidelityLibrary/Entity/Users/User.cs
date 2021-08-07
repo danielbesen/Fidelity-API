@@ -6,24 +6,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FidelityLibrary.Entity
+namespace FidelityLibrary.Entity.Users
 {
-    [Table("cliente", Schema = "public")]
-    public class Client 
+    [Table("usuario", Schema = "public")]
+    public class User
     {
-        [Key, Column("id_cliente")]
+        [Key, Column("id_usuario")]
         public int Id { get; set; }
 
-        [Column("id_usuario")]
-        public int UserId { get; set; }
-
-        [Column("nome")]
+        [Column("nome_usuario")]
         public string Name { get; set; }
 
-        [Column("cpf_cliente")]
-        public string Cpf { get; set; }
+        [Column("tipo_usuario")]
+        public char Type { get; set; }
+
+        [Column("senha")]
+        public char password { get; set; }
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
+
     }
 }

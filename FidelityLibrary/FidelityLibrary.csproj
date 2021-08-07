@@ -65,8 +65,12 @@
   <ItemGroup>
     <Compile Include="DataContext\ApplicationDbContext.cs" />
     <Compile Include="Entity\Clients\Client.cs" />
+    <Compile Include="Entity\Employees\Employee.cs" />
+    <Compile Include="Entity\Entreprises\Enterprise.cs" />
     <Compile Include="Entity\Users\User.cs" />
     <Compile Include="Persistance\ClientDAO\ClientDAO.cs" />
+    <Compile Include="Persistance\EmployeeDAO\EmployeeDAO.cs" />
+    <Compile Include="Persistance\EnterpriseDAO\EnterpriseDAO.cs" />
     <Compile Include="Persistance\Generics\GenericDAO.cs" />
     <Compile Include="Persistance\UserDAO\UserDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

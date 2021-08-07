@@ -2,6 +2,8 @@
 using FidelityLibrary.Entity;
 using FidelityLibrary.Entity.Users;
 using FidelityLibrary.Persistance.ClientDAO;
+using FidelityLibrary.Persistance.EmployeeDAO;
+using FidelityLibrary.Persistance.EnterpriseDAO;
 using FidelityLibrary.Persistance.UserDAO;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -33,7 +35,7 @@ namespace Fidelity.Areas.Login.Controllers
                     {
                         Object = new LoginResult<Object>() {
                             Token = GetToken(oUser.Name, oUser.Password),
-                            Property = oUser.Type == 'C' ? ClientDAO.FindByUserId(oUser.Id) : 
+                            Property = oUser.Type == 'C' ? ClientDAO.FindByUserId(oUser.Id) : oUser.Type == 'E' ? EnterpriseDAO.FindByUserId(oUser.Id) : EmployeeDAO.FindByUserId(oUser.Id)
                         },
                         Message = "Usuário logado com sucesso!"
                     };

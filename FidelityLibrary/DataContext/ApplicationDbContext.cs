@@ -18,5 +18,7 @@ namespace FidelityLibrary.DataContext
 
         public virtual DbSet<Client> DbSetClient { get; set; }
         public virtual DbSet<User> DbSetUser { get; set; }
+        public virtual DbSet<Enterprise> DbSetEnterprise { get; set; }
+        public virtual DbSet<Employee> DbSetEmployee { get; set; }
     }
 }

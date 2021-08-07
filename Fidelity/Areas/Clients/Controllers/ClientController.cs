@@ -1,6 +1,7 @@
-﻿using Fidelity.Areas.Clients.Models;
-using Fidelity.DataContext;
-using Fidelity.Models;
+﻿using Fidelity.Models;
+using FidelityLibrary.DataContext;
+using FidelityLibrary.Entity;
+using FidelityLibrary.Persistance.ClientDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,20 +13,18 @@ namespace Fidelity.Areas.Clients.Controllers
 {
     public class ClientController : ApiController
     {
-        private static List<Client> oClients = new List<Client>();
-
         [System.Web.Http.HttpGet]
         [System.Web.Http.Route("clients")]
         public APIResult<List<Client>> Get()
         {
             try
             {
-                var oResult = new APIResult<List<Client>>
+                var oResult = new APIResult<List<Client>>()
                 {
-                    Count = oClients.Count,
-                    Object = oClients
+                    Object = ClientDAO.FindAll().ToList(),
+                    Count = ClientDAO.FindAll().ToList().Count
                 };
-
+                  
                 return oResult;
             }
             catch (Exception e)
@@ -44,10 +43,10 @@ namespace Fidelity.Areas.Clients.Controllers
         {
             try
             {
-                using (var contexto = new ApplicationDbContext())
+                using (var context = new ApplicationDbContext())
                 {
-                    contexto.DbSetClient.Add(oClient);
-                    contexto.SaveChanges();
+                    context.DbSetClient.Add(oClient);
+                    context.SaveChanges();
                 }
 
                 return new APIResult<string>()

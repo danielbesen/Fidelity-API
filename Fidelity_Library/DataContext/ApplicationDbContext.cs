@@ -1,16 +1,16 @@
-﻿using Fidelity.Areas.Clients.Models;
-using Fidelity.Models;
+﻿using Fidelity_Library.Entity;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Fidelity.DataContext
+namespace Fidelity_Library.DataContext
 {
     public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext():base("PgConnection")
+        public ApplicationDbContext() : base("PgConnection")
         {
 
         }

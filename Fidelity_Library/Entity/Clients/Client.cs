@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
-using System.Web;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Fidelity.Areas.Clients.Models
+namespace Fidelity_Library.Entity
 {
     [Table("cliente", Schema = "public")]
     public class Client

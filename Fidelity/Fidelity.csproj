@@ -208,12 +208,10 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\TesteController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
-    <Compile Include="DataContext\ApplicationDbContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\APIResult.cs" />
-    <Compile Include="Areas\Clients\Models\Client.cs" />
     <Compile Include="Models\ServiceLayerError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -271,6 +269,7 @@
   <ItemGroup>
     <Folder Include="API\" />
     <Folder Include="App_Data\" />
+    <Folder Include="Areas\Clients\Models\" />
     <Folder Include="Areas\Clients\Views\" />
     <Folder Include="Views\Teste\" />
   </ItemGroup>
@@ -302,6 +301,12 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.4.1.slim.min.map" />
     <Content Include="Scripts\jquery-3.4.1.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FidelityLibrary\FidelityLibrary.csproj">
+      <Project>{BE9B2051-6802-4EFC-8C22-D71DE0066F0B}</Project>
+      <Name>FidelityLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

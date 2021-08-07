@@ -1,6 +1,4 @@
-﻿using Fidelity.Areas.Clients.Models;
-using Fidelity.DataContext;
-using Fidelity.Models;
+﻿using Fidelity.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;

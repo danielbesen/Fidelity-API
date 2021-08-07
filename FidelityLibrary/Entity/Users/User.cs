@@ -18,7 +18,7 @@ namespace FidelityLibrary.Entity.Users
         public string Name { get; set; }
 
         [Column("tipo_usuario")]
-        public char Type { get; set; }
+        public string Type { get; set; }
 
         [Column("senha_usuario")]
         public string Password { get; set; }

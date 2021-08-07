@@ -35,7 +35,8 @@ namespace Fidelity.Areas.Login.Controllers
                     {
                         Object = new LoginResult<Object>() {
                             Token = GetToken(oUser.Name, oUser.Password),
-                            Property = oUser.Type == 'C' ? ClientDAO.FindByUserId(oUser.Id) : oUser.Type == 'E' ? EnterpriseDAO.FindByUserId(oUser.Id) : EmployeeDAO.FindByUserId(oUser.Id)
+                            Property = oUser.Type == "C" ? ClientDAO.FindByUserId(oUser.Id) : oUser.Type == "E" ? EnterpriseDAO.FindByUserId(oUser.Id) : EmployeeDAO.FindByUserId(oUser.Id),
+                            Type = oUser.Type.ToString()
                         },
                         Message = "Usuário logado com sucesso!"
                     };

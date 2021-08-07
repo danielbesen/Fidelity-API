@@ -12,7 +12,7 @@ namespace Fidelity.Common
     public class Util
     {
         private static string _baseUrl;
-        private static string _AppKey;
+        //private static string _AppKey;
 
         #region URL BASE
 

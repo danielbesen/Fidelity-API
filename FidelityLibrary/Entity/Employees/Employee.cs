@@ -27,7 +27,7 @@ namespace FidelityLibrary.Entity
         public string Email { get; set; }
 
         [Column("id_status")]
-        public char Status { get; set; }
+        public string Status { get; set; }
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;

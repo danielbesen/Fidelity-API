@@ -16,7 +16,7 @@ namespace FidelityLibrary.Persistance.Generics
     /// <typeparam name="K">ID Key</typeparam>
     public class GenericDAO<T, K> where T : class
     {
-        private static void Insert(T Entity)
+        public static void Insert(T Entity)
         {
             try
             {
@@ -36,7 +36,7 @@ namespace FidelityLibrary.Persistance.Generics
             }
         }
 
-        private static void Update(T Entity)
+        public static void Update(T Entity)
         {
             try
             {
@@ -56,7 +56,7 @@ namespace FidelityLibrary.Persistance.Generics
             }
         }
 
-        private static void Delete(T Entity)
+        public static void Delete(T Entity)
         {
             try
             {

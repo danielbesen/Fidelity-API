@@ -43,11 +43,7 @@ namespace Fidelity.Areas.Clients.Controllers
         {
             try
             {
-                using (var context = new ApplicationDbContext())
-                {
-                    context.DbSetClient.Add(oClient);
-                    context.SaveChanges();
-                }
+                ClientDAO.Insert(oClient);
 
                 return new APIResult<string>()
                 {

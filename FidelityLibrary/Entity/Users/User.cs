@@ -20,8 +20,8 @@ namespace FidelityLibrary.Entity.Users
         [Column("tipo_usuario")]
         public char Type { get; set; }
 
-        [Column("senha")]
-        public char password { get; set; }
+        [Column("senha_usuario")]
+        public string Password { get; set; }
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;

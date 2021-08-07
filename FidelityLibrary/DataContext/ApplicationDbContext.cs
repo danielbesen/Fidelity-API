@@ -1,4 +1,5 @@
 ﻿using FidelityLibrary.Entity;
+using FidelityLibrary.Entity.Users;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -16,5 +17,6 @@ namespace FidelityLibrary.DataContext
         }
 
         public virtual DbSet<Client> DbSetClient { get; set; }
+        public virtual DbSet<User> DbSetUser { get; set; }
     }
 }

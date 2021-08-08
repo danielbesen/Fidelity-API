@@ -16,7 +16,7 @@ namespace FidelityLibrary.Entity.Users
 
         [Column("email")]
         [Required(ErrorMessage = "O Email do usuário é obrigatório", AllowEmptyStrings = false)]
-        public string Email { get; set; }
+        public string Email { get; set; } 
 
         [Column("tipo_usuario")]
         public string Type { get; set; }

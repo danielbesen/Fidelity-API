@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Security.Claims;
 
 namespace Fidelity.Controllers
 {
@@ -21,7 +22,44 @@ namespace Fidelity.Controllers
             return "value";
         }
 
-        // POST api/values
+        [HttpPost]
+        [Route("getname")]
+        public String GetName()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                var identity = User.Identity as ClaimsIdentity;
+                if (identity != null)
+                {
+                    IEnumerable<Claim> claims = identity.Claims;
+                }
+                return "Valid";
+            }
+            else
+            {
+                return "Invalid";
+            }
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route("getname1")]
+        public Object GetName1()
+        {
+            var identity = User.Identity as ClaimsIdentity;
+            if (identity != null)
+            {
+                IEnumerable<Claim> claims = identity.Claims;
+                var name = claims.Where(p => p.Type == "name").FirstOrDefault()?.Value;
+                return new
+                {
+                    data = name
+                };
+
+            }
+            return null;
+        }
+
         public void Post([FromBody] string value)
         {
         }

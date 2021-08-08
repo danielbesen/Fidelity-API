@@ -14,20 +14,19 @@ using System.Security.Claims;
 using System.Text;
 using System.Web;
 using System.Web.Http;
-using System.Web.Mvc;
 
 namespace Fidelity.Areas.Login.Controllers
 {
     public class LoginController : ApiController
     {
-        [System.Web.Http.AllowAnonymous]
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("login")]
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("login")]
         public APIResult<Object> Get(User oUser)
         {
             try
             {
-                if (UserDAO.FindAll().ToList().Any(x => x.Name == oUser.Name && x.Password == oUser.Password))
+                if (UserDAO.FindAll().ToList().Any(x => x.Name == oUser.Name && Encrypt.VerifyPass(oUser.Password, x.Password)))
                 {
                     oUser = UserDAO.GetUser(oUser);
 

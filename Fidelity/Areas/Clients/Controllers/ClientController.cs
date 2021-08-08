@@ -7,25 +7,32 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Http;
-using System.Web.Mvc;
+using System.Security.Claims;
 
 namespace Fidelity.Areas.Clients.Controllers
 {
     public class ClientController : ApiController
     {
-        [System.Web.Http.HttpGet]
-        [System.Web.Http.Route("clients")]
+        [HttpGet]
+        [Authorize]
+        [Route("clients")]
         public APIResult<List<Client>> Get()
         {
             try
             {
-                var oResult = new APIResult<List<Client>>()
+                if (User.Identity.IsAuthenticated)
                 {
-                    Object = ClientDAO.FindAll().ToList(),
-                    Count = ClientDAO.FindAll().ToList().Count
-                };
-                  
-                return oResult;
+                    return new APIResult<List<Client>>()
+                    {
+                        Object = ClientDAO.FindAll().ToList(),
+                        Count = ClientDAO.FindAll().ToList().Count
+                    };
+                }
+                else
+                    return new APIResult<List<Client>>()
+                    {
+                        Message = "Acesso negado!"
+                    };
             }
             catch (Exception e)
             {
@@ -37,18 +44,27 @@ namespace Fidelity.Areas.Clients.Controllers
             }
         }
 
-        [System.Web.Http.HttpPost]
-        [System.Web.Http.Route("clients/add")]
+        [HttpPost]
+        [Authorize]
+        [Route("clients/add")]
         public APIResult<string> Post(Client oClient)
         {
             try
             {
-                ClientDAO.Insert(oClient);
-
-                return new APIResult<string>()
+                if (User.Identity.IsAuthenticated)
                 {
-                    Message = "Cliente inserido com sucesso!"
-                };
+                    ClientDAO.Insert(oClient);
+
+                    return new APIResult<string>()
+                    {
+                        Message = "Cliente inserido com sucesso!"
+                    };
+                }
+                else
+                    return new APIResult<string>()
+                    {
+                        Message = "Acesso negado!"
+                    };
             }
             catch (Exception e)
             {

@@ -30,14 +30,14 @@ namespace Fidelity.Areas.Login.Controllers
             {
                 if (UserDAO.FindAll().ToList().Any(x => x.Email == oUser.Email && Encrypt.VerifyPass(oUser.Password, x.Password)))
                 {
-                    oUser = UserDAO.GetUser(oUser);
+                    var oNewUser = UserDAO.GetUser(oUser);
 
                     return new APIResult<Object>()
                     {
                         Object = new LoginResult<Object>()
                         {
                             Token = Encrypt.GetToken(oUser.Email, oUser.Password),
-                            Property = oUser.Type == "C" ? ClientDAO.FindByUserId(oUser.Id) : oUser.Type == "E" ? EnterpriseDAO.FindByUserId(oUser.Id) : EmployeeDAO.FindByUserId(oUser.Id),
+                            Property = oUser.Type == "C" ? ClientDAO.FindByUserId(oNewUser.Id) : oUser.Type == "E" ? EnterpriseDAO.FindByUserId(oNewUser.Id) : EmployeeDAO.FindByUserId(oNewUser.Id),
                             Type = oUser.Type.ToString()
                         },
                         Message = "Usuário logado com sucesso!"
@@ -72,7 +72,7 @@ namespace Fidelity.Areas.Login.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("signup/cliente")]
+        [Route("signup/client")]
         public APIResult<string> Signup(ClientViewModel Model)
         {
             try

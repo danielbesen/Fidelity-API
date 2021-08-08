@@ -14,9 +14,9 @@ namespace FidelityLibrary.Entity.Users
         [Key, Column("id_usuario")]
         public int Id { get; set; }
 
-        [Column("nome_usuario")]
+        [Column("email")]
         [Required(ErrorMessage = "O Email do usuário é obrigatório", AllowEmptyStrings = false)]
-        public string Name { get; set; }
+        public string Email { get; set; }
 
         [Column("tipo_usuario")]
         public string Type { get; set; }

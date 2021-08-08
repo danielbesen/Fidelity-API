@@ -18,7 +18,7 @@ namespace FidelityLibrary.Persistance.UserDAO
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    LoginUser = context.DbSetUser.AsNoTracking().FirstOrDefault(x => x.Name == LoginUser.Name);
+                    LoginUser = context.DbSetUser.AsNoTracking().FirstOrDefault(x => x.Email == LoginUser.Email);
                 }
 
                 return LoginUser;

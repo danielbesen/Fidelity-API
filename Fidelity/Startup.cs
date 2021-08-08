@@ -26,7 +26,7 @@ namespace Fidelity
                         ValidateIssuerSigningKey = true,
                         ValidIssuer = "https://localhost:44387", //some string, normally web url,  
                         ValidAudience = "https://localhost:44387",
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("my_secret_key_12345"))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("fidelity_98554"))
                     }
                 });
         }

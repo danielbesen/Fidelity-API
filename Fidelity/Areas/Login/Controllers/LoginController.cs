@@ -28,7 +28,7 @@ namespace Fidelity.Areas.Login.Controllers
         {
             try
             {
-                if (UserDAO.FindAll().ToList().Any(x => x.Name == oUser.Name && Encrypt.VerifyPass(oUser.Password, x.Password)))
+                if (UserDAO.FindAll().ToList().Any(x => x.Email == oUser.Email && Encrypt.VerifyPass(oUser.Password, x.Password)))
                 {
                     oUser = UserDAO.GetUser(oUser);
 
@@ -36,14 +36,14 @@ namespace Fidelity.Areas.Login.Controllers
                     {
                         Object = new LoginResult<Object>()
                         {
-                            Token = Encrypt.GetToken(oUser.Name, oUser.Password),
+                            Token = Encrypt.GetToken(oUser.Email, oUser.Password),
                             Property = oUser.Type == "C" ? ClientDAO.FindByUserId(oUser.Id) : oUser.Type == "E" ? EnterpriseDAO.FindByUserId(oUser.Id) : EmployeeDAO.FindByUserId(oUser.Id),
                             Type = oUser.Type.ToString()
                         },
                         Message = "Usuário logado com sucesso!"
                     };
                 }
-                else if (UserDAO.FindAll().Any(x => x.Name == oUser.Name))
+                else if (UserDAO.FindAll().Any(x => x.Email == oUser.Email))
                 {
                     return new APIResult<Object>()
                     {
@@ -72,12 +72,12 @@ namespace Fidelity.Areas.Login.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        [Route("signup")]
+        [Route("signup/cliente")]
         public APIResult<string> Signup(ClientViewModel Model)
         {
             try
             {
-                if (UserDAO.FindAll().ToList().Any(x => x.Name == Model.Email))
+                if (UserDAO.FindAll().ToList().Any(x => x.Email == Model.Email))
                 {
                     return new APIResult<string>()
                     {
@@ -90,14 +90,14 @@ namespace Fidelity.Areas.Login.Controllers
                     //fazer uma transaction aqui pra caso 1 insert der falha, voltar tudo
                     UserDAO.Insert(new User()
                     {
-                        Name = Model.Email,
+                        Email = Model.Email,
                         Type = Model.Type,
                         Password = Encrypt.EncryptPass(Model.Password)
                     });
 
                     ClientDAO.Insert(new Client()
                     {
-                        UserId = UserDAO.FindAll().FirstOrDefault(x => x.Name == Model.Email).Id,
+                        UserId = UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email).Id,
                         Name = Model.Name,
                         Cpf = Model.Cpf
                     });

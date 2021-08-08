@@ -61,7 +61,7 @@ namespace FidelityLibrary.Models
 
         public static Object GetToken(string Username, string Password)
         {
-            string key = "my_secret_key_12345"; //Secret key which will be used later during validation    
+            string key = "fidelity_98554"; //Secret key which will be used later during validation    
             var issuer = "https://localhost:44387";  //normally this will be your site URL    
 
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));

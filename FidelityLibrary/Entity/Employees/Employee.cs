@@ -24,6 +24,7 @@ namespace FidelityLibrary.Entity
         public byte[] Image { get; set; }
 
         [Column("email")]
+        [Required(ErrorMessage = "O Email do funcionário é obrigatório", AllowEmptyStrings = false)]
         public string Email { get; set; }
 
         [Column("id_status")]

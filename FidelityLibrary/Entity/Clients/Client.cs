@@ -18,9 +18,11 @@ namespace FidelityLibrary.Entity
         public int UserId { get; set; }
 
         [Column("nome")]
+        [Required(ErrorMessage = "O nome do usuário é obrigatório", AllowEmptyStrings = false)]
         public string Name { get; set; }
 
         [Column("cpf_cliente")]
+        [Required(ErrorMessage = "O cpf é obrigatório", AllowEmptyStrings = false)]
         public string Cpf { get; set; }
 
         [Column("dt_inclusao")]

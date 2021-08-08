@@ -1,6 +1,8 @@
-﻿using Fidelity.Models;
+﻿using Fidelity.Areas.Clients.Models;
+using Fidelity.Models;
 using FidelityLibrary.Entity;
 using FidelityLibrary.Entity.Users;
+using FidelityLibrary.Models;
 using FidelityLibrary.Persistance.ClientDAO;
 using FidelityLibrary.Persistance.EmployeeDAO;
 using FidelityLibrary.Persistance.EnterpriseDAO;
@@ -19,10 +21,10 @@ namespace Fidelity.Areas.Login.Controllers
 {
     public class LoginController : ApiController
     {
-        [HttpGet]
+        [HttpPost]
         [AllowAnonymous]
         [Route("login")]
-        public APIResult<Object> Get(User oUser)
+        public APIResult<Object> Login(User oUser)
         {
             try
             {
@@ -32,8 +34,9 @@ namespace Fidelity.Areas.Login.Controllers
 
                     return new APIResult<Object>()
                     {
-                        Object = new LoginResult<Object>() {
-                            Token = GetToken(oUser.Name, oUser.Password),
+                        Object = new LoginResult<Object>()
+                        {
+                            Token = Encrypt.GetToken(oUser.Name, oUser.Password),
                             Property = oUser.Type == "C" ? ClientDAO.FindByUserId(oUser.Id) : oUser.Type == "E" ? EnterpriseDAO.FindByUserId(oUser.Id) : EmployeeDAO.FindByUserId(oUser.Id),
                             Type = oUser.Type.ToString()
                         },
@@ -67,28 +70,52 @@ namespace Fidelity.Areas.Login.Controllers
             }
         }
 
-        public Object GetToken(string Username, string Password)
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("signup")]
+        public APIResult<string> Signup(ClientViewModel Model)
         {
-            string key = "my_secret_key_12345"; //Secret key which will be used later during validation    
-            var issuer = "https://localhost:44387";  //normally this will be your site URL    
+            try
+            {
+                if (UserDAO.FindAll().ToList().Any(x => x.Name == Model.Email))
+                {
+                    return new APIResult<string>()
+                    {
+                        Success = false,
+                        Message = "E-mail já cadastrado!",
+                    };
+                }
+                else
+                {
+                    //fazer uma transaction aqui pra caso 1 insert der falha, voltar tudo
+                    UserDAO.Insert(new User()
+                    {
+                        Name = Model.Email,
+                        Type = Model.Type,
+                        Password = Encrypt.EncryptPass(Model.Password)
+                    });
 
-            var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(key));
-            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+                    ClientDAO.Insert(new Client()
+                    {
+                        UserId = UserDAO.FindAll().FirstOrDefault(x => x.Name == Model.Email).Id,
+                        Name = Model.Name,
+                        Cpf = Model.Cpf
+                    });
 
-            //Create a List of Claims, Keep claims name short    
-            var permClaims = new List<Claim>();
-            permClaims.Add(new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()));
-            permClaims.Add(new Claim("username", Username));
-            permClaims.Add(new Claim("password", Password));
-
-            //Create Security Token object by giving required parameters    
-            var token = new JwtSecurityToken(issuer, //Issure    
-                            issuer,  //Audience    
-                            permClaims,
-                            expires: DateTime.Now.AddDays(1),
-                            signingCredentials: credentials);
-            var jwt_token = new JwtSecurityTokenHandler().WriteToken(token);
-            return new { data = jwt_token };
+                    return new APIResult<string>()
+                    {
+                        Message = "Cliente cadastrado com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<string>()
+                {
+                    Success = false,
+                    Message = "Erro ao validar Login: " + e.Message,
+                };
+            }
         }
     }
 }

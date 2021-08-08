@@ -20,7 +20,7 @@ namespace Fidelity.Models
         /// <summary>
         /// Http Status
         /// </summary>
-        public int Status { get; set; }
+        //public int Status { get; set; }
 
         /// <summary>
         /// Http Count

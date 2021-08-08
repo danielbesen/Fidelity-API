@@ -1,5 +1,6 @@
 ﻿using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Users;
+using FidelityLibrary.Models;
 using FidelityLibrary.Persistance.Generics;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,7 @@ namespace FidelityLibrary.Persistance.UserDAO
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    LoginUser = context.DbSetUser.AsNoTracking().FirstOrDefault(x => x.Name == LoginUser.Name && x.Password == LoginUser.Password);
+                    LoginUser = context.DbSetUser.AsNoTracking().FirstOrDefault(x => x.Name == LoginUser.Name);
                 }
 
                 return LoginUser;

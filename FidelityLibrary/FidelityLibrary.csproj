@@ -95,6 +95,7 @@
     <Compile Include="Persistance\Generics\GenericDAO.cs" />
     <Compile Include="Persistance\UserDAO\UserDAO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Util\Encrypt.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

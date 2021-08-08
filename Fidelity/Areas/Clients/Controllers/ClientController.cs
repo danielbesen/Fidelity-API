@@ -31,6 +31,7 @@ namespace Fidelity.Areas.Clients.Controllers
                 else
                     return new APIResult<List<Client>>()
                     {
+                        Success = false,
                         Message = "Acesso negado!"
                     };
             }
@@ -63,6 +64,7 @@ namespace Fidelity.Areas.Clients.Controllers
                 else
                     return new APIResult<string>()
                     {
+                        Success = false,
                         Message = "Acesso negado!"
                     };
             }

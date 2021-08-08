@@ -42,7 +42,7 @@ namespace FidelityLibrary.Entity
         public string Branch { get; set; }
 
         [Column("id_plano")]
-        public int MembershipId { get; set; }
+        public int? MembershipId { get; set; }
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;

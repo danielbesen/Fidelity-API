@@ -15,12 +15,14 @@ namespace FidelityLibrary.Entity.Users
         public int Id { get; set; }
 
         [Column("nome_usuario")]
+        [Required(ErrorMessage = "O Email do usuário é obrigatório", AllowEmptyStrings = false)]
         public string Name { get; set; }
 
         [Column("tipo_usuario")]
         public string Type { get; set; }
 
         [Column("senha_usuario")]
+        [Required(ErrorMessage = "A senha do usuário é obrigatória", AllowEmptyStrings = false)]
         public string Password { get; set; }
 
         [Column("dt_inclusao")]

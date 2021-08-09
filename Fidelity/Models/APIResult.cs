@@ -30,6 +30,6 @@ namespace Fidelity.Models
         /// <summary>
         /// Object Return
         /// </summary>
-        public T Object { get; set; }
+        public T Result { get; set; }
     }
 }

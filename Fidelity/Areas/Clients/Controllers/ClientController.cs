@@ -24,7 +24,7 @@ namespace Fidelity.Areas.Clients.Controllers
                 {
                     return new APIResult<List<Client>>()
                     {
-                        Object = ClientDAO.FindAll().ToList(),
+                        Result = ClientDAO.FindAll().ToList(),
                         Count = ClientDAO.FindAll().ToList().Count
                     };
                 }

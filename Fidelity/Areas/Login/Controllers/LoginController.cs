@@ -34,7 +34,7 @@ namespace Fidelity.Areas.Login.Controllers
 
                     return new APIResult<Object>()
                     {
-                        Object = new LoginResult<Object>()
+                        Result = new LoginResult<Object>()
                         {
                             Token = Encrypt.GetToken(oUser.Email, oUser.Password),
                             Property = oUser.Type == "C" ? ClientDAO.FindByUserId(oNewUser.Id) : oUser.Type == "E" ? EnterpriseDAO.FindByUserId(oNewUser.Id) : EmployeeDAO.FindByUserId(oNewUser.Id),

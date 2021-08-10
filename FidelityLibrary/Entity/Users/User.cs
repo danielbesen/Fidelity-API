@@ -11,6 +11,7 @@ namespace FidelityLibrary.Entity.Users
     [Table("usuario", Schema = "public")]
     public class User
     {
+
         [Key, Column("id_usuario")]
         public int Id { get; set; }
 

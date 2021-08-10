@@ -21,6 +21,11 @@ namespace Fidelity.Areas.Login.Controllers
 {
     public class LoginController : ApiController
     {
+        /// <summary>
+        /// Requisição para logar o usuário no sistema.
+        /// </summary>
+        /// <param name="oUser"></param>
+        /// <returns>API Result Object</returns>
         [HttpPost]
         [AllowAnonymous]
         [Route("login")]
@@ -63,54 +68,6 @@ namespace Fidelity.Areas.Login.Controllers
             catch (Exception e)
             {
                 return new APIResult<Object>()
-                {
-                    Success = false,
-                    Message = "Erro ao validar Login: " + e.Message,
-                };
-            }
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("signup/client")]
-        public APIResult<string> Signup(ClientViewModel Model)
-        {
-            try
-            {
-                if (UserDAO.FindAll().ToList().Any(x => x.Email == Model.Email))
-                {
-                    return new APIResult<string>()
-                    {
-                        Success = false,
-                        Message = "E-mail já cadastrado!",
-                    };
-                }
-                else
-                {
-                    //fazer uma transaction aqui pra caso 1 insert der falha, voltar tudo
-                    UserDAO.Insert(new User()
-                    {
-                        Email = Model.Email,
-                        Type = Model.Type,
-                        Password = Encrypt.EncryptPass(Model.Password)
-                    });
-
-                    ClientDAO.Insert(new Client()
-                    {
-                        UserId = UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email).Id,
-                        Name = Model.Name,
-                        Cpf = Model.Cpf
-                    });
-
-                    return new APIResult<string>()
-                    {
-                        Message = "Cliente cadastrado com sucesso!"
-                    };
-                }
-            }
-            catch (Exception e)
-            {
-                return new APIResult<string>()
                 {
                     Success = false,
                     Message = "Erro ao validar Login: " + e.Message,

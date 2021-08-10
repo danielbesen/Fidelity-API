@@ -4,6 +4,19 @@
         <name>Fidelity</name>
     </assembly>
     <members>
+        <member name="M:Fidelity.Areas.Clients.Controllers.ClientController.Get">
+            <summary>
+            Requisição para buscar todos os clientes no sistema.
+            </summary>
+            <returns>Client List Object></returns>
+        </member>
+        <member name="M:Fidelity.Areas.Clients.Controllers.ClientController.Signup(Fidelity.Areas.Clients.Models.ClientViewModel)">
+            <summary>
+            Requisição para cadastrar cliente no sistema.
+            </summary>
+            <param name="Model"></param>
+            <returns>API Result Object</returns>
+        </member>
         <member name="M:Fidelity.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
             <summary>
             Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
@@ -480,6 +493,13 @@
             Initializes a new instance of the <see cref="T:Fidelity.Areas.HelpPage.XmlDocumentationProvider"/> class.
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
+        </member>
+        <member name="M:Fidelity.Areas.Login.Controllers.LoginController.Login(FidelityLibrary.Entity.Users.User)">
+            <summary>
+            Requisição para logar o usuário no sistema.
+            </summary>
+            <param name="oUser"></param>
+            <returns>API Result Object</returns>
         </member>
         <member name="T:Fidelity.Common.Util.IgnoreEmptyEnumerablesResolver">
             <summary>

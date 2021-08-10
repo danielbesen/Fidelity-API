@@ -8,11 +8,19 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 using System.Security.Claims;
+using Fidelity.Areas.Clients.Models;
+using FidelityLibrary.Persistance.UserDAO;
+using FidelityLibrary.Entity.Users;
+using FidelityLibrary.Models;
 
 namespace Fidelity.Areas.Clients.Controllers
 {
     public class ClientController : ApiController
     {
+        /// <summary>
+        /// Requisição para buscar todos os clientes no sistema.
+        /// </summary>
+        /// <returns>Client List Object></returns>
         [HttpGet]
         [Authorize]
         [Route("clients")]
@@ -45,35 +53,55 @@ namespace Fidelity.Areas.Clients.Controllers
             }
         }
 
+        /// <summary>
+        /// Requisição para cadastrar cliente no sistema.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>API Result Object</returns>
         [HttpPost]
-        [Authorize]
-        [Route("clients/add")]
-        public APIResult<string> Post(Client oClient)
+        [AllowAnonymous]
+        [Route("signup/client")]
+        public APIResult<string> Signup(ClientViewModel Model)
         {
             try
             {
-                if (User.Identity.IsAuthenticated)
+                if (UserDAO.FindAll().ToList().Any(x => x.Email == Model.Email))
                 {
-                    ClientDAO.Insert(oClient);
-
-                    return new APIResult<string>()
-                    {
-                        Message = "Cliente inserido com sucesso!"
-                    };
-                }
-                else
                     return new APIResult<string>()
                     {
                         Success = false,
-                        Message = "Acesso negado!"
+                        Message = "E-mail já cadastrado!",
                     };
+                }
+                else
+                {
+                    //fazer uma transaction aqui pra caso 1 insert der falha, voltar tudo
+                    UserDAO.Insert(new User()
+                    {
+                        Email = Model.Email,
+                        Type = Model.Type,
+                        Password = Encrypt.EncryptPass(Model.Password)
+                    });
+
+                    ClientDAO.Insert(new Client()
+                    {
+                        UserId = UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email).Id,
+                        Name = Model.Name,
+                        Cpf = Model.Cpf
+                    });
+
+                    return new APIResult<string>()
+                    {
+                        Message = "Cliente cadastrado com sucesso!"
+                    };
+                }
             }
             catch (Exception e)
             {
                 return new APIResult<string>()
                 {
                     Success = false,
-                    Message = "Erro ao inserir novo cliente! " + e.Message,
+                    Message = "Erro ao validar Login: " + e.Message,
                 };
             }
         }

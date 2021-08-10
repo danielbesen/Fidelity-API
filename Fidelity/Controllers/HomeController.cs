@@ -10,7 +10,7 @@ namespace Fidelity.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Title = "Home Page";
+            ViewBag.Title = "Fidelity API";
 
             return View();
         }

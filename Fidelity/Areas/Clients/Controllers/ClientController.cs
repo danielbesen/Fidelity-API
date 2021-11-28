@@ -12,6 +12,7 @@ using Fidelity.Areas.Clients.Models;
 using FidelityLibrary.Persistance.UserDAO;
 using FidelityLibrary.Entity.Users;
 using FidelityLibrary.Models;
+using FidelityLibrary.Persistance.Generics;
 
 namespace Fidelity.Areas.Clients.Controllers
 {
@@ -76,19 +77,39 @@ namespace Fidelity.Areas.Clients.Controllers
                 else
                 {
                     //fazer uma transaction aqui pra caso 1 insert der falha, voltar tudo
-                    UserDAO.Insert(new User()
+                    //UserDAO.Insert(new User()
+                    //{
+                    //    Email = Model.Email,
+                    //    Type = Model.Type,
+                    //    Password = Encrypt.EncryptPass(Model.Password)
+                    //});
+
+                    //ClientDAO.Insert(new Client()
+                    //{
+                    //    UserId = UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email)?.Id,
+                    //    Name = Model.Name,
+                    //    Cpf = Model.Cpf
+                    //});
+
+                    #region Tentando fazer a criação com transaction
+
+                    var user1 = new User()
                     {
                         Email = Model.Email,
                         Type = Model.Type,
                         Password = Encrypt.EncryptPass(Model.Password)
-                    });
+                    };
 
-                    ClientDAO.Insert(new Client()
+                    var client1 = new Client()
                     {
-                        UserId = UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email).Id,
+                        UserId = UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email)?.Id,
                         Name = Model.Name,
                         Cpf = Model.Cpf
-                    });
+                    };
+
+                    GenericDAO.InsertWithTransaction(user1, client1);
+
+                    #endregion
 
                     return new APIResult<string>()
                     {

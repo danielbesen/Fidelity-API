@@ -12,10 +12,10 @@ namespace FidelityLibrary.Entity
     public class Client 
     {
         [Key, Column("id_cliente")]
-        public int Id { get; set; }
+        public int? Id { get; set; }
 
         [Column("id_usuario")]
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
 
         [Column("nome")]
         [Required(ErrorMessage = "O nome do usuário é obrigatório", AllowEmptyStrings = false)]

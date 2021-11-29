@@ -114,25 +114,5 @@ namespace FidelityLibrary.Persistance.Generics
             }
         }
 
-        public static void InsertWithTransaction(T Entity, T Entity1)
-        {
-            try
-            {
-                using (var context = new ApplicationDbContext())
-                {
-                    using (var dbContextTransaction = context.Database.BeginTransaction())
-                    {
-                        context.Entry(Entity).State = EntityState.Added;
-                        context.Entry(Entity1).State = EntityState.Added;
-                        context.SaveChanges();
-                        dbContextTransaction.Commit();
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                throw new Exception("Erro ao fazer insersão de entidades: " + e);
-            }
-        }
     }
 }

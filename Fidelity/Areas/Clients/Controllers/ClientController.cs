@@ -93,21 +93,21 @@ namespace Fidelity.Areas.Clients.Controllers
 
                     #region Tentando fazer a criação com transaction
 
-                    var user1 = new User()
+                    var user = new User()
                     {
                         Email = Model.Email,
                         Type = Model.Type,
                         Password = Encrypt.EncryptPass(Model.Password)
                     };
 
-                    var client1 = new Client()
+                    var client = new Client()
                     {
                         UserId = UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email)?.Id,
                         Name = Model.Name,
                         Cpf = Model.Cpf
                     };
 
-                    GenericDAO.InsertWithTransaction(user1, client1);
+                    UserDAO.SaveNewClientUser<User, Client>(user, client);
 
                     #endregion
 

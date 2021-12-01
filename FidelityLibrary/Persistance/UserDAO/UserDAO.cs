@@ -30,7 +30,7 @@ namespace FidelityLibrary.Persistance.UserDAO
             }
         }
 
-        public static void SaveNewClientUser<A, B>(A EntityUser, B EntityClient)
+        public static void SaveNewUser<A, B>(A EntityUser, B EntityClient)
         {
             try
             {
@@ -49,6 +49,11 @@ namespace FidelityLibrary.Persistance.UserDAO
             {
                 throw new Exception("Transaction insert error: " + e);
             }
+        }
+
+        public static void SaveNewClientUser<T1, T2>(T1 user, T2 client)
+        {
+            throw new NotImplementedException();
         }
     }
 }

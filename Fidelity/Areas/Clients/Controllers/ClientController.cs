@@ -76,11 +76,14 @@ namespace Fidelity.Areas.Clients.Controllers
                 }
                 else
                 {
+
+                    #region Legacy Code
+
                     //fazer uma transaction aqui pra caso 1 insert der falha, voltar tudo
                     //UserDAO.Insert(new User()
                     //{
                     //    Email = Model.Email,
-                    //    Type = Model.Type,
+                    //////    Type = Model.Type,
                     //    Password = Encrypt.EncryptPass(Model.Password)
                     //});
 
@@ -91,7 +94,9 @@ namespace Fidelity.Areas.Clients.Controllers
                     //    Cpf = Model.Cpf
                     //});
 
-                    #region Tentando fazer a criação com transaction
+                    #endregion
+
+                    #region Saving User and Client
 
                     var user = new User()
                     {
@@ -109,12 +114,13 @@ namespace Fidelity.Areas.Clients.Controllers
 
                     UserDAO.SaveNewClientUser<User, Client>(user, client);
 
-                    #endregion
 
                     return new APIResult<string>()
                     {
                         Message = "Cliente cadastrado com sucesso!"
                     };
+
+                    #endregion
                 }
             }
             catch (Exception e)

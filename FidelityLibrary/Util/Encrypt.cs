@@ -35,7 +35,7 @@ namespace FidelityLibrary.Models
             }
         }
 
-        private static string GetHash(HashAlgorithm hashAlgorithm, string input)
+        public static string GetHash(HashAlgorithm hashAlgorithm, string input)
         {
 
             byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
@@ -50,7 +50,7 @@ namespace FidelityLibrary.Models
             return sBuilder.ToString();
         }
 
-        private static bool VerifyHash(HashAlgorithm hashAlgorithm, string input, string hash)
+        public static bool VerifyHash(HashAlgorithm hashAlgorithm, string input, string hash)
         {
             var hashOfInput = GetHash(hashAlgorithm, input);
 

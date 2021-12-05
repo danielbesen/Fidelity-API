@@ -21,6 +21,9 @@ namespace FidelityLibrary.Entity.Users
         [Column("tipo_usuario")]
         public string Type { get; set; }
 
+        [Column("img_func")]
+        public byte[] Image { get; set; }
+
         [Column("senha_usuario")]
         [Required(ErrorMessage = "A senha do usuário é obrigatória", AllowEmptyStrings = false)]
         public string Password { get; set; }
@@ -28,5 +31,7 @@ namespace FidelityLibrary.Entity.Users
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
 
+        [Column("dt_alteracao")]
+        public DateTime AlterDate { get; set; }
     }
 }

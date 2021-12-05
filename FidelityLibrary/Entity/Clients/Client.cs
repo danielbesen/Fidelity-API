@@ -27,5 +27,8 @@ namespace FidelityLibrary.Entity
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
+
+        [Column("dt_alteracao")]
+        public DateTime AlterDate { get; set; }
     }
 }

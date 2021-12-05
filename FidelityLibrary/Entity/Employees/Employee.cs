@@ -20,17 +20,16 @@ namespace FidelityLibrary.Entity
         [Column("id_empresa")]
         public int EnterpriseId { get; set; }
 
-        [Column("img_func")]
-        public byte[] Image { get; set; }
-
-        [Column("email")]
-        [Required(ErrorMessage = "O Email do funcionário é obrigatório", AllowEmptyStrings = false)]
-        public string Email { get; set; }
-
         [Column("id_status")]
         public string Status { get; set; }
 
+        [Column("tipo_acesso")]
+        public int AccessType { get; set; }
+
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
+
+        [Column("dt_alteracao")]
+        public DateTime AlterDate { get; set; }
     }
 }

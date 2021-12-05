@@ -98,6 +98,9 @@
     <Compile Include="Util\Encrypt.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\Fidelity\.editorconfig">
+      <Link>.editorconfig</Link>
+    </None>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>

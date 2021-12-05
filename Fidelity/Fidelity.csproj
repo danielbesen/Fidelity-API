@@ -243,8 +243,6 @@
     <Compile Include="Areas\Login\LoginResult.cs" />
     <Compile Include="Common\Util.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\TesteController.cs" />
-    <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -309,6 +307,7 @@
     <Folder Include="API\" />
     <Folder Include="Areas\Clients\Views\" />
     <Folder Include="Areas\Login\Views\Login\" />
+    <Folder Include="Services\" />
     <Folder Include="Views\Teste\" />
   </ItemGroup>
   <ItemGroup>

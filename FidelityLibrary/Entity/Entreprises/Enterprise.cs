@@ -17,8 +17,8 @@ namespace FidelityLibrary.Entity
         [Column("id_usuario")]
         public int UserId { get; set; }
 
-        [Column("email")]
-        public string Email { get; set; }
+        [Column("nome")]
+        public string Name { get; set; }
 
         [Column("cnpj")]
         public string Cnpj { get; set; }
@@ -44,7 +44,13 @@ namespace FidelityLibrary.Entity
         [Column("id_plano")]
         public int? MembershipId { get; set; }
 
+        [Column("ativo")]
+        public bool Active { get; set; } = true;
+
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
+
+        [Column("dt_alteracao")]
+        public DateTime AlterDate { get; set; } 
     }
 }

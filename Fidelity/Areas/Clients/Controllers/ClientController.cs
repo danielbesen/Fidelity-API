@@ -112,8 +112,7 @@ namespace Fidelity.Areas.Clients.Controllers
                         Cpf = Model.Cpf
                     };
 
-                    UserDAO.SaveNewClientUser<User, Client>(user, client);
-
+                    UserDAO.SaveNewUser<User, Client>(user, client);
 
                     return new APIResult<string>()
                     {

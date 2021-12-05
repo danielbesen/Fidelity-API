@@ -30,19 +30,14 @@ namespace FidelityLibrary.Persistance.UserDAO
             }
         }
 
-        public static void SaveNewUser<A, B>(A EntityUser, B EntityClient)
+        public static void SaveUser(User User, ApplicationDbContext oContext)
         {
             try
             {
-                using (var context = new ApplicationDbContext())
+                using (oContext)
                 {
-                    using (var dbContextTransaction = context.Database.BeginTransaction())
-                    {
-                        context.Entry(EntityUser).State = EntityState.Added;
-                        context.Entry(EntityClient).State = EntityState.Added;
-                        context.SaveChanges();
-                        dbContextTransaction.Commit();
-                    }
+                    oContext.Entry(User).State = EntityState.Added;
+                    oContext.SaveChanges();
                 }
             }
             catch (Exception e)

@@ -10,7 +10,7 @@
             </summary>
             <returns>Client List Object></returns>
         </member>
-        <member name="M:Fidelity.Areas.Clients.Controllers.ClientController.Signup(Fidelity.Areas.Clients.Models.ClientViewModel)">
+        <member name="M:Fidelity.Areas.Clients.Controllers.ClientController.Signup(Fidelity.Areas.Users.Models.UserViewModel)">
             <summary>
             Requisição para cadastrar cliente no sistema.
             </summary>

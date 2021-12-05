@@ -13,6 +13,7 @@ using FidelityLibrary.Persistance.UserDAO;
 using FidelityLibrary.Entity.Users;
 using FidelityLibrary.Models;
 using FidelityLibrary.Persistance.Generics;
+using Fidelity.Areas.Users.Models;
 
 namespace Fidelity.Areas.Clients.Controllers
 {
@@ -62,7 +63,7 @@ namespace Fidelity.Areas.Clients.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("signup/client")]
-        public APIResult<string> Signup(ClientViewModel Model)
+        public APIResult<string> Signup(UserViewModel Model)
         {
             try
             {
@@ -76,49 +77,47 @@ namespace Fidelity.Areas.Clients.Controllers
                 }
                 else
                 {
-
-                    #region Legacy Code
-
-                    //fazer uma transaction aqui pra caso 1 insert der falha, voltar tudo
-                    //UserDAO.Insert(new User()
-                    //{
-                    //    Email = Model.Email,
-                    //////    Type = Model.Type,
-                    //    Password = Encrypt.EncryptPass(Model.Password)
-                    //});
-
-                    //ClientDAO.Insert(new Client()
-                    //{
-                    //    UserId = UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email)?.Id,
-                    //    Name = Model.Name,
-                    //    Cpf = Model.Cpf
-                    //});
-
-                    #endregion
-
                     #region Saving User and Client
 
-                    var user = new User()
+                    try
                     {
-                        Email = Model.Email,
-                        Type = Model.Type,
-                        Password = Encrypt.EncryptPass(Model.Password)
-                    };
+                        using (var context = new ApplicationDbContext())
+                        {
+                            using (var dbContextTransaction = context.Database.BeginTransaction())
+                            {
+                                var user = new User()
+                                {
+                                    Name = Model.Name,
+                                    Email = Model.Email,
+                                    Type = Model.Type,
+                                    Active = "1",
+                                    Password = Encrypt.EncryptPass(Model.Password)
+                                };
 
-                    var client = new Client()
+                                UserDAO.SaveUser(user, context);
+
+                                var client = new Client()
+                                {
+                                    UserId = UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email)?.Id,
+                                    Name = Model.Client.Name,
+                                    Cpf = Model.Client.Cpf
+                                };
+
+                                ClientDAO.SaveClient(client, context);
+
+                                dbContextTransaction.Commit();
+
+                                return new APIResult<string>()
+                                {
+                                    Message = "Cliente cadastrado com sucesso!"
+                                };
+                            }
+                        }
+                    }
+                    catch (Exception e)
                     {
-                        UserId = UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email)?.Id,
-                        Name = Model.Name,
-                        Cpf = Model.Cpf
-                    };
-
-                    UserDAO.SaveNewUser<User, Client>(user, client);
-
-                    return new APIResult<string>()
-                    {
-                        Message = "Cliente cadastrado com sucesso!"
-                    };
-
+                        throw new Exception("Transaction insert error: " + e);
+                    }
                     #endregion
                 }
             }

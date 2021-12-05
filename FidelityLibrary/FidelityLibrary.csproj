@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext\ApplicationDbContext.cs" />
+    <Compile Include="Entity\Checkpoints\Checkpoint.cs" />
     <Compile Include="Entity\Clients\Client.cs" />
     <Compile Include="Entity\Employees\Employee.cs" />
     <Compile Include="Entity\Entreprises\Enterprise.cs" />

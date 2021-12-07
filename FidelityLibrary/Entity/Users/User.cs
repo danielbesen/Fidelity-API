@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace FidelityLibrary.Entity.Users
 {
-    [Table("public.usuario", Schema = "public")]
+    [Table("usuario", Schema = "public")]
     public class User
     {
         [Key, Column("id_usuario")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Column("nome_usuario")]

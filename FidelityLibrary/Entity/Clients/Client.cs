@@ -11,7 +11,7 @@ namespace FidelityLibrary.Entity
     [Table("cliente", Schema = "public")]
     public class Client 
     {
-        [Key, Column("id_clienteessada")]
+        [Key, Column("id_cliente")]
         public int? Id { get; set; }
 
         [Column("id_usuario")]

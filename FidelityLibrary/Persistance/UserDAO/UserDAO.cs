@@ -34,11 +34,8 @@ namespace FidelityLibrary.Persistance.UserDAO
         {
             try
             {
-                using (oContext)
-                {
-                    oContext.Entry(User).State = EntityState.Added;
-                    oContext.SaveChanges();
-                }
+                oContext.Entry(User).State = EntityState.Added;
+                oContext.SaveChanges();
             }
             catch (Exception e)
             {

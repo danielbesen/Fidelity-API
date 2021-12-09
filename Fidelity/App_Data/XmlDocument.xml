@@ -10,13 +10,6 @@
             </summary>
             <returns>Client List Object></returns>
         </member>
-        <member name="M:Fidelity.Areas.Clients.Controllers.ClientController.Signup(Fidelity.Areas.Users.Models.UserViewModel)">
-            <summary>
-            Requisição para cadastrar cliente no sistema.
-            </summary>
-            <param name="Model"></param>
-            <returns>API Result Object</returns>
-        </member>
         <member name="M:Fidelity.Areas.HelpPage.ApiDescriptionExtensions.GetFriendlyId(System.Web.Http.Description.ApiDescription)">
             <summary>
             Generates an URI-friendly ID for the <see cref="T:System.Web.Http.Description.ApiDescription"/>. E.g. "Get-Values-id_name" instead of "GetValues/{id}?name={name}"
@@ -499,6 +492,20 @@
             Requisição para logar o usuário no sistema.
             </summary>
             <param name="oUser"></param>
+            <returns>API Result Object</returns>
+        </member>
+        <member name="M:Fidelity.Areas.Users.Controllers.UserController.Signup(Fidelity.Areas.Users.Models.UserViewModel)">
+            <summary>
+            Requisição para cadastrar cliente no sistema.
+            </summary>
+            <returns>API Result Object</returns>
+            <param name="Model"></param>
+        </member>
+        <member name="M:Fidelity.Areas.Users.Controllers.UserController.SignupEnterprise(Fidelity.Areas.Users.Models.UserViewModel)">
+            <summary>
+            Requisição para Empresa cliente no sistema.
+            </summary>
+            <param name="Model"></param>
             <returns>API Result Object</returns>
         </member>
         <member name="T:Fidelity.Common.Util.IgnoreEmptyEnumerablesResolver">

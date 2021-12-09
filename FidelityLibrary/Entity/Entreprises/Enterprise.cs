@@ -12,6 +12,7 @@ namespace FidelityLibrary.Entity
     public class Enterprise
     {
         [Key, Column("id_empresa")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Column("id_usuario")]
@@ -45,7 +46,7 @@ namespace FidelityLibrary.Entity
         public int? MembershipId { get; set; }
 
         [Column("ativo")]
-        public bool Active { get; set; } = true;
+        public string Active { get; set; }
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;

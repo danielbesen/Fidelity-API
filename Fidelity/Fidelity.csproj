@@ -31,11 +31,12 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\</OutputPath>
+    <OutputPath>App_Data\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>App_Data\XmlDocument.xml</DocumentationFile>
+    <GenerateSerializationAssemblies>On</GenerateSerializationAssemblies>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -211,6 +212,10 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Clients\Controllers\ClientController.cs" />
     <Compile Include="Areas\Clients\Models\ClientViewModel.cs" />
+    <Compile Include="Areas\Employes\EmployesAreaRegistration.cs" />
+    <Compile Include="Areas\Employes\Models\EmployeeViewModel.cs" />
+    <Compile Include="Areas\Enterprises\EnterprisesAreaRegistration.cs" />
+    <Compile Include="Areas\Enterprises\Models\EnterpriseViewModel.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
     <Compile Include="Areas\HelpPage\App_Start\HelpPageConfig.cs" />
     <Compile Include="Areas\HelpPage\Controllers\HelpController.cs" />
@@ -241,6 +246,7 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Areas\Login\Controllers\LoginController.cs" />
     <Compile Include="Areas\Login\LoginResult.cs" />
+    <Compile Include="Areas\Users\Controllers\UserController.cs" />
     <Compile Include="Areas\Users\Models\UserViewModel.cs" />
     <Compile Include="Areas\Users\UsersAreaRegistration.cs" />
     <Compile Include="Common\Util.cs" />
@@ -285,6 +291,8 @@
     <Content Include="Areas\HelpPage\Views\Help\DisplayTemplates\ApiGroup.cshtml" />
     <Content Include="Areas\HelpPage\Views\Help\Api.cshtml" />
     <Content Include="Areas\Users\Views\web.config" />
+    <Content Include="Areas\Enterprises\Views\web.config" />
+    <Content Include="Areas\Employes\Views\web.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -309,10 +317,16 @@
   <ItemGroup>
     <Folder Include="API\" />
     <Folder Include="Areas\Clients\Views\" />
+    <Folder Include="Areas\Employes\Controllers\" />
+    <Folder Include="Areas\Employes\Data\" />
+    <Folder Include="Areas\Employes\Views\Shared\" />
+    <Folder Include="Areas\Enterprises\Controllers\" />
+    <Folder Include="Areas\Enterprises\Data\" />
+    <Folder Include="Areas\Enterprises\Views\Shared\" />
     <Folder Include="Areas\Login\Views\Login\" />
-    <Folder Include="Areas\Users\Controllers\" />
     <Folder Include="Areas\Users\Data\" />
     <Folder Include="Areas\Users\Views\Shared\" />
+    <Folder Include="Areas\Users\Views\User\" />
     <Folder Include="Services\" />
     <Folder Include="Views\Teste\" />
     <Folder Include="Views\User\" />
@@ -355,6 +369,7 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <PropertyGroup>
     <LangVersion>9.0</LangVersion>

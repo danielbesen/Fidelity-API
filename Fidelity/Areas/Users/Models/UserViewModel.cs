@@ -1,4 +1,5 @@
 ﻿using Fidelity.Areas.Clients.Models;
+using Fidelity.Areas.Enterprises.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,6 @@ namespace Fidelity.Areas.Users.Models
 
         public ClientViewModel Client { get; set; }
 
+        public EnterpriseViewModel Enteprise { get; set; }
     }
 }

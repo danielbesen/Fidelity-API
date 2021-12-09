@@ -17,9 +17,6 @@ namespace Fidelity.Models
         /// </summary>
         public string Message { get; set; }
 
-        /// <summary>
-        /// Http Status
-        /// </summary>
         //public int Status { get; set; }
 
         /// <summary>

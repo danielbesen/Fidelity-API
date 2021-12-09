@@ -14,6 +14,7 @@ using FidelityLibrary.Entity.Users;
 using FidelityLibrary.Models;
 using FidelityLibrary.Persistance.Generics;
 using Fidelity.Areas.Users.Models;
+using Fidelity.Areas.Enterprises.Models;
 
 namespace Fidelity.Areas.Clients.Controllers
 {
@@ -51,82 +52,6 @@ namespace Fidelity.Areas.Clients.Controllers
                 {
                     Success = false,
                     Message = "Erro ao buscar todos clientes: " + e.Message,
-                };
-            }
-        }
-
-        /// <summary>
-        /// Requisição para cadastrar cliente no sistema.
-        /// </summary>
-        /// <param name="Model"></param>
-        /// <returns>API Result Object</returns>
-        [HttpPost]
-        [AllowAnonymous]
-        [Route("signup/client")]
-        public APIResult<string> Signup(UserViewModel Model)
-        {
-            try
-            {
-                if (UserDAO.FindAll().ToList().Any(x => x.Email == Model.Email))
-                {
-                    return new APIResult<string>()
-                    {
-                        Success = false,
-                        Message = "E-mail já cadastrado!",
-                    };
-                }
-                else
-                {
-                    #region Saving User and Client
-
-                    try
-                    {
-                        using (var context = new ApplicationDbContext())
-                        {
-                            using (var dbContextTransaction = context.Database.BeginTransaction())
-                            {
-                                var user = new User()
-                                {
-                                    Name = Model.Name,
-                                    Email = Model.Email,
-                                    Type = Model.Type,
-                                    Active = "1",
-                                    Password = Encrypt.EncryptPass(Model.Password)
-                                };
-
-                                UserDAO.SaveUser(user, context);
-
-                                var client = new Client()
-                                {
-                                    UserId = user.Id,//UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email)?.Id,
-                                    Name = Model.Client.Name,
-                                    Cpf = Model.Client.Cpf
-                                };
-
-                                ClientDAO.SaveClient(client, context);
-
-                                dbContextTransaction.Commit();
-
-                                return new APIResult<string>()
-                                {
-                                    Message = "Cliente cadastrado com sucesso!"
-                                };
-                            }
-                        }
-                    }
-                    catch (Exception e)
-                    {
-                        throw new Exception("Transaction insert error: " + e);
-                    }
-                    #endregion
-                }
-            }
-            catch (Exception e)
-            {
-                return new APIResult<string>()
-                {
-                    Success = false,
-                    Message = "Erro ao validar Login: " + e.Message,
                 };
             }
         }

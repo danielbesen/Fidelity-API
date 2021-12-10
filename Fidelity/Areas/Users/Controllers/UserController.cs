@@ -1,4 +1,5 @@
-﻿using Fidelity.Areas.Users.Models;
+﻿using Fidelity.Areas.Clients.Models;
+using Fidelity.Areas.Users.Models;
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity;
@@ -8,15 +9,19 @@ using FidelityLibrary.Persistance.ClientDAO;
 using FidelityLibrary.Persistance.EmployeeDAO;
 using FidelityLibrary.Persistance.EnterpriseDAO;
 using FidelityLibrary.Persistance.UserDAO;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Security.Claims;
+using System.Text;
 using System.Web;
-using System.Web.Mvc;
+using System.Web.Http;
 
 namespace Fidelity.Areas.Users.Controllers
 {
-    public class UserController : Controller
+    public class UserController : ApiController
     {
         /// <summary>
         /// Requisição para cadastrar cliente no sistema.

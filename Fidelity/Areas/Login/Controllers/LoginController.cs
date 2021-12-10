@@ -1,4 +1,5 @@
 ﻿using Fidelity.Areas.Clients.Models;
+using Fidelity.Areas.Users.Models;
 using Fidelity.Models;
 using FidelityLibrary.Entity;
 using FidelityLibrary.Entity.Users;
@@ -29,26 +30,26 @@ namespace Fidelity.Areas.Login.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("login")]
-        public APIResult<Object> Login(User oUser)
+        public APIResult<Object> Login(UserViewModel Model)
         {
             try
             {
-                if (UserDAO.FindAll().ToList().Any(x => x.Email == oUser.Email && Encrypt.VerifyPass(oUser.Password, x.Password)))
+                if (UserDAO.FindAll().ToList().Any(x => x.Email == Model.Email && Encrypt.VerifyPass(Model.Password, x.Password)))
                 {
-                    var oNewUser = UserDAO.GetUser(oUser);
+                    var oNewUser = UserDAO.GetUser(Model.Email);
 
                     return new APIResult<Object>()
                     {
                         Result = new LoginResult<Object>()
                         {
-                            Token = Encrypt.GetToken(oUser.Email, oUser.Password),
-                            Property = oUser.Type == "C" ? ClientDAO.FindByUserId(oNewUser.Id) : oUser.Type == "E" ? EnterpriseDAO.FindByUserId(oNewUser.Id) : EmployeeDAO.FindByUserId(oNewUser.Id),
-                            Type = oUser.Type.ToString()
+                            Token = Encrypt.GetToken(Model.Email, Model.Password),
+                            Property = Model.Type == "C" ? ClientDAO.FindByUserId(oNewUser.Id) : Model.Type == "E" ? EnterpriseDAO.FindByUserId(oNewUser.Id) : EmployeeDAO.FindByUserId(oNewUser.Id),
+                            Type = Model.Type.ToString()
                         },
                         Message = "Usuário logado com sucesso!"
                     };
                 }
-                else if (UserDAO.FindAll().Any(x => x.Email == oUser.Email))
+                else if (UserDAO.FindAll().Any(x => x.Email == Model.Email))
                 {
                     return new APIResult<Object>()
                     {

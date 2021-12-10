@@ -13,13 +13,14 @@ namespace FidelityLibrary.Persistance.UserDAO
 {
     public class UserDAO : GenericDAO<User, int>
     {
-        public static User GetUser(User LoginUser)
+        public static User GetUser(string email)
         {
             try
             {
+                var LoginUser = new User();
                 using (var context = new ApplicationDbContext())
                 {
-                    LoginUser = context.DbSetUser.AsNoTracking().FirstOrDefault(x => x.Email == LoginUser.Email);
+                    LoginUser = context.DbSetUser.AsNoTracking().FirstOrDefault(x => x.Email == email);
                 }
 
                 return LoginUser;

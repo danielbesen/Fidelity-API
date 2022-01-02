@@ -25,22 +25,32 @@ namespace Fidelity.Areas.Clients.Controllers
         /// </summary>
         /// <returns>Client List Object></returns>
         [HttpGet]
-        [Authorize]
+        //[Authorize]
         [Route("clients")]
-        public APIResult<List<Client>> Get()
+        public APIResult<List<ClientViewModel>> Get()
         {
             try
             {
                 if (User.Identity.IsAuthenticated)
                 {
-                    return new APIResult<List<Client>>()
+                    var oClientList = new List<ClientViewModel>();
+                    foreach (var item in ClientDAO.FindAll().ToList())
                     {
-                        Result = ClientDAO.FindAll().ToList(),
+                        oClientList.Add(new ClientViewModel()
+                        {
+                            Cpf = item.Cpf,
+                            Name = item.Name
+                        } as ClientViewModel );
+                    }
+
+                    return new APIResult<List<ClientViewModel>>()
+                    {
+                        Result = oClientList,
                         Count = ClientDAO.FindAll().ToList().Count
                     };
                 }
                 else
-                    return new APIResult<List<Client>>()
+                    return new APIResult<List<ClientViewModel>>()
                     {
                         Success = false,
                         Message = "Acesso negado!"
@@ -48,7 +58,7 @@ namespace Fidelity.Areas.Clients.Controllers
             }
             catch (Exception e)
             {
-                return new APIResult<List<Client>>()
+                return new APIResult<List<ClientViewModel>>()
                 {
                     Success = false,
                     Message = "Erro ao buscar todos clientes: " + e.Message,

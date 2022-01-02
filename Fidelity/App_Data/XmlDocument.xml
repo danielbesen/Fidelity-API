@@ -487,7 +487,7 @@
             </summary>
             <param name="documentPath">The physical path to XML document.</param>
         </member>
-        <member name="M:Fidelity.Areas.Login.Controllers.LoginController.Login(FidelityLibrary.Entity.Users.User)">
+        <member name="M:Fidelity.Areas.Login.Controllers.LoginController.Login(Fidelity.Areas.Users.Models.UserViewModel)">
             <summary>
             Requisição para logar o usuário no sistema.
             </summary>

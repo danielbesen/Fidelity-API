@@ -25,7 +25,7 @@ namespace Fidelity.Areas.Clients.Controllers
         /// </summary>
         /// <returns>Client List Object></returns>
         [HttpGet]
-        //[Authorize]
+        [Authorize]
         [Route("clients")]
         public APIResult<List<ClientViewModel>> Get()
         {

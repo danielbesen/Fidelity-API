@@ -150,15 +150,15 @@ namespace Fidelity.Areas.Users.Controllers
                                 var Enterprise = new Enterprise()
                                 {
                                     UserId = user.Id,
-                                    Name = Model.Enteprise.Name,
-                                    Address = Model.Enteprise.Address,
-                                    AddressNum = Model.Enteprise.AddressNum,
-                                    Branch = Model.Enteprise.Branch,
-                                    City = Model.Enteprise.City,
-                                    Cnpj = Model.Enteprise.Cnpj,
-                                    MembershipId = Model.Enteprise.MembershipId,
-                                    State = Model.Enteprise.State,
-                                    Tel = Model.Enteprise.Tel,
+                                    Name = Model.Enterprise.Name,
+                                    Address = Model.Enterprise.Address,
+                                    AddressNum = Model.Enterprise.AddressNum,
+                                    Branch = Model.Enterprise.Branch,
+                                    City = Model.Enterprise.City,
+                                    Cnpj = Model.Enterprise.Cnpj,
+                                    MembershipId = Model.Enterprise.MembershipId,
+                                    State = Model.Enterprise.State,
+                                    Tel = Model.Enterprise.Tel,
                                     Active = "1"
                                 };
 
@@ -170,6 +170,7 @@ namespace Fidelity.Areas.Users.Controllers
 
                                 var Employee = new Employee()
                                 {
+                                    UserId = user.Id,
                                     EnterpriseId = Enterprise.Id,
                                     AccessType = 0
                                 };
@@ -182,7 +183,7 @@ namespace Fidelity.Areas.Users.Controllers
 
                                 return new APIResult<string>()
                                 {
-                                    Message = "Cliente cadastrado com sucesso!"
+                                    Message = "Empresa cadastrada com sucesso!"
                                 };
                             }
                         }

@@ -21,6 +21,6 @@ namespace Fidelity.Areas.Users.Models
 
         public ClientViewModel Client { get; set; }
 
-        public EnterpriseViewModel Enteprise { get; set; }
+        public EnterpriseViewModel Enterprise { get; set; }
     }
 }

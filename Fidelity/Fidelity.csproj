@@ -213,6 +213,7 @@
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Areas\Clients\Controllers\ClientController.cs" />
     <Compile Include="Areas\Clients\Models\ClientViewModel.cs" />
+    <Compile Include="Areas\Employes\Controllers\EmployeeController.cs" />
     <Compile Include="Areas\Employes\EmployesAreaRegistration.cs" />
     <Compile Include="Areas\Employes\Models\EmployeeViewModel.cs" />
     <Compile Include="Areas\Enterprises\EnterprisesAreaRegistration.cs" />
@@ -318,8 +319,8 @@
   <ItemGroup>
     <Folder Include="API\" />
     <Folder Include="Areas\Clients\Views\" />
-    <Folder Include="Areas\Employes\Controllers\" />
     <Folder Include="Areas\Employes\Data\" />
+    <Folder Include="Areas\Employes\Views\Employee\" />
     <Folder Include="Areas\Employes\Views\Shared\" />
     <Folder Include="Areas\Enterprises\Controllers\" />
     <Folder Include="Areas\Enterprises\Data\" />

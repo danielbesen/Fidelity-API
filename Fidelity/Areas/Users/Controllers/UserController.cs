@@ -85,7 +85,11 @@ namespace Fidelity.Areas.Users.Controllers
                     }
                     catch (Exception e)
                     {
-                        throw new Exception("Transaction insert error: " + e);
+                        return new APIResult<Object>()
+                        {
+                            Success = false,
+                            Message = "Erro na transação: " + e.Message,
+                        };
                     }
                     #endregion
                 }
@@ -101,7 +105,7 @@ namespace Fidelity.Areas.Users.Controllers
         }
 
         /// <summary>
-        /// Requisição para Empresa cliente no sistema.
+        /// Requisição para cadastrar empresa no sistema.
         /// </summary>
         /// <param name="Model"></param>
         /// <returns>API Result Object</returns>
@@ -190,7 +194,11 @@ namespace Fidelity.Areas.Users.Controllers
                     }
                     catch (Exception e)
                     {
-                        throw new Exception("Transaction insert error: " + e);
+                        return new APIResult<string>()
+                        {
+                            Success = false,
+                            Message = "Erro na transação: " + e.Message,
+                        };
                     }
                     #endregion
                 }

@@ -14,6 +14,8 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net;
+using System.Net.Mail;
 using System.Security.Claims;
 using System.Text;
 using System.Web;
@@ -26,8 +28,8 @@ namespace Fidelity.Areas.Users.Controllers
         /// <summary>
         /// Requisição para cadastrar cliente no sistema.
         /// </summary>
-        /// <returns>API Result Object</returns>
         /// <param name="Model"></param>
+        /// <returns>API Result Object</returns>
         [HttpPost]
         [AllowAnonymous]
         [Route("signup/client")]
@@ -112,13 +114,13 @@ namespace Fidelity.Areas.Users.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("signup/enterprise")]
-        public APIResult<string> SignupEnterprise(UserViewModel Model)
+        public APIResult<Object> SignupEnterprise(UserViewModel Model)
         {
             try
             {
                 if (UserDAO.FindAll().ToList().Any(x => x.Email == Model.Email))
                 {
-                    return new APIResult<string>()
+                    return new APIResult<Object>()
                     {
                         Success = false,
                         Message = "E-mail já cadastrado!",
@@ -185,7 +187,7 @@ namespace Fidelity.Areas.Users.Controllers
 
                                 dbContextTransaction.Commit();
 
-                                return new APIResult<string>()
+                                return new APIResult<Object>()
                                 {
                                     Message = "Empresa cadastrada com sucesso!"
                                 };
@@ -194,7 +196,7 @@ namespace Fidelity.Areas.Users.Controllers
                     }
                     catch (Exception e)
                     {
-                        return new APIResult<string>()
+                        return new APIResult<Object>()
                         {
                             Success = false,
                             Message = "Erro na transação: " + e.Message,
@@ -205,11 +207,52 @@ namespace Fidelity.Areas.Users.Controllers
             }
             catch (Exception e)
             {
-                return new APIResult<string>()
+                return new APIResult<Object>()
                 {
                     Success = false,
                     Message = "Erro ao validar Login: " + e.Message,
                 };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para redefinição de senha
+        /// </summary>>
+        /// <param name="Email"></param>
+        /// <returns>API Result Object</returns>
+        [HttpPost]
+        [AllowAnonymous]
+        [Route("reset/pass")]
+        public APIResult<Object> ResetPassword(string Email)
+        {
+            try
+            {
+                #region Envio de e-mail
+
+                MailMessage mail = new MailMessage();
+
+                mail.From = new MailAddress("de@gmail.com");
+                mail.To.Add("para@gmail.com"); 
+                mail.Subject = "Teste"; 
+                mail.Body = "Testando mensagem de e-mail";
+
+                using (var smtp = new SmtpClient("smtp.gmail.com"))
+                {
+                    smtp.EnableSsl = true;
+                    smtp.Port = 587;       
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network; 
+                    smtp.UseDefaultCredentials = false; 
+
+                    smtp.Credentials = new NetworkCredential("suaconta@gmail.com", "sua senha");
+
+                    smtp.Send(mail);
+                }
+
+                #endregion
+            }
+            catch (Exception e)
+            {
+
             }
         }
     }

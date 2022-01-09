@@ -19,6 +19,8 @@ namespace Fidelity.Areas.Users.Models
 
         public string Active { get; set; }
 
+        public byte[] Ímage { get; set; }
+
         public ClientViewModel Client { get; set; }
 
         public EnterpriseViewModel Enterprise { get; set; }

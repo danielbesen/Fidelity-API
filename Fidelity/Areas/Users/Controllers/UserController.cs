@@ -32,8 +32,8 @@ namespace Fidelity.Areas.Users.Controllers
         /// <returns>API Result Object</returns>
         [HttpPost]
         [AllowAnonymous]
-        [Route("signup/client")]
-        public APIResult<Object> Signup(UserViewModel Model)
+        [Route("new/client")]
+        public APIResult<Object> SignupClient(UserViewModel Model)
         {
             try
             {
@@ -113,7 +113,7 @@ namespace Fidelity.Areas.Users.Controllers
         /// <returns>API Result Object</returns>
         [HttpPost]
         [AllowAnonymous]
-        [Route("signup/enterprise")]
+        [Route("new/enterprise")]
         public APIResult<Object> SignupEnterprise(UserViewModel Model)
         {
             try

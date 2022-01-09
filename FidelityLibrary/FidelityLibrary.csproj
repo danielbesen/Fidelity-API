@@ -89,6 +89,7 @@
     <Compile Include="Entity\Clients\Client.cs" />
     <Compile Include="Entity\Employees\Employee.cs" />
     <Compile Include="Entity\Entreprises\Enterprise.cs" />
+    <Compile Include="Entity\Loyalt\Loyalt.cs" />
     <Compile Include="Entity\Products\Product.cs" />
     <Compile Include="Entity\Users\User.cs" />
     <Compile Include="Persistance\ClientDAO\ClientDAO.cs" />

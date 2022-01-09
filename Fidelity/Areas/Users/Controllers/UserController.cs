@@ -227,33 +227,87 @@ namespace Fidelity.Areas.Users.Controllers
         {
             try
             {
+                if (UserDAO.FindAll().Any(x => x.Email == Email))
+                {
+                    var oUser = UserDAO.GetUser(Email);
+
+                    oUser.Password = Encrypt.EncryptPass(CreatePassword(8));
+
+                    using (var context = new ApplicationDbContext())
+                    {
+                        UserDAO.SaveUser(oUser, context);
+                    }
+                }
+                else
+                {
+                    {
+                        return new APIResult<Object>()
+                        {
+                            Success = false,
+                            Message = "Nenhum registro com esse e-mail encontrado!"
+                        };
+                    }
+                }
+
                 #region Envio de e-mail
 
                 MailMessage mail = new MailMessage();
 
                 mail.From = new MailAddress("de@gmail.com");
-                mail.To.Add("para@gmail.com"); 
-                mail.Subject = "Teste"; 
+                mail.To.Add("para@gmail.com");
+                mail.Subject = "Teste";
                 mail.Body = "Testando mensagem de e-mail";
 
                 using (var smtp = new SmtpClient("smtp.gmail.com"))
                 {
                     smtp.EnableSsl = true;
-                    smtp.Port = 587;       
-                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network; 
-                    smtp.UseDefaultCredentials = false; 
-
-                    smtp.Credentials = new NetworkCredential("suaconta@gmail.com", "sua senha");
-
+                    smtp.Port = 587;
+                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    smtp.UseDefaultCredentials = false;
+                    smtp.Credentials = new NetworkCredential("fidelity@gmail.com", "sua senha");
                     smtp.Send(mail);
                 }
 
                 #endregion
+
+                return new APIResult<Object>()
+                {
+                    Message = "E-mail enviado com sucesso!"
+                };
             }
             catch (Exception e)
             {
-
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao resetar senha! " + e.Message
+                };
             }
+        }
+
+        /// <summary>
+        /// Função para gerar senha aleatória
+        /// </summary>>
+        /// <param name="length"></param>
+        /// <returns>String</returns>
+        public string CreatePassword(int length)
+        {
+            try
+            {
+                const string valid = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+                StringBuilder res = new StringBuilder();
+                Random random = new Random();
+                while (0 < length--)
+                {
+                    res.Append(valid[random.Next(valid.Length)]);
+                }
+                return res.ToString();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro ao gerar nova senha: " + e.Message);
+            }
+
         }
     }
 }

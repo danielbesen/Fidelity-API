@@ -43,5 +43,18 @@ namespace FidelityLibrary.Persistance.UserDAO
                 throw new Exception("Transaction insert error: " + e);
             }
         }
+
+        public static void UpdateUser(User User, ApplicationDbContext oContext)
+        {
+            try
+            {
+                oContext.Entry(User).State = EntityState.Modified;
+                oContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Transaction insert error: " + e);
+            }
+        }
     }
 }

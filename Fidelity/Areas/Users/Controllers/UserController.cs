@@ -223,57 +223,61 @@ namespace Fidelity.Areas.Users.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("reset/pass")]
-        public APIResult<Object> ResetPassword(string Email)
+        public APIResult<Object> ResetPassword([FromBody] string Email)
         {
             try
             {
-                if (UserDAO.FindAll().Any(x => x.Email == Email))
+                if (!UserDAO.FindAll().Any(x => x.Email == Email))
                 {
-                    var oUser = UserDAO.GetUser(Email);
-
-                    oUser.Password = Encrypt.EncryptPass(CreatePassword(8));
-
-                    using (var context = new ApplicationDbContext())
+                    return new APIResult<Object>()
                     {
-                        UserDAO.SaveUser(oUser, context);
-                    }
+                        Success = false,
+                        Message = "Nenhum registro com esse e-mail encontrado!"
+                    };
                 }
                 else
                 {
+                    var oUser = UserDAO.GetUser(Email);
+
+                    var Password = CreatePassword(8);
+                    oUser.Password = Encrypt.EncryptPass(Password);
+
+                    using (var context = new ApplicationDbContext())
                     {
-                        return new APIResult<Object>()
+                        using (var dbContextTransaction = context.Database.BeginTransaction())
                         {
-                            Success = false,
-                            Message = "Nenhum registro com esse e-mail encontrado!"
-                        };
+                            UserDAO.UpdateUser(oUser, context);
+
+                            #region Envio de e-mail
+
+                            MailMessage mail = new MailMessage();
+
+                            mail.From = new MailAddress("de@gmail.com");
+                            mail.To.Add("para@gmail.com");
+                            mail.Subject = "Teste";
+                            mail.Body = "Testando mensagem de e-mail";
+
+                            using (var smtp = new SmtpClient("smtp.gmail.com"))
+                            {
+                                smtp.EnableSsl = true;
+                                smtp.Port = 587;
+                                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                                smtp.UseDefaultCredentials = false;
+                                smtp.Credentials = new NetworkCredential("fidelity@gmail.com", "sua senha");
+                                smtp.Send(mail);
+                            }
+
+                            #endregion
+
+                            dbContextTransaction.Commit();
+
+                            return new APIResult<Object>()
+                            {
+                                Message = "E-mail enviado com sucesso!"
+                            };
+                        }
                     }
                 }
-
-                #region Envio de e-mail
-
-                MailMessage mail = new MailMessage();
-
-                mail.From = new MailAddress("de@gmail.com");
-                mail.To.Add("para@gmail.com");
-                mail.Subject = "Teste";
-                mail.Body = "Testando mensagem de e-mail";
-
-                using (var smtp = new SmtpClient("smtp.gmail.com"))
-                {
-                    smtp.EnableSsl = true;
-                    smtp.Port = 587;
-                    smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
-                    smtp.UseDefaultCredentials = false;
-                    smtp.Credentials = new NetworkCredential("fidelity@gmail.com", "sua senha");
-                    smtp.Send(mail);
-                }
-
-                #endregion
-
-                return new APIResult<Object>()
-                {
-                    Message = "E-mail enviado com sucesso!"
-                };
             }
             catch (Exception e)
             {

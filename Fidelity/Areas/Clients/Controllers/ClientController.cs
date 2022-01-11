@@ -27,7 +27,7 @@ namespace Fidelity.Areas.Clients.Controllers
         [HttpGet]
         [Authorize]
         [Route("clients")]
-        public APIResult<List<ClientViewModel>> Get()
+        public APIResult<List<ClientViewModel>> GetClients()
         {
             try
             {
@@ -40,7 +40,7 @@ namespace Fidelity.Areas.Clients.Controllers
                         {
                             Cpf = item.Cpf,
                             Name = item.Name
-                        } as ClientViewModel );
+                        });
                     }
 
                     return new APIResult<List<ClientViewModel>>()

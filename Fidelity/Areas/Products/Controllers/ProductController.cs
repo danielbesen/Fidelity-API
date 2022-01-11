@@ -2,6 +2,7 @@
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Products;
+using FidelityLibrary.Persistance.ProductDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,7 +17,7 @@ namespace Fidelity.Areas.Products.Controllers
         /// Requisição para buscar todos os clientes no sistema.
         /// </summary>
         /// <returns>Client List Object></returns>
-        [HttpGet]
+        [HttpPost]
         [Authorize]
         [Route("new/product")]
         public APIResult<Object> NewProduct(ProductViewModel Model)
@@ -29,10 +30,13 @@ namespace Fidelity.Areas.Products.Controllers
                     Value = Model.Value,
                     Category = Model.Category,
                     Image = Model.Image,
-                    Status = Model.status,
-                    
+                    Status = Model.status
                 };
 
+                if (Model.LoyaltList.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelidade/fidelização
+                {
+
+                }
 
                 using (var context = new ApplicationDbContext())
                 {
@@ -46,6 +50,56 @@ namespace Fidelity.Areas.Products.Controllers
                 {
                     Success = false,
                     Message = "Erro ao criar produto! " + e.Message
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para buscar todos os clientes no sistema.
+        /// </summary>
+        /// <returns>Client List Object></returns>
+        [HttpGet]
+        [Authorize]
+        [Route("products")]
+        public APIResult<List<ProductViewModel>> GetProducts()
+        {
+            try
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    var oProductList = new List<ProductViewModel>();
+                    foreach (var item in ProductDAO.FindAll().ToList())
+                    {
+                        oProductList.Add(new ProductViewModel()
+                        {
+                            Name = item.Description,
+                            Category = item.Category,
+                            Value = item.Value,
+                            Image = item.Image,
+                            status = item.Status
+                        });
+                    }
+
+                    return new APIResult<List<ProductViewModel>>()
+                    {
+                        Result = oProductList,
+                        Count = ProductDAO.FindAll().ToList().Count
+                    };
+                }
+                else
+                    return new APIResult<List<ProductViewModel>>()
+                    {
+                        Success = false,
+                        Message = "Acesso negado!"
+                    };
+
+            }
+            catch (Exception e)
+            {
+                return new APIResult<List<ProductViewModel>>()
+                {
+                    Success = false,
+                    Message = "Erro ao buscar produtos! " + e.Message
                 };
             }
         }

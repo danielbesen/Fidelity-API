@@ -248,6 +248,8 @@
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
     <Compile Include="Areas\Login\Controllers\LoginController.cs" />
     <Compile Include="Areas\Login\LoginResult.cs" />
+    <Compile Include="Areas\Loyalt\LoyaltAreaRegistration.cs" />
+    <Compile Include="Areas\Loyalt\Models\LoyaltViewModel.cs" />
     <Compile Include="Areas\Products\Controllers\ProductController.cs" />
     <Compile Include="Areas\Products\Models\ProductViewModel.cs" />
     <Compile Include="Areas\Products\ProductsAreaRegistration.cs" />
@@ -299,6 +301,7 @@
     <Content Include="Areas\Enterprises\Views\web.config" />
     <Content Include="Areas\Employes\Views\web.config" />
     <Content Include="Areas\Products\Views\web.config" />
+    <Content Include="Areas\Loyalt\Views\web.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -330,6 +333,9 @@
     <Folder Include="Areas\Enterprises\Data\" />
     <Folder Include="Areas\Enterprises\Views\Shared\" />
     <Folder Include="Areas\Login\Views\Login\" />
+    <Folder Include="Areas\Loyalt\Controllers\" />
+    <Folder Include="Areas\Loyalt\Data\" />
+    <Folder Include="Areas\Loyalt\Views\Shared\" />
     <Folder Include="Areas\Products\Data\" />
     <Folder Include="Areas\Products\Views\Product\" />
     <Folder Include="Areas\Products\Views\Shared\" />

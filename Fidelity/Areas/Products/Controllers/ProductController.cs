@@ -26,7 +26,7 @@ namespace Fidelity.Areas.Products.Controllers
             {
                 var oProduct = new Product()
                 {
-                    Description = Model.ProductName,
+                    Description = Model.Name,
                     Value = Model.Value,
                     Category = Model.Category,
                     Image = Model.Image,
@@ -40,8 +40,13 @@ namespace Fidelity.Areas.Products.Controllers
 
                 using (var context = new ApplicationDbContext())
                 {
-
+                    ProductDAO.Insert(oProduct);
                 }
+
+                return new APIResult<object>()
+                {
+                    Message = "Produto cadastrado com sucesso!"
+                };
 
             }
             catch (Exception e)

@@ -69,7 +69,7 @@ namespace Fidelity.Areas.Users.Controllers
 
                                 var client = new Client()
                                 {
-                                    UserId = user.Id,//UserDAO.FindAll().FirstOrDefault(x => x.Email == Model.Email)?.Id,
+                                    UserId = user.Id,
                                     Name = Model.Client.Name,
                                     Cpf = Model.Client.Cpf
                                 };

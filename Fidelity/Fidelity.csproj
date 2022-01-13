@@ -216,6 +216,7 @@
     <Compile Include="Areas\Employes\Controllers\EmployeeController.cs" />
     <Compile Include="Areas\Employes\EmployesAreaRegistration.cs" />
     <Compile Include="Areas\Employes\Models\EmployeeViewModel.cs" />
+    <Compile Include="Areas\Enterprises\Controllers\EnterpriseController.cs" />
     <Compile Include="Areas\Enterprises\EnterprisesAreaRegistration.cs" />
     <Compile Include="Areas\Enterprises\Models\EnterpriseViewModel.cs" />
     <Compile Include="Areas\HelpPage\ApiDescriptionExtensions.cs" />
@@ -329,8 +330,8 @@
     <Folder Include="Areas\Employes\Data\" />
     <Folder Include="Areas\Employes\Views\Employee\" />
     <Folder Include="Areas\Employes\Views\Shared\" />
-    <Folder Include="Areas\Enterprises\Controllers\" />
     <Folder Include="Areas\Enterprises\Data\" />
+    <Folder Include="Areas\Enterprises\Views\Enterprise\" />
     <Folder Include="Areas\Enterprises\Views\Shared\" />
     <Folder Include="Areas\Login\Views\Login\" />
     <Folder Include="Areas\Loyalt\Controllers\" />

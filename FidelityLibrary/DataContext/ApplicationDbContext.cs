@@ -1,4 +1,6 @@
 ﻿using FidelityLibrary.Entity;
+using FidelityLibrary.Entity.Loyalt;
+using FidelityLibrary.Entity.Products;
 using FidelityLibrary.Entity.Users;
 using System;
 using System.Collections.Generic;
@@ -20,5 +22,8 @@ namespace FidelityLibrary.DataContext
         public virtual DbSet<User> DbSetUser { get; set; }
         public virtual DbSet<Enterprise> DbSetEnterprise { get; set; }
         public virtual DbSet<Employee> DbSetEmployee { get; set; }
+        public virtual DbSet<Product> DbSetProduct { get; set; }
+        public virtual DbSet<Loyalt> DbSetLoyalt { get; set; }
+
     }
 }

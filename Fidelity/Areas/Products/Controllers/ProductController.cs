@@ -33,9 +33,9 @@ namespace Fidelity.Areas.Products.Controllers
                     Status = Model.status
                 };
 
-                if (Model.LoyaltList.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelidade/fidelização
+                if (Model.LoyaltList?.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelidade/fidelização
                 {
-
+                    var a = 2;
                 }
 
                 using (var context = new ApplicationDbContext())

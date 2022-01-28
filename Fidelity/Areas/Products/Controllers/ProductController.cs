@@ -16,6 +16,7 @@ namespace Fidelity.Areas.Products.Controllers
         /// <summary>
         /// Requisição para buscar todos os clientes no sistema.
         /// </summary>
+        /// <param name="Model"></param>
         /// <returns>Client List Object></returns>
         [HttpPost]
         [Authorize]

@@ -90,10 +90,12 @@
     <Compile Include="Entity\Employees\Employee.cs" />
     <Compile Include="Entity\Entreprises\Enterprise.cs" />
     <Compile Include="Entity\Fidelity\Fidelity.cs" />
+    <Compile Include="Entity\Fidelity\FidelityType.cs" />
     <Compile Include="Entity\Loyalt\Loyalt.cs" />
     <Compile Include="Entity\Loyalt\LoyaltProgress.cs" />
     <Compile Include="Entity\Membership\Membership.cs" />
     <Compile Include="Entity\Products\Product.cs" />
+    <Compile Include="Entity\Promotion\PromotionType.cs" />
     <Compile Include="Entity\Users\User.cs" />
     <Compile Include="Persistance\ClientDAO\ClientDAO.cs" />
     <Compile Include="Persistance\EmployeeDAO\EmployeeDAO.cs" />

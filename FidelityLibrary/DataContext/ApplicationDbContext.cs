@@ -28,6 +28,6 @@ namespace FidelityLibrary.DataContext
         public virtual DbSet<Loyalt> DbSetLoyalt { get; set; }
         public virtual DbSet<Fidelity> DbSetFidelity { get; set; }
         public virtual DbSet<Membership> DbSetMembership { get; set; }
-
+        public virtual DbSet<LoyaltProgress> DbSetLoyaltProgress { get; set; }
     }
 }

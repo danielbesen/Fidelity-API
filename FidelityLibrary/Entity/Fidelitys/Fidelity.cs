@@ -6,16 +6,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FidelityLibrary.Entity.Fidelity
+namespace FidelityLibrary.Entity.Fidelitys
 {
     [Table("fidelizacao", Schema = "public")]
     public class Fidelity
     {
         [Key, Column("id_fidelizacao")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? Id { get; set; }
-
-        [Column("id_fidelidade")]
-        public int LoyaltId { get; set; }
 
         [Column("id_tipo_promocao")]
         public int PromotionTypeId { get; set; }

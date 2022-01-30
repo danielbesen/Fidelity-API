@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FidelityLibrary.Entity.Loyalt
+namespace FidelityLibrary.Entity.Loyalts
 {
     [Table("fidelidade", Schema = "public")]
     public class Loyalt
@@ -25,10 +25,10 @@ namespace FidelityLibrary.Entity.Loyalt
         public int EnterpriseId { get; set; }
 
         [Column("dt_inicio")]
-        public DateTime StartDate { get; set; }
+        public DateTime? StartDate { get; set; }
 
         [Column("dt_vencimento")]
-        public DateTime EndDate { get; set; }
+        public DateTime? EndDate { get; set; }
 
         [Column("limite")]
         public int Limit { get; set; }
@@ -36,11 +36,8 @@ namespace FidelityLibrary.Entity.Loyalt
         [Column("id_produto")]
         public int ProductId { get; set; }
 
-        [Column("id_tipo_promocao")]
-        public int PromotionType { get; set; }
-
         [Column("id_fidelizacao")]
-        public int FidelityId { get; set; }
+        public int? FidelityId { get; set; }
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;

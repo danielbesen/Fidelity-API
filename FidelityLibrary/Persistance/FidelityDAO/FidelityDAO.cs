@@ -1,5 +1,5 @@
 ﻿using FidelityLibrary.DataContext;
-using FidelityLibrary.Entity.Loyalts;
+using FidelityLibrary.Entity.Fidelitys;
 using FidelityLibrary.Persistance.Generics;
 using System;
 using System.Collections.Generic;
@@ -8,15 +8,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FidelityLibrary.Persistance.LoyaltyDAO
+namespace FidelityLibrary.Persistance.FidelityDAO
 {
-    public class LoyaltyDAO : GenericDAO<Loyalt, int>
+    public class FidelityDAO : GenericDAO<Fidelity, int>
     {
-        public static void SaveLoyalt(Loyalt Loyalt, ApplicationDbContext oContext)
+        public static void SaveFidelity(Fidelity Fidelity, ApplicationDbContext oContext)
         {
             try
             {
-                oContext.Entry(Loyalt).State = EntityState.Added;
+                oContext.Entry(Fidelity).State = EntityState.Added;
                 oContext.SaveChanges();
             }
             catch (Exception e)

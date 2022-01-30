@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FidelityLibrary.Entity.Loyalt
+namespace FidelityLibrary.Entity.Loyalts
 {
     [Table("progresso_fidelidade", Schema = "public")]
     public class LoyaltProgress

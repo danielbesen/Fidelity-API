@@ -1,22 +1,22 @@
 ﻿using System.Web.Mvc;
 
-namespace Fidelity.Areas.Loyalt
+namespace Fidelity.Areas.Loyalts
 {
-    public class LoyaltAreaRegistration : AreaRegistration 
+    public class LoyaltsAreaRegistration : AreaRegistration 
     {
         public override string AreaName 
         {
             get 
             {
-                return "Loyalt";
+                return "Loyalts";
             }
         }
 
         public override void RegisterArea(AreaRegistrationContext context) 
         {
             context.MapRoute(
-                "Loyalt_default",
-                "Loyalt/{controller}/{action}/{id}",
+                "Loyalts_default",
+                "Loyalts/{controller}/{action}/{id}",
                 new { action = "Index", id = UrlParameter.Optional }
             );
         }

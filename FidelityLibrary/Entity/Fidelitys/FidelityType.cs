@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FidelityLibrary.Entity.Fidelity
+namespace FidelityLibrary.Entity.Fidelitys
 {
     [Table("tipo_fidelizacao", Schema = "public")]
     public class FidelityType

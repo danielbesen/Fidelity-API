@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FidelityLibrary.Entity.Membership
+namespace FidelityLibrary.Entity.Memberships
 {
     [Table("plano_app", Schema = "public")]
     public class Membership

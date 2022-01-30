@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace FidelityLibrary.Entity.Promotion
+namespace FidelityLibrary.Entity.Promotions
 {
     [Table("tipo_promocao", Schema = "public")]
     public class PromotionType

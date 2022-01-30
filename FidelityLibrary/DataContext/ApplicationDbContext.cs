@@ -1,9 +1,9 @@
 ﻿using FidelityLibrary.Entity;
-using FidelityLibrary.Entity.Fidelity;
-using FidelityLibrary.Entity.Loyalt;
-using FidelityLibrary.Entity.Membership;
+using FidelityLibrary.Entity.Fidelitys;
+using FidelityLibrary.Entity.Loyalts;
+using FidelityLibrary.Entity.Memberships;
 using FidelityLibrary.Entity.Products;
-using FidelityLibrary.Entity.Promotion;
+using FidelityLibrary.Entity.Promotions;
 using FidelityLibrary.Entity.Users;
 using System;
 using System.Collections.Generic;

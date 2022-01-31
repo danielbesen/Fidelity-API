@@ -34,7 +34,7 @@ namespace FidelityLibrary.Entity.Loyalts
         public int Limit { get; set; }
 
         [Column("id_produto")]
-        public int ProductId { get; set; }
+        public int? ProductId { get; set; }
 
         [Column("id_fidelizacao")]
         public int? FidelityId { get; set; }

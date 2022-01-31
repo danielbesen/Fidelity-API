@@ -48,7 +48,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             Limit = Model.Limit,
                             EnterpriseId = Model.EnterpriseId,
                             FidelityId = oFidelity.Id,
-                            ProductId = Model.ProductId //Produto que o usuário irá ganhar
+                            ProductId = Model.ProductId //Produto que o usuário irá ganhar, se houver
                         };
 
                         LoyaltyDAO.SaveLoyalt(oLoyalt, context);

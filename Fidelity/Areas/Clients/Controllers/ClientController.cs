@@ -101,7 +101,7 @@ namespace Fidelity.Areas.Clients.Controllers
                                 {
                                     Name = Model.Name,
                                     Email = Model.Email,
-                                    Type = Model.Type,
+                                    Type = "C",
                                     Active = "1",
                                     Password = Encrypt.EncryptPass(Model.Password)
                                 };

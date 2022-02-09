@@ -43,8 +43,8 @@ namespace Fidelity.Areas.Login.Controllers
                         Result = new LoginResult<Object>()
                         {
                             Token = Encrypt.GetToken(Model.Email, Model.Password),
-                            Property = Model.Type == "C" ? ClientDAO.FindByUserId(oNewUser.Id) : Model.Type == "E" ? EnterpriseDAO.FindByUserId(oNewUser.Id) : EmployeeDAO.FindByUserId(oNewUser.Id),
-                            Type = Model.Type.ToString()
+                            Property = oNewUser.Type == "C" ? ClientDAO.FindByUserId(oNewUser.Id) : oNewUser.Type == "E" ? EnterpriseDAO.FindByUserId(oNewUser.Id) : EmployeeDAO.FindByUserId(oNewUser.Id),
+                            Type = oNewUser.Type.ToString()
                         },
                         Message = "Usuário logado com sucesso!"
                     };

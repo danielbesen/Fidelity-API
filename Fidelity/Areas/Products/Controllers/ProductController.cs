@@ -27,11 +27,12 @@ namespace Fidelity.Areas.Products.Controllers
             {
                 var oProduct = new Product()
                 {
+                    EnterpriseId = Model.EnterpriseId,
                     Description = Model.Name,
                     Value = Model.Value,
                     Category = Model.Category,
                     Image = Model.Image,
-                    Status = Model.status
+                    Status = Model.Status
                 };
 
                 if (Model.LoyaltList?.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelidade/fidelização
@@ -78,11 +79,12 @@ namespace Fidelity.Areas.Products.Controllers
                     {
                         oProductList.Add(new ProductViewModel()
                         {
+                            EnterpriseId = item.EnterpriseId,
                             Name = item.Description,
                             Category = item.Category,
                             Value = item.Value,
                             Image = item.Image,
-                            status = item.Status
+                            Status = item.Status
                         });
                     }
 

@@ -18,6 +18,9 @@ namespace FidelityLibrary.Entity.Products
         [Column("ds_produto")]
         public string Description { get; set; }
 
+        [Column("id_empresa")]
+        public int EnterpriseId { get; set; }
+
         [Column("valor")]
         public double Value { get; set; }
 

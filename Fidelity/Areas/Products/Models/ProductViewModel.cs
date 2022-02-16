@@ -7,13 +7,14 @@ namespace Fidelity.Areas.Products.Models
 {
     public class ProductViewModel
     {
+        public int EnterpriseId { get; set; }
         public string Name { get; set; }
 
         public double Value { get; set; }
 
         public string Category { get; set; }
 
-        public string status { get; set; }
+        public string Status { get; set; }
 
         public byte[] Image { get; set; }
 

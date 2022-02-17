@@ -34,7 +34,7 @@ namespace Fidelity.Areas.Login.Controllers
         {
             try
             {
-                if (UserDAO.FindAll().ToList().Any(x => x.Email == Model.Email && Encrypt.VerifyPass(Model.Password, x.Password)))
+                if (UserDAO.FindAll().ToList().Any(x => x.Email.ToLower() == Model.Email.ToLower() && Encrypt.VerifyPass(Model.Password, x.Password)))
                 {
                     var oNewUser = UserDAO.GetUser(Model.Email);
 

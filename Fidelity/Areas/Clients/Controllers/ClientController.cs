@@ -98,9 +98,7 @@ namespace Fidelity.Areas.Clients.Controllers
                             {
 
                                 var user = new User()
-                                {
-                                    Name = Model.Name,
-                                    Email = Model.Email,
+                                {   Email = Model.Email.ToLower(),
                                     Type = "C",
                                     Active = "1",
                                     Password = Encrypt.EncryptPass(Model.Password)

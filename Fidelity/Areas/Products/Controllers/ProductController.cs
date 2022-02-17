@@ -19,7 +19,7 @@ namespace Fidelity.Areas.Products.Controllers
         /// <param name="Model"></param>
         /// <returns>Client List Object></returns>
         [HttpPost]
-        [Authorize]
+        //[Authorize]
         [Route("new/product")]
         public APIResult<Object> NewProduct(ProductViewModel Model)
         {

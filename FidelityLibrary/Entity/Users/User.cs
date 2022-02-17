@@ -15,10 +15,6 @@ namespace FidelityLibrary.Entity.Users
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
-        [Column("nome_usuario")]
-        [Required(ErrorMessage = "O Nome de usuário é obrigatório", AllowEmptyStrings = false)]
-        public string Name { get; set; }
-
         [Column("email")]
         [Required(ErrorMessage = "O Email do usuário é obrigatório", AllowEmptyStrings = false)]
         public string Email { get; set; } 

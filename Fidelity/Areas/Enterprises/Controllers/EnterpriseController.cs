@@ -51,8 +51,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
 
                                 var user = new User()
                                 {
-                                    Name = Model.Name,
-                                    Email = Model.Email,
+                                    Email = Model.Email.ToLower(),
                                     Type = "E",
                                     Active = "1",
                                     Password = Encrypt.EncryptPass(Model.Password)

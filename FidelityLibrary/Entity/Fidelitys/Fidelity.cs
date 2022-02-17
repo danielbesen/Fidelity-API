@@ -19,7 +19,7 @@ namespace FidelityLibrary.Entity.Fidelitys
         public int PromotionTypeId { get; set; }
 
         [Column("id_produto")]
-        public int? ProductId { get; set; }
+        public int? ConsumedProductId { get; set; }
 
         [Column("id_tipo_fidelizacao")]
         public int FidelityTypeId { get; set; }

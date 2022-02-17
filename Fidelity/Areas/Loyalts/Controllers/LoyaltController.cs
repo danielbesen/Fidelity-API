@@ -33,7 +33,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                         {
                             FidelityTypeId = Model.FidelityId,
                             PromotionTypeId = Model.PromotionType,
-                            ProductId = Model.ConsumedProductId, //Produto que precisará ser consumido
+                            ConsumedProductId = Model.ConsumedProductId, //Produto que precisará ser consumido
                             Quantity = Model.Quantity
                         };
 

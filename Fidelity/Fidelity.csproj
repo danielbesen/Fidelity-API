@@ -264,6 +264,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\APIResult.cs" />
+    <Compile Include="Models\PaginationParams.cs" />
     <Compile Include="Models\ServiceLayerError.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />

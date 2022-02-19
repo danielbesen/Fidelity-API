@@ -68,14 +68,14 @@ namespace Fidelity.Areas.Products.Controllers
         [HttpGet]
         [Authorize]
         [Route("products")]
-        public APIResult<List<ProductViewModel>> GetProducts()
+        public APIResult<List<ProductViewModel>> GetProducts(PaginationParams Params)
         {
             try
             {
                 if (User.Identity.IsAuthenticated)
                 {
                     var oProductList = new List<ProductViewModel>();
-                    foreach (var item in ProductDAO.FindAll().ToList())
+                    foreach (var item in ProductDAO.FindAll().Skip(Params.Page - 1 * Params.PageSize).Take(Params.PageSize).ToList())
                     {
                         oProductList.Add(new ProductViewModel()
                         {
@@ -91,7 +91,7 @@ namespace Fidelity.Areas.Products.Controllers
                     return new APIResult<List<ProductViewModel>>()
                     {
                         Result = oProductList,
-                        Count = ProductDAO.FindAll().ToList().Count
+                        Count = ProductDAO.FindAll().Skip(Params.Page - 1 * Params.PageSize).Take(Params.PageSize).ToList().Count
                     };
                 }
                 else

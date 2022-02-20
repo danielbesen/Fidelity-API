@@ -71,5 +71,54 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 };
             }
         }
+
+        /// <summary>
+        /// Requisição para buscar todas as fidelidades no sistema.
+        /// </summary>
+        /// <returns>Client List Object></returns>
+        [HttpGet]
+        [Authorize]
+        [Route("loyalts")]
+        public APIResult<List<LoyaltViewModel>> GetLoyalts()
+        {
+            try
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    var oLoyaltList = new List<LoyaltViewModel>();
+                    foreach (var item in LoyaltyDAO.FindAll().ToList())
+                    {
+                        oLoyaltList.Add(new LoyaltViewModel()
+                        {
+                            Id = item.Id,
+                            Description = item.Description,
+                            EnterpriseId = item.EnterpriseId,
+                            Limit = item.Limit,
+                            Name = item.Name
+                        });
+                    }
+
+                    return new APIResult<List<LoyaltViewModel>>()
+                    {
+                        Result = oLoyaltList,
+                        Count = oLoyaltList.Count
+                    };
+                }
+                else
+                    return new APIResult<List<LoyaltViewModel>>()
+                    {
+                        Success = false,
+                        Message = "Acesso negado!"
+                    };
+            }
+            catch (Exception e)
+            {
+                return new APIResult<List<LoyaltViewModel>>()
+                {
+                    Success = false,
+                    Message = "Erro ao buscar todas fidelidades: " + e.Message,
+                };
+            }
+        }
     }
 }

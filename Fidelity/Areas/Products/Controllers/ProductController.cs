@@ -91,7 +91,7 @@ namespace Fidelity.Areas.Products.Controllers
                     return new APIResult<List<ProductViewModel>>()
                     {
                         Result = oProductList,
-                        Count = ProductDAO.FindAll().Skip(Params.Page - 1 * Params.PageSize).Take(Params.PageSize).ToList().Count
+                        Count = oProductList.Count
                     };
                 }
                 else

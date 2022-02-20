@@ -46,7 +46,7 @@ namespace Fidelity.Areas.Clients.Controllers
                     return new APIResult<List<ClientViewModel>>()
                     {
                         Result = oClientList,
-                        Count = ClientDAO.FindAll().ToList().Count
+                        Count = oClientList.Count
                     };
                 }
                 else

@@ -17,7 +17,7 @@ namespace Fidelity.Areas.Loyalts.Models
         public int? ProductId { get; set; }
         public int? ConsumedProductId { get; set; }
         public int PromotionType { get; set; }
-        public int FidelityId { get; set; }
+        public int FidelityTypeId { get; set; }
         public double Quantity { get; set; }
     }
 }

@@ -31,7 +31,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                     {
                         var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
                         {
-                            FidelityTypeId = Model.FidelityId,
+                            FidelityTypeId = Model.FidelityTypeId,
                             PromotionTypeId = Model.PromotionType,
                             ConsumedProductId = Model.ConsumedProductId, //Produto que precisará ser consumido
                             Quantity = Model.Quantity

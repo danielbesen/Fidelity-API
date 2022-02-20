@@ -36,6 +36,6 @@ namespace FidelityLibrary.Entity.Users
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
 
         [Column("dt_alteracao")]
-        public DateTime AlterDate { get; set; }
+        public DateTime? AlterDate { get; set; }
     }
 }

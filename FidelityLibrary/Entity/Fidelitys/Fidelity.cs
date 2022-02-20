@@ -13,7 +13,7 @@ namespace FidelityLibrary.Entity.Fidelitys
     {
         [Key, Column("id_fidelizacao")]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [Column("id_tipo_promocao")]
         public int PromotionTypeId { get; set; }

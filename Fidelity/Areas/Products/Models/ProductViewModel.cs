@@ -12,7 +12,7 @@ namespace Fidelity.Areas.Products.Models
 
         public double Value { get; set; }
 
-        public string Category { get; set; }
+        public int CategoryId { get; set; }
 
         public string Status { get; set; }
 

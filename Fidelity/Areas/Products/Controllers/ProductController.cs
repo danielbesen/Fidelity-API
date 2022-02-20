@@ -30,7 +30,7 @@ namespace Fidelity.Areas.Products.Controllers
                     EnterpriseId = Model.EnterpriseId,
                     Description = Model.Name,
                     Value = Model.Value,
-                    Category = Model.Category,
+                    CategoryId = Model.CategoryId,
                     Image = Model.Image,
                     Status = Model.Status
                 };
@@ -81,7 +81,7 @@ namespace Fidelity.Areas.Products.Controllers
                         {
                             EnterpriseId = item.EnterpriseId,
                             Name = item.Description,
-                            Category = item.Category,
+                            CategoryId = item.CategoryId,
                             Value = item.Value,
                             Image = item.Image,
                             Status = item.Status

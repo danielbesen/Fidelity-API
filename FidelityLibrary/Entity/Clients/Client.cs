@@ -12,7 +12,8 @@ namespace FidelityLibrary.Entity
     public class Client 
     {
         [Key, Column("id_cliente")]
-        public int? Id { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int Id { get; set; }
 
         [Column("id_usuario")]
         public int? UserId { get; set; }
@@ -29,6 +30,6 @@ namespace FidelityLibrary.Entity
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
 
         [Column("dt_alteracao")]
-        public DateTime AlterDate { get; set; }
+        public DateTime? AlterDate { get; set; }
     }
 }

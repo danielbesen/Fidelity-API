@@ -24,8 +24,8 @@ namespace FidelityLibrary.Entity.Products
         [Column("valor")]
         public double Value { get; set; }
 
-        [Column("categoria")]
-        public string Category { get; set; }
+        [Column("id_categoria")]
+        public int CategoryId { get; set; }
 
         [Column("status")]
         public string Status { get; set; }
@@ -37,6 +37,6 @@ namespace FidelityLibrary.Entity.Products
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
 
         [Column("dt_alteracao")]
-        public DateTime AlterDate { get; set; }
+        public DateTime? AlterDate { get; set; }
     }
 }

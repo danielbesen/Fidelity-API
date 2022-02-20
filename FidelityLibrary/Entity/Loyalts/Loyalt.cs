@@ -12,7 +12,7 @@ namespace FidelityLibrary.Entity.Loyalts
     public class Loyalt
     {
         [Key, Column("id_fidel")]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         [Column("titulo_fidel")]

@@ -1,4 +1,5 @@
 ﻿using FidelityLibrary.Entity;
+using FidelityLibrary.Entity.Categories;
 using FidelityLibrary.Entity.Fidelitys;
 using FidelityLibrary.Entity.Loyalts;
 using FidelityLibrary.Entity.Memberships;
@@ -32,5 +33,6 @@ namespace FidelityLibrary.DataContext
         public virtual DbSet<LoyaltProgress> DbSetLoyaltProgress { get; set; }
         public virtual DbSet<FidelityType> DbSetFidelityType { get; set; }
         public virtual DbSet<PromotionType> DbSetPromotionType { get; set; }
+        public virtual DbSet<Category> DbSetCategory { get; set; }
     }
 }

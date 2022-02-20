@@ -18,7 +18,7 @@ namespace Fidelity.Areas.Categories.Controllers
         [HttpGet]
         [Authorize]
         [Route("categories")]
-        public APIResult<List<CategoryViewModel>> GetClients()
+        public APIResult<List<CategoryViewModel>> GetCategories()
         {
             try
             {

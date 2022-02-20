@@ -75,7 +75,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
         /// <summary>
         /// Requisição para buscar todas as fidelidades no sistema.
         /// </summary>
-        /// <returns>Client List Object></returns>
+        /// <returns>Loyalt List Object></returns>
         [HttpGet]
         [Authorize]
         [Route("loyalts")]

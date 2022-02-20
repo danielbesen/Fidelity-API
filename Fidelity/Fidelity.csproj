@@ -211,6 +211,9 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Areas\Categories\CategoriesAreaRegistration.cs" />
+    <Compile Include="Areas\Categories\Controllers\CategoryController.cs" />
+    <Compile Include="Areas\Categories\Models\CategoryViewModel.cs" />
     <Compile Include="Areas\Clients\Controllers\ClientController.cs" />
     <Compile Include="Areas\Clients\Models\ClientViewModel.cs" />
     <Compile Include="Areas\Employes\Controllers\EmployeeController.cs" />
@@ -305,6 +308,7 @@
     <Content Include="Areas\Employes\Views\web.config" />
     <Content Include="Areas\Products\Views\web.config" />
     <Content Include="Areas\Loyalts\Views\web.config" />
+    <Content Include="Areas\Categories\Views\web.config" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -328,6 +332,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="API\" />
+    <Folder Include="Areas\Categories\Data\" />
+    <Folder Include="Areas\Categories\Views\Category\" />
+    <Folder Include="Areas\Categories\Views\Shared\" />
     <Folder Include="Areas\Clients\Views\" />
     <Folder Include="Areas\Employes\Data\" />
     <Folder Include="Areas\Employes\Views\Employee\" />

@@ -85,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataContext\ApplicationDbContext.cs" />
+    <Compile Include="Entity\Categories\Category.cs" />
     <Compile Include="Entity\Checkpoints\Checkpoint.cs" />
     <Compile Include="Entity\Clients\Client.cs" />
     <Compile Include="Entity\Employees\Employee.cs" />
@@ -97,6 +98,7 @@
     <Compile Include="Entity\Products\Product.cs" />
     <Compile Include="Entity\Promotions\PromotionType.cs" />
     <Compile Include="Entity\Users\User.cs" />
+    <Compile Include="Persistance\CategoryDAO\CategoryDAO.cs" />
     <Compile Include="Persistance\ClientDAO\ClientDAO.cs" />
     <Compile Include="Persistance\EmployeeDAO\EmployeeDAO.cs" />
     <Compile Include="Persistance\EnterpriseDAO\EnterpriseDAO.cs" />

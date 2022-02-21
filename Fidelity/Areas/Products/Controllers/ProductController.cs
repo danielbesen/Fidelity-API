@@ -2,6 +2,7 @@
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Products;
+using FidelityLibrary.Persistance.LoyaltyDAO;
 using FidelityLibrary.Persistance.ProductDAO;
 using System;
 using System.Collections.Generic;
@@ -37,7 +38,11 @@ namespace Fidelity.Areas.Products.Controllers
 
                 if (Model.LoyaltList?.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelidade/fidelização
                 {
-                    var a = 2;
+                    //adicionar uma linha com a fidelidade selecionada, mas com o produtoID criado
+                    foreach (var item in Model.LoyaltList)
+                    {
+                        var x = 2;
+                    }
                 }
 
                 using (var context = new ApplicationDbContext())

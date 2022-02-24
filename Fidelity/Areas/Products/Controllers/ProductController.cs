@@ -1,8 +1,10 @@
-﻿using Fidelity.Areas.Products.Models;
+﻿using Fidelity.Areas.Fidelities.Models;
+using Fidelity.Areas.Loyalts.Models;
+using Fidelity.Areas.Products.Models;
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Products;
-using FidelityLibrary.Persistance.LoyaltyDAO;
+using FidelityLibrary.Persistance.FidelityDAO;
 using FidelityLibrary.Persistance.ProductDAO;
 using System;
 using System.Collections.Generic;
@@ -26,35 +28,46 @@ namespace Fidelity.Areas.Products.Controllers
         {
             try
             {
-                var oProduct = new Product()
-                {
-                    EnterpriseId = Model.EnterpriseId,
-                    Description = Model.Name,
-                    Value = Model.Value,
-                    CategoryId = Model.CategoryId,
-                    Image = Model.Image,
-                    Status = Model.Status
-                };
-
-                if (Model.LoyaltList?.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelidade/fidelização
-                {
-                    //adicionar uma linha com a fidelidade selecionada, mas com o produtoID criado
-                    foreach (var item in Model.LoyaltList)
-                    {
-                        var x = 2;
-                    }
-                }
-
                 using (var context = new ApplicationDbContext())
                 {
-                    ProductDAO.Insert(oProduct);
+                    using (var dbContextTransaction = context.Database.BeginTransaction())
+                    {
+                        var oProduct = new Product()
+                        {
+                            EnterpriseId = Model.EnterpriseId,
+                            Description = Model.Name,
+                            Value = Model.Value,
+                            CategoryId = Model.CategoryId,
+                            Image = Model.Image,
+                            Status = Model.Status
+                        };
+
+                        ProductDAO.SaveProduct(oProduct, context);
+
+                        if (Model.FidelityList?.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelização
+                        {
+                            //adicionar uma linha com a fidelização selecionada, mas com o produtoID criado
+                            foreach (var item in Model.FidelityList)
+                            {
+                                var DbFidelity = FidelityDAO.FindByKey(item);
+                                if (DbFidelity != null)
+                                {
+                                    DbFidelity.ConsumedProductId = oProduct.Id;
+                                }
+
+                                FidelityDAO.SaveFidelity(DbFidelity, context);
+                            }
+                        }
+
+                        dbContextTransaction.Commit();
+                    }
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Produto cadastrado com sucesso!"
+                    };
+
                 }
-
-                return new APIResult<object>()
-                {
-                    Message = "Produto cadastrado com sucesso!"
-                };
-
             }
             catch (Exception e)
             {
@@ -79,8 +92,18 @@ namespace Fidelity.Areas.Products.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
+                    var Products = new List<Product>();
+                    if (Params == null)
+                    {
+                        Products = ProductDAO.FindAll().ToList();
+                    }
+                    else
+                    {
+                        Products = ProductDAO.FindAll().Skip((Params.Page - 1) * Params.PageSize).Take(Params.PageSize).ToList();
+                    }
+
                     var oProductList = new List<ProductViewModel>();
-                    foreach (var item in ProductDAO.FindAll().Skip(Params.Page - 1 * Params.PageSize).Take(Params.PageSize).ToList())
+                    foreach (var item in Products)
                     {
                         oProductList.Add(new ProductViewModel()
                         {
@@ -96,7 +119,8 @@ namespace Fidelity.Areas.Products.Controllers
                     return new APIResult<List<ProductViewModel>>()
                     {
                         Result = oProductList,
-                        Count = oProductList.Count
+                        Count = oProductList.Count,
+                        Message = "Sucesso ao buscar produtos!"
                     };
                 }
                 else

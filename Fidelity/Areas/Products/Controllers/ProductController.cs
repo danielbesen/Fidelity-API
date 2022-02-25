@@ -58,7 +58,6 @@ namespace Fidelity.Areas.Products.Controllers
                                 FidelityDAO.SaveFidelity(DbFidelity, context);
                             }
                         }
-
                         dbContextTransaction.Commit();
                     }
 

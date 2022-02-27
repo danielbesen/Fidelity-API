@@ -25,7 +25,7 @@ namespace Fidelity.Areas.Enterprises.Models
 
         public int? MembershipId { get; set; }
 
-        public string Active { get; set; }
+        public bool Active { get; set; }
 
         public DateTime AlterDate { get; set; }
     }

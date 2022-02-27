@@ -46,7 +46,7 @@ namespace FidelityLibrary.Entity
         public int? MembershipId { get; set; }
 
         [Column("ativo")]
-        public string Active { get; set; }
+        public bool Active { get; set; }
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;

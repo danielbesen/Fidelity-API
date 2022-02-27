@@ -75,7 +75,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
                                     MembershipId = Model.Enterprise.MembershipId,
                                     State = Model.Enterprise.State,
                                     Tel = Model.Enterprise.Tel,
-                                    Active = "1"
+                                    Active = true
                                 };
 
                                 EnterpriseDAO.SaveEnterprise(Enterprise, context);

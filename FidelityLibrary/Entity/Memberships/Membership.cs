@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FidelityLibrary.Entity.Memberships
 {
-    [Table("plano_app", Schema = "public")]
+    [Table("plano_app", Schema = "dbo")]
     public class Membership
     {
 

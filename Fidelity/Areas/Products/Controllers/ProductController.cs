@@ -53,9 +53,8 @@ namespace Fidelity.Areas.Products.Controllers
                                 if (DbFidelity != null)
                                 {
                                     DbFidelity.ConsumedProductId = oProduct.Id;
+                                    FidelityDAO.SaveFidelity(DbFidelity, context);
                                 }
-
-                                FidelityDAO.SaveFidelity(DbFidelity, context);
                             }
                         }
                         dbContextTransaction.Commit();

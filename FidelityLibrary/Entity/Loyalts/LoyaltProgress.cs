@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FidelityLibrary.Entity.Loyalts
 {
-    [Table("progresso_fidelidade", Schema = "public")]
+    [Table("progresso_fidelidade", Schema = "dbo")]
     public class LoyaltProgress
     {
         [Key, Column("id_progresso_fidelidade")]

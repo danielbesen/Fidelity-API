@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FidelityLibrary.Entity.Categories
 {
-    [Table("categoria", Schema = "public")]
+    [Table("categoria", Schema = "dbo")]
     public class Category
     {
         [Key, Column("id_categoria")]

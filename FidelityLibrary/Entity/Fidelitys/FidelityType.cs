@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FidelityLibrary.Entity.Fidelitys
 {
-    [Table("tipo_fidelizacao", Schema = "public")]
+    [Table("tipo_fidelizacao", Schema = "dbo")]
     public class FidelityType
     {
         [Key, Column("id_tipo_fidelizacao") ]

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FidelityLibrary.Entity.Promotions
 {
-    [Table("tipo_promocao", Schema = "public")]
+    [Table("tipo_promocao", Schema = "dbo")]
     public class PromotionType
     {
         [Key, Column("id_tipo_promocao")]

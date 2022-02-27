@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FidelityLibrary.Entity.Checkpoints
 {
-    [Table("checkpoint", Schema = "public")]
+    [Table("checkpoint", Schema = "dbo")]
     public class Checkpoint
     {
         [Key, Column("id_checkpoint")]

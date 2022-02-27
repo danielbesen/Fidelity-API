@@ -1,16 +1,12 @@
 {
   "dependencies": {
     "secrets1": {
-      "secretStore": null,
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/Fidelityvault",
-      "type": "secrets.keyVault",
-      "connectionId": "VaultUri"
+      "type": "secrets.user"
     },
     "mssql1": {
-      "secretStore": "AzureKeyVault",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/fidelitydbserver/databases/Fidelity_db",
-      "type": "mssql.azure",
-      "connectionId": "FidelityDbConnectionStrings"
+      "secretStore": null,
+      "type": "mssql.local",
+      "connectionId": "FidelityDbConnectionString"
     }
   }
 }

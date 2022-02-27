@@ -5,12 +5,6 @@
       "suggestion": "true",
       "type": "identityapp",
       "connectionId": ""
-    },
-    "mssql1": {
-      "secretStore": "AzureAppSettings",
-      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/fidelitydbserver/databases/Fidelity_db",
-      "type": "mssql.azure",
-      "connectionId": "FidelityDbConnectionStrings"
     }
   }
 }

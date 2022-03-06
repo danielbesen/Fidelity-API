@@ -20,24 +20,33 @@ namespace Fidelity.Areas.Loyalts.Controllers
         /// <returns>Client List Object></returns>
         [HttpPost]
         [Authorize]
-        [Route("new/loyalt")] //CORRIGIR MÉTODO!
+        [Route("new/loyalt")]
         public APIResult<Object> NewLoyalt(LoyaltViewModel Model)
         {
             try
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    using (var dbContextTransaction = context.Database.BeginTransaction())
+                    var oLoyalt = new Loyalt()
                     {
-                        //var a = 2;
+                        Name = Model.Name,
+                        Description = Model.Description,
+                        Limit = Model.Limit,
+                        EndDate = Model.EndDate,
+                        EnterpriseId = Model.EnterpriseId,
+                        FidelityTypeId = Model.FidelityTypeId,
+                        PromotionTypeId = Model.PromotionTypeId,
+                        ProductId = Model.ProductId,
+                        Quantity = Model.Quantity,
+                        StartDate = Model.StartDate
+                    };
 
-                        dbContextTransaction.Commit();
+                    LoyaltyDAO.Insert(oLoyalt);
 
-                        return new APIResult<Object>()
-                        {
-                            Message = "Fidelidade cadastrada com sucesso!"
-                        };
-                    }
+                    return new APIResult<Object>()
+                    {
+                        Message = "Fidelidade cadastrada com sucesso!"
+                    };
                 }
             }
             catch (Exception e)
@@ -45,7 +54,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao cadastrar fidelidade: " + e.Message
+                    Message = "Erro ao cadastrar fidelidade: " + e.Message + e.InnerException
                 };
             }
         }

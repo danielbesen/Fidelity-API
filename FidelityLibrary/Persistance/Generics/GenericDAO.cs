@@ -32,7 +32,7 @@ namespace FidelityLibrary.Persistance.Generics
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw new Exception(e.Message + e.InnerException.InnerException.Message);
             }
         }
 

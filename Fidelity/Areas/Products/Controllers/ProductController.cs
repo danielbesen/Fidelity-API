@@ -49,14 +49,15 @@ namespace Fidelity.Areas.Products.Controllers
                             //adicionar uma linha com a fidelização selecionada, mas com o produtoID criado
                             foreach (var item in Model.FidelityList)
                             {
-                                var DbFidelity = FidelityDAO.FindByKey(item);
-                                if (DbFidelity != null)
-                                {
-                                    DbFidelity.ConsumedProductId = oProduct.Id;
-                                    FidelityDAO.SaveFidelity(DbFidelity, context);
-                                }
+                                    var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
+                                    {
+                                        ConsumedProductId = oProduct.Id,
+                                        LoyaltId = item
+                                    };
+                                    FidelityDAO.SaveFidelity(oFidelity, context);
                             }
                         }
+
                         dbContextTransaction.Commit();
                     }
 

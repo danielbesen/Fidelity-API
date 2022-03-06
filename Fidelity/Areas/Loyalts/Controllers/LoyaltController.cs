@@ -20,7 +20,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
         /// <returns>Client List Object></returns>
         [HttpPost]
         [Authorize]
-        [Route("new/loyalt")]
+        [Route("new/loyalt")] //CORRIGIR MÉTODO!
         public APIResult<Object> NewLoyalt(LoyaltViewModel Model)
         {
             try
@@ -29,29 +29,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 {
                     using (var dbContextTransaction = context.Database.BeginTransaction())
                     {
-                        var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
-                        {
-                            FidelityTypeId = Model.FidelityTypeId,
-                            PromotionTypeId = Model.PromotionType,
-                            ConsumedProductId = Model.ConsumedProductId, //Produto que precisará ser consumido
-                            Quantity = Model.Quantity
-                        };
-
-                        FidelityDAO.SaveFidelity(oFidelity, context);
-
-                        var oLoyalt = new Loyalt()
-                        {
-                            Name = Model.Name,
-                            StartDate = Model.StartDate,
-                            EndDate = Model.EndDate,
-                            Description = Model.Description,
-                            Limit = Model.Limit,
-                            EnterpriseId = Model.EnterpriseId,
-                            FidelityId = oFidelity.Id,
-                            ProductId = Model.ProductId //Produto que o usuário irá ganhar, se houver
-                        };
-
-                        LoyaltyDAO.SaveLoyalt(oLoyalt, context);
+                        //var a = 2;
 
                         dbContextTransaction.Commit();
 

@@ -91,7 +91,7 @@
     <Compile Include="Entity\Employees\Employee.cs" />
     <Compile Include="Entity\Entreprises\Enterprise.cs" />
     <Compile Include="Entity\Fidelitys\Fidelity.cs" />
-    <Compile Include="Entity\Fidelitys\FidelityType.cs" />
+    <Compile Include="Entity\Loyalts\FidelityType.cs" />
     <Compile Include="Entity\Loyalts\Loyalt.cs" />
     <Compile Include="Entity\Loyalts\LoyaltProgress.cs" />
     <Compile Include="Entity\Memberships\Membership.cs" />

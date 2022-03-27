@@ -66,7 +66,7 @@ namespace Fidelity.Areas.Categories.Controllers
         [HttpPost]
         [Authorize]
         [Route("categories")]
-        public APIResult<Object> NewCategory(CategoryViewModel Model)
+        public APIResult<Object> AddCategory(CategoryViewModel Model)
         {
             try
             {
@@ -91,6 +91,77 @@ namespace Fidelity.Areas.Categories.Controllers
                 {
                     Success = false,
                     Message = "Erro ao criar categoria! " + e.Message
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para alterar uma categoria.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>Client List Object></returns>
+        [HttpPut]
+        [Authorize]
+        [Route("categories")]
+        public APIResult<Object> UpdateCategory(CategoryViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oCategory = CategoryDAO.FindByKey(Model.Id);
+
+                    oCategory.Name = Model.Name;
+                    oCategory.AlterDate = DateTime.Now;
+
+                    CategoryDAO.Update(oCategory);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Categoria atualizada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao atualizar categoria! " + e.Message
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para deletar uma categoria.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>Client List Object></returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("categories")]
+        public APIResult<Object> DeleteCategory(CategoryViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oCategory = CategoryDAO.FindByKey(Model.Id);
+
+                    CategoryDAO.Delete(oCategory);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Categoria deletada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao deletar categoria! " + e.Message
                 };
             }
         }

@@ -7,6 +7,7 @@ namespace Fidelity.Areas.Products.Models
 {
     public class ProductViewModel
     {
+        public int Id { get; set; }
         public int EnterpriseId { get; set; }
         public string Name { get; set; }
 

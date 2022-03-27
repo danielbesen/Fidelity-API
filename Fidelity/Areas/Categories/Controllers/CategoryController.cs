@@ -62,7 +62,7 @@ namespace Fidelity.Areas.Categories.Controllers
         /// Requisição para cadastar uma nova categoria.
         /// </summary>
         /// <param name="Model"></param>
-        /// <returns>Client List Object></returns>
+        /// <returns>Category List Object></returns>
         [HttpPost]
         [Authorize]
         [Route("categories")]
@@ -99,7 +99,7 @@ namespace Fidelity.Areas.Categories.Controllers
         /// Requisição para alterar uma categoria.
         /// </summary>
         /// <param name="Model"></param>
-        /// <returns>Client List Object></returns>
+        /// <returns>Category List Object></returns>
         [HttpPut]
         [Authorize]
         [Route("categories")]
@@ -136,7 +136,7 @@ namespace Fidelity.Areas.Categories.Controllers
         /// Requisição para deletar uma categoria.
         /// </summary>
         /// <param name="Model"></param>
-        /// <returns>Client List Object></returns>
+        /// <returns>Category List Object></returns>
         [HttpDelete]
         [Authorize]
         [Route("categories")]

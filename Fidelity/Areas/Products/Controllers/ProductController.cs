@@ -24,7 +24,7 @@ namespace Fidelity.Areas.Products.Controllers
         [HttpPost]
         [Authorize]
         [Route("products")]
-        public APIResult<Object> NewProduct(ProductViewModel Model)
+        public APIResult<Object> AddProduct(ProductViewModel Model)
         {
             try
             {
@@ -106,6 +106,7 @@ namespace Fidelity.Areas.Products.Controllers
                     {
                         oProductList.Add(new ProductViewModel()
                         {
+                            Id = item.Id,
                             EnterpriseId = item.EnterpriseId,
                             Name = item.Description,
                             CategoryId = item.CategoryId,
@@ -136,6 +137,88 @@ namespace Fidelity.Areas.Products.Controllers
                 {
                     Success = false,
                     Message = "Erro ao buscar produtos! " + e.Message
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para alterar um produto.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>Product List Object></returns>
+        [HttpPut]
+        [Authorize]
+        [Route("products")]
+        public APIResult<Object> UpdateProduct(ProductViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oProduct = ProductDAO.FindByKey(Model.Id);
+
+                    oProduct.Description = Model.Name;
+                    oProduct.Status = Model.Status;
+                    oProduct.CategoryId = Model.CategoryId;
+                    oProduct.Image = Model.Image;
+                    oProduct.AlterDate = DateTime.Now;
+                    oProduct.Value = Model.Value;
+
+                    ProductDAO.Update(oProduct);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Produto atualizado com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao atualizar produto! " + e.Message
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para deletar um produto.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>Product List Object></returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("products")]
+        public APIResult<Object> DeleteProduct(ProductViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var Fidelities = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == Model.Id);
+
+                    foreach (var fidel in Fidelities)
+                    {
+                        FidelityDAO.Delete(fidel);
+                    }
+
+                    var oProduct = ProductDAO.FindByKey(Model.Id);
+
+                    ProductDAO.Delete(oProduct);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Produto deletado com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao deletar produto! " + e.Message
                 };
             }
         }

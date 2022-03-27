@@ -20,7 +20,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
         /// <returns>Client List Object></returns>
         [HttpPost]
         [Authorize]
-        [Route("new/loyalt")]
+        [Route("loyalts")]
         public APIResult<Object> NewLoyalt(LoyaltViewModel Model)
         {
             try

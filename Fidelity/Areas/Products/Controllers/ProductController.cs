@@ -17,13 +17,13 @@ namespace Fidelity.Areas.Products.Controllers
     public class ProductController : ApiController
     {
         /// <summary>
-        /// Requisição para buscar todos os clientes no sistema.
+        /// Requisição para cadastrar um novo produto
         /// </summary>
         /// <param name="Model"></param>
-        /// <returns>Client List Object></returns>
+        /// <returns>APIResult Object></returns>
         [HttpPost]
         [Authorize]
-        [Route("new/product")]
+        [Route("products")]
         public APIResult<Object> NewProduct(ProductViewModel Model)
         {
             try
@@ -79,9 +79,9 @@ namespace Fidelity.Areas.Products.Controllers
         }
 
         /// <summary>
-        /// Requisição para buscar todos os clientes no sistema.
+        /// Requisição para buscar todos os produtos no sistema.
         /// </summary>
-        /// <returns>Client List Object></returns>
+        /// <returns>Product List Object></returns>
         [HttpGet]
         [Authorize]
         [Route("products")]

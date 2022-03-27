@@ -24,7 +24,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
         /// <returns>API Result Object</returns>
         [HttpPost]
         [AllowAnonymous]
-        [Route("new/enterprise")]
+        [Route("enterprises")]
         public APIResult<Object> SignupEnterprise(UserViewModel Model)
         {
             try

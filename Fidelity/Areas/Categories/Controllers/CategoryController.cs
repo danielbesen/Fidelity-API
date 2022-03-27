@@ -1,5 +1,6 @@
 ﻿using Fidelity.Areas.Categories.Models;
 using Fidelity.Models;
+using FidelityLibrary.DataContext;
 using FidelityLibrary.Persistance.CategoryDAO;
 using System;
 using System.Collections.Generic;
@@ -53,6 +54,43 @@ namespace Fidelity.Areas.Categories.Controllers
                 {
                     Success = false,
                     Message = "Erro ao buscar todas categorias: " + e.Message,
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para cadastar uma nova categoria.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>Client List Object></returns>
+        [HttpPost]
+        [Authorize]
+        [Route("categories")]
+        public APIResult<Object> NewCategory(CategoryViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oCategory = new FidelityLibrary.Entity.Categories.Category()
+                    {
+                        Name = Model.Name
+                    };
+
+                    CategoryDAO.Insert(oCategory);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Categoria cadastrada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao criar categoria! " + e.Message
                 };
             }
         }

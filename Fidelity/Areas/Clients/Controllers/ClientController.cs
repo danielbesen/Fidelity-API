@@ -73,7 +73,7 @@ namespace Fidelity.Areas.Clients.Controllers
         /// <returns>API Result Object</returns>
         [HttpPost]
         [AllowAnonymous]
-        [Route("new/client")]
+        [Route("clients")]
         public APIResult<Object> SignupClient(UserViewModel Model)
         {
             try

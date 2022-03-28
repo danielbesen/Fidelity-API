@@ -10,6 +10,7 @@ using FidelityLibrary.Persistance.ProductDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
@@ -92,14 +93,30 @@ namespace Fidelity.Areas.Products.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
-                    var Products = new List<Product>();
-                    if (Params == null)
+                    var value = "";
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
                     {
-                        Products = ProductDAO.FindAll().ToList();
+                        value = parameter.Value.ToLower();
+                    }
+
+                    #region GET
+
+                    var Products = new List<Product>();
+
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        Products = ProductDAO.FindAll().Where(x => x.Description.ToLower().Contains(value)).ToList();
                     }
                     else
                     {
-                        Products = ProductDAO.FindAll().Skip((Params.Page - 1) * Params.PageSize).Take(Params.PageSize).ToList();
+                        if (Params == null)
+                        {
+                            Products = ProductDAO.FindAll().ToList();
+                        }
+                        else
+                        {
+                            Products = ProductDAO.FindAll().Skip((Params.Page - 1) * Params.PageSize).Take(Params.PageSize).ToList();
+                        }
                     }
 
                     var oProductList = new List<ProductViewModel>();
@@ -123,6 +140,8 @@ namespace Fidelity.Areas.Products.Controllers
                         Count = oProductList.Count,
                         Message = "Sucesso ao buscar produtos!"
                     };
+
+                    #endregion
                 }
                 else
                     return new APIResult<List<ProductViewModel>>()

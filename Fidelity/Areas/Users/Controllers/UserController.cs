@@ -65,7 +65,7 @@ namespace Fidelity.Areas.Users.Controllers
                             mail.From = new MailAddress("de@gmail.com");
                             mail.To.Add("para@gmail.com");
                             mail.Subject = "Teste";
-                            mail.Body = "Testando mensagem de e-mail";
+                            mail.Body = "Sua nova senha é " + Password;
 
                             using (var smtp = new SmtpClient("smtp.gmail.com"))
                             {
@@ -73,7 +73,7 @@ namespace Fidelity.Areas.Users.Controllers
                                 smtp.Port = 587;
                                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                                 smtp.UseDefaultCredentials = false;
-                                smtp.Credentials = new NetworkCredential("fidelity@gmail.com", "sua senha");
+                                smtp.Credentials = new NetworkCredential("@gmail.com", "");
                                 smtp.Send(mail);
                             }
 
@@ -94,7 +94,7 @@ namespace Fidelity.Areas.Users.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao resetar senha! " + e.Message
+                    Message = "Erro ao resetar senha! " + e.Message + e.InnerException
                 };
             }
         }

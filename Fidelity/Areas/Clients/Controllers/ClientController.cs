@@ -27,7 +27,7 @@ namespace Fidelity.Areas.Clients.Controllers
         [HttpGet]
         [Authorize]
         [Route("clients")]
-        public APIResult<List<ClientViewModel>> GetClients()
+        public APIResult<List<ClientViewModel>> Get()
         {
             try
             {
@@ -74,7 +74,7 @@ namespace Fidelity.Areas.Clients.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("clients")]
-        public APIResult<Object> SignupClient(UserViewModel Model)
+        public APIResult<Object> Signup(UserViewModel Model)
         {
             try
             {

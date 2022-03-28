@@ -21,7 +21,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
         [HttpPost]
         [Authorize]
         [Route("loyalts")]
-        public APIResult<Object> AddLoyalt(LoyaltViewModel Model)
+        public APIResult<Object> Add(LoyaltViewModel Model)
         {
             try
             {
@@ -84,7 +84,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
         [HttpGet]
         [Authorize]
         [Route("loyalts")]
-        public APIResult<List<LoyaltViewModel>> GetLoyalts()
+        public APIResult<List<LoyaltViewModel>> Get()
         {
             try
             {
@@ -139,7 +139,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
         [HttpPut]
         [Authorize]
         [Route("loyalts")]
-        public APIResult<Object> UpdateLoyalt(LoyaltViewModel Model)
+        public APIResult<Object> Update(LoyaltViewModel Model)
         {
             try
             {
@@ -184,7 +184,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
         [HttpDelete]
         [Authorize]
         [Route("loyalts")]
-        public APIResult<Object> DeleteLoyalt(LoyaltViewModel Model)
+        public APIResult<Object> Delete(LoyaltViewModel Model)
         {
             try
             {

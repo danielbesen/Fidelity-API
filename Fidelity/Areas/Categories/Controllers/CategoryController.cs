@@ -19,7 +19,7 @@ namespace Fidelity.Areas.Categories.Controllers
         [HttpGet]
         [Authorize]
         [Route("categories")]
-        public APIResult<List<CategoryViewModel>> GetCategories()
+        public APIResult<List<CategoryViewModel>> Get()
         {
             try
             {
@@ -66,7 +66,7 @@ namespace Fidelity.Areas.Categories.Controllers
         [HttpPost]
         [Authorize]
         [Route("categories")]
-        public APIResult<Object> AddCategory(CategoryViewModel Model)
+        public APIResult<Object> Add(CategoryViewModel Model)
         {
             try
             {
@@ -103,7 +103,7 @@ namespace Fidelity.Areas.Categories.Controllers
         [HttpPut]
         [Authorize]
         [Route("categories")]
-        public APIResult<Object> UpdateCategory(CategoryViewModel Model)
+        public APIResult<Object> Update(CategoryViewModel Model)
         {
             try
             {
@@ -140,7 +140,7 @@ namespace Fidelity.Areas.Categories.Controllers
         [HttpDelete]
         [Authorize]
         [Route("categories")]
-        public APIResult<Object> DeleteCategory(CategoryViewModel Model)
+        public APIResult<Object> Delete(CategoryViewModel Model)
         {
             try
             {

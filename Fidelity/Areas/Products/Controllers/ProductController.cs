@@ -26,7 +26,7 @@ namespace Fidelity.Areas.Products.Controllers
         [HttpPost]
         [Authorize]
         [Route("products")]
-        public APIResult<Object> AddProduct(ProductViewModel Model)
+        public APIResult<Object> Add(ProductViewModel Model)
         {
             try
             {
@@ -87,7 +87,7 @@ namespace Fidelity.Areas.Products.Controllers
         [HttpGet]
         [Authorize]
         [Route("products")]
-        public APIResult<List<ProductViewModel>> GetProducts(PaginationParams Params)
+        public APIResult<List<ProductViewModel>> Get(PaginationParams Params)
         {
             try
             {
@@ -169,7 +169,7 @@ namespace Fidelity.Areas.Products.Controllers
         [HttpPut]
         [Authorize]
         [Route("products")]
-        public APIResult<Object> UpdateProduct(ProductViewModel Model)
+        public APIResult<Object> Update(ProductViewModel Model)
         {
             try
             {
@@ -210,7 +210,7 @@ namespace Fidelity.Areas.Products.Controllers
         [HttpDelete]
         [Authorize]
         [Route("products")]
-        public APIResult<Object> DeleteProduct(ProductViewModel Model)
+        public APIResult<Object> Delete(ProductViewModel Model)
         {
             try
             {

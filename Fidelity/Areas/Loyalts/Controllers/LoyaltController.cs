@@ -15,7 +15,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
     public class LoyaltController : ApiController
     {
         /// <summary>
-        /// Requisição para inserir uma fidelidade ao sistema
+        /// Requisição para inserir uma fidelidade ao sistema.
         /// </summary>
         /// <returns>Client List Object></returns>
         [HttpPost]
@@ -104,6 +104,50 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 {
                     Success = false,
                     Message = "Erro ao buscar todas fidelidades: " + e.Message,
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para atualizar uma fidelidade.
+        /// </summary>
+        /// <returns>APIResult Object></returns>
+        [HttpPut]
+        [Authorize]
+        [Route("loyalts")]
+        public APIResult<Object> UpdateLoyalt(LoyaltViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oLoyalt = LoyaltyDAO.FindByKey(Model.Id);
+
+                    oLoyalt.Name = Model.Name;
+                    oLoyalt.Description = Model.Description;
+                    oLoyalt.Limit = Model.Limit;
+                    oLoyalt.EndDate = Model.EndDate;
+                    oLoyalt.FidelityTypeId = Model.FidelityTypeId;
+                    oLoyalt.PromotionTypeId = Model.PromotionTypeId;
+                    oLoyalt.ProductId = Model.ProductId;
+                    oLoyalt.Quantity = Model.Quantity;
+                    oLoyalt.StartDate = Model.StartDate;
+                    oLoyalt.AlterDate = DateTime.Now;
+
+                    LoyaltyDAO.Update(oLoyalt);
+
+                    return new APIResult<Object>()
+                    {
+                        Message = "Fidelidade atualizada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao atualizar fidelidade: " + e.Message + e.InnerException
                 };
             }
         }

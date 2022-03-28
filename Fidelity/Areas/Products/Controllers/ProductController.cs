@@ -45,17 +45,17 @@ namespace Fidelity.Areas.Products.Controllers
 
                         ProductDAO.SaveProduct(oProduct, context);
 
-                        if (Model.FidelityList?.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelização
+                        if (Model.LoyaltList?.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelização
                         {
                             //adicionar uma linha com a fidelização selecionada, mas com o produtoID criado
-                            foreach (var item in Model.FidelityList)
+                            foreach (var item in Model.LoyaltList)
                             {
-                                    var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
-                                    {
-                                        ConsumedProductId = oProduct.Id,
-                                        LoyaltId = item
-                                    };
-                                    FidelityDAO.SaveFidelity(oFidelity, context);
+                                var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
+                                {
+                                    ConsumedProductId = oProduct.Id,
+                                    LoyaltId = item
+                                };
+                                FidelityDAO.SaveFidelity(oFidelity, context);
                             }
                         }
 

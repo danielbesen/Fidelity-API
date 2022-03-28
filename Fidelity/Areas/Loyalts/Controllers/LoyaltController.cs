@@ -27,21 +27,39 @@ namespace Fidelity.Areas.Loyalts.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oLoyalt = new Loyalt()
+                    using (var dbContextTransaction = context.Database.BeginTransaction())
                     {
-                        Name = Model.Name,
-                        Description = Model.Description,
-                        Limit = Model.Limit,
-                        EndDate = Model.EndDate,
-                        EnterpriseId = Model.EnterpriseId,
-                        FidelityTypeId = Model.FidelityTypeId,
-                        PromotionTypeId = Model.PromotionTypeId,
-                        ProductId = Model.ProductId,
-                        Quantity = Model.Quantity,
-                        StartDate = Model.StartDate
-                    };
+                        var oLoyalt = new Loyalt()
+                        {
+                            Name = Model.Name,
+                            Description = Model.Description,
+                            Limit = Model.Limit,
+                            EndDate = Model.EndDate,
+                            EnterpriseId = Model.EnterpriseId,
+                            FidelityTypeId = Model.FidelityTypeId,
+                            PromotionTypeId = Model.PromotionTypeId,
+                            ProductId = Model.ProductId,
+                            Quantity = Model.Quantity,
+                            StartDate = Model.StartDate
+                        };
 
-                    LoyaltyDAO.Insert(oLoyalt);
+                        LoyaltyDAO.SaveLoyalt(oLoyalt, context);
+
+                        if (Model.ProductList?.Count > 0)
+                        {
+                            foreach (var item in Model.ProductList)
+                            {
+                                var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
+                                {
+                                    ConsumedProductId = item,
+                                    LoyaltId = oLoyalt.Id,
+                                };
+                                FidelityDAO.SaveFidelity(oFidelity, context);
+                            }
+                        }
+
+                        dbContextTransaction.Commit();
+                    }
 
                     return new APIResult<Object>()
                     {
@@ -87,7 +105,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             Quantity = item.Quantity,
                             PromotionTypeId = item.PromotionTypeId,
                             EndDate = item.EndDate,
-                            StartDate = item.StartDate,
+                            StartDate = item.StartDate
                         });
                     }
 

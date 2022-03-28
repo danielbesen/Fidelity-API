@@ -19,6 +19,6 @@ namespace Fidelity.Areas.Products.Models
 
         public byte[] Image { get; set; }
 
-        public List<int> FidelityList { get; set; }
+        public List<int> LoyaltList { get; set; }
     }
 }

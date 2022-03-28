@@ -61,7 +61,7 @@ namespace Fidelity.Areas.Clients.Controllers
                 return new APIResult<List<ClientViewModel>>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar todos clientes: " + e.Message,
+                    Message = "Erro ao buscar todos clientes: " + e.Message + e.InnerException
                 };
             }
         }
@@ -129,7 +129,7 @@ namespace Fidelity.Areas.Clients.Controllers
                         return new APIResult<Object>()
                         {
                             Success = false,
-                            Message = "Erro na transação: " + e.Message,
+                            Message = "Erro na transação: " + e.Message + e.InnerException
                         };
                     }
                     #endregion
@@ -140,7 +140,7 @@ namespace Fidelity.Areas.Clients.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao validar Login: " + e.Message,
+                    Message = "Erro ao validar Login: " + e.Message + e.InnerException
                 };
             }
         }

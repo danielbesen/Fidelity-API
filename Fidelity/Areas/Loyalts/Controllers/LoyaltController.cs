@@ -103,7 +103,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 return new APIResult<List<LoyaltViewModel>>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar todas fidelidades: " + e.Message,
+                    Message = "Erro ao buscar todas fidelidades: " + e.Message + e.InnerException
                 };
             }
         }

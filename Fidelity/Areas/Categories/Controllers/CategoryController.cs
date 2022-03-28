@@ -53,7 +53,7 @@ namespace Fidelity.Areas.Categories.Controllers
                 return new APIResult<List<CategoryViewModel>>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar todas categorias: " + e.Message,
+                    Message = "Erro ao buscar todas categorias: " + e.Message + e.InnerException
                 };
             }
         }
@@ -90,7 +90,7 @@ namespace Fidelity.Areas.Categories.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao criar categoria! " + e.Message
+                    Message = "Erro ao criar categoria! " + e.Message + e.InnerException
                 };
             }
         }
@@ -127,7 +127,7 @@ namespace Fidelity.Areas.Categories.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao atualizar categoria! " + e.Message
+                    Message = "Erro ao atualizar categoria! " + e.Message + e.InnerException
                 };
             }
         }
@@ -161,7 +161,7 @@ namespace Fidelity.Areas.Categories.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao deletar categoria! " + e.Message
+                    Message = "Erro ao deletar categoria! " + e.Message + e.InnerException
                 };
             }
         }

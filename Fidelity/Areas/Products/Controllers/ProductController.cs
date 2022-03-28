@@ -73,7 +73,7 @@ namespace Fidelity.Areas.Products.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao criar produto! " + e.Message
+                    Message = "Erro ao criar produto! " + e.Message + e.InnerException
                 };
             }
         }
@@ -136,7 +136,7 @@ namespace Fidelity.Areas.Products.Controllers
                 return new APIResult<List<ProductViewModel>>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar produtos! " + e.Message
+                    Message = "Erro ao buscar produtos! " + e.Message + e.InnerException
                 };
             }
         }
@@ -177,7 +177,7 @@ namespace Fidelity.Areas.Products.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao atualizar produto! " + e.Message
+                    Message = "Erro ao atualizar produto! " + e.Message + e.InnerException
                 };
             }
         }
@@ -218,7 +218,7 @@ namespace Fidelity.Areas.Products.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao deletar produto! " + e.Message
+                    Message = "Erro ao deletar produto! " + e.Message + e.InnerException
                 };
             }
         }

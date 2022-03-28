@@ -119,7 +119,7 @@ namespace Fidelity.Areas.Users.Controllers
             }
             catch (Exception e)
             {
-                throw new Exception("Erro ao gerar nova senha: " + e.Message);
+                throw new Exception("Erro ao gerar nova senha: " + e.Message + e.InnerException);
             }
 
         }

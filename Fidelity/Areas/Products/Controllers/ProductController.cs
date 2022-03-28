@@ -5,6 +5,7 @@ using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Products;
 using FidelityLibrary.Persistance.FidelityDAO;
+using FidelityLibrary.Persistance.LoyaltyDAO;
 using FidelityLibrary.Persistance.ProductDAO;
 using System;
 using System.Collections.Generic;
@@ -196,8 +197,17 @@ namespace Fidelity.Areas.Products.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var Fidelities = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == Model.Id);
+                    var Loyalts = LoyaltyDAO.FindAll().Where(x => x.ProductId == Model.Id).ToList();
+                    if (Loyalts.Any())
+                    {
+                        return new APIResult<object>()
+                        {
+                            Success = false,
+                            Message = "Produto vinculado como prêmio de fidelidades. Remova-as primeiro."
+                        };
+                    }
 
+                    var Fidelities = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == Model.Id).ToList();
                     foreach (var fidel in Fidelities)
                     {
                         FidelityDAO.Delete(fidel);

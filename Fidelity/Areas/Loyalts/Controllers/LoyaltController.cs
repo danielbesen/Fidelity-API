@@ -81,7 +81,13 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             Description = item.Description,
                             EnterpriseId = item.EnterpriseId,
                             Limit = item.Limit,
-                            Name = item.Name
+                            Name = item.Name,
+                            ProductId = item.ProductId,
+                            FidelityTypeId = item.FidelityTypeId,
+                            Quantity = item.Quantity,
+                            PromotionTypeId = item.PromotionTypeId,
+                            EndDate = item.EndDate,
+                            StartDate = item.StartDate,
                         });
                     }
 

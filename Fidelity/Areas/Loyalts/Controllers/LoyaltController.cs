@@ -157,5 +157,45 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 };
             }
         }
+
+        /// <summary>
+        /// Requisição para deletar uma fidelidade.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>APIResult Object></returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("loyalts")]
+        public APIResult<Object> DeleteLoyalt(LoyaltViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+
+                    var Fidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == Model.Id).ToList();
+                    foreach (var fidel in Fidelities)
+                    {
+                        FidelityDAO.Delete(fidel);
+                    }
+
+                    var oLoyalt = LoyaltyDAO.FindByKey(Model.Id);
+                    LoyaltyDAO.Delete(oLoyalt);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Fidelidade deletada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao deletar fidelidade! " + e.Message + e.InnerException
+                };
+            }
+        }
     }
 }

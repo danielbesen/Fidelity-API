@@ -180,7 +180,7 @@ namespace Fidelity.Areas.Clients.Controllers
                         return new APIResult<ClientViewModel>()
                         {
                             Success = false,
-                            Message = "Nenhum cliente com esse CPF encontrado!"
+                            Message = "Nenhum cliente encontrado!"
                         };
                     }
                 }

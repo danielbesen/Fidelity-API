@@ -1,10 +1,6 @@
 ﻿using Fidelity.Areas.Categories.Models;
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
-<<<<<<< HEAD
-using FidelityLibrary.Entity.Categories;
-=======
->>>>>>> 56aab9eb998b5f0d313175984cf1a4ea211c5074
 using FidelityLibrary.Persistance.CategoryDAO;
 using System;
 using System.Collections.Generic;
@@ -16,10 +12,7 @@ namespace Fidelity.Areas.Categories.Controllers
 {
     public class CategoryController : ApiController
     {
-        /// <summary>
-        /// Requisição para buscar todas as categorias no sistema.
-        /// </summary>
-        /// <returns>Category List Object></returns>
+
         [HttpGet]
         [Authorize]
         [Route("categories")]

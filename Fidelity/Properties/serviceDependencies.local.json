@@ -1,12 +1,3 @@
 {
-  "dependencies": {
-    "secrets1": {
-      "type": "secrets.user"
-    },
-    "mssql1": {
-      "secretStore": null,
-      "type": "mssql.local",
-      "connectionId": "FidelityDbConnectionString"
-    }
-  }
+  "dependencies": {}
 }

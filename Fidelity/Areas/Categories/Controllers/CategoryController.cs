@@ -22,13 +22,8 @@ namespace Fidelity.Areas.Categories.Controllers
         /// <returns>Category List Object></returns>
         [HttpGet]
         [Authorize]
-<<<<<<< HEAD
-        [Route("category")]
-        public APIResult<List<CategoryViewModel>> GetCategories()
-=======
         [Route("categories")]
         public APIResult<List<CategoryViewModel>> Get()
->>>>>>> 56aab9eb998b5f0d313175984cf1a4ea211c5074
         {
             try
             {
@@ -67,11 +62,7 @@ namespace Fidelity.Areas.Categories.Controllers
             }
         }
 
-        /// <summary>
-        /// Requisição para cadastar uma nova categoria.
-        /// </summary>
-        /// <param name="Model"></param>
-        /// <returns>Category List Object></returns>
+
         [HttpPost]
         [Authorize]
         [Route("categories")]
@@ -104,11 +95,6 @@ namespace Fidelity.Areas.Categories.Controllers
             }
         }
 
-        /// <summary>
-        /// Requisição para alterar uma categoria.
-        /// </summary>
-        /// <param name="Model"></param>
-        /// <returns>Category List Object></returns>
         [HttpPut]
         [Authorize]
         [Route("categories")]
@@ -141,11 +127,6 @@ namespace Fidelity.Areas.Categories.Controllers
             }
         }
 
-        /// <summary>
-        /// Requisição para deletar uma categoria.
-        /// </summary>
-        /// <param name="Model"></param>
-        /// <returns>Category List Object></returns>
         [HttpDelete]
         [Authorize]
         [Route("categories")]
@@ -175,104 +156,6 @@ namespace Fidelity.Areas.Categories.Controllers
             }
         }
 
-        [HttpPost]
-        [Authorize]
-        [Route("category")]
-        public APIResult<Object> NewCategory(CategoryViewModel model)
-        {
-            try
-            {
-                using (var context = new ApplicationDbContext())
-                {
-
-                    var categoria = new Category()
-                    {
-                        Name = model.Name,
-                        InsertDate = model.DataInclusao,
-                    };
-
-                    CategoryDAO.SaveCategory(categoria,context);
-
-                    return new APIResult<object>()
-                    {
-                        Message = "Categoria cadastrado com sucesso!"
-                    };
-                }
-            }
-            catch (Exception e)
-            {
-                return new APIResult<Object>()
-                {
-                    Success = false,
-                    Message = "Erro ao buscar todas categorias: " + e.Message,
-                };
-            }
-        }
-
-        [HttpPut]
-        [Authorize]
-        [Route("category")]
-        public APIResult<Object> PutCategory(CategoryViewModel model)
-        {
-            try
-            {
-                using (var context = new ApplicationDbContext())
-                {
-                    var categoria = new Category()
-                    {
-                        Id = model.Id,
-                        AlterDate = model.DataAlteracao,
-                        Name = model.Name,
-                    };
-
-                    CategoryDAO.PutCategory(categoria,context);
-
-                    return new APIResult<object>()
-                    {
-                        Message = "Categoria atualizada com sucesso!"
-                    };
-                }
-            }
-            catch (Exception e)
-            {
-                return new APIResult<Object>()
-                {
-                    Success = false,
-                    Message = "Erro ao buscar todas categorias: " + e.Message,
-                };
-            }
-        }
-
-        [HttpDelete]
-        [Authorize]
-        [Route("category")]
-        public APIResult<Object> DeleteCategory(CategoryViewModel model)
-        {
-            try
-            {
-                using (var context = new ApplicationDbContext())
-                {
-                    var categoria = new Category()
-                    {
-                        Id = model.Id
-                    };
-
-                    CategoryDAO.DeleteCategory(categoria, context);
-
-                    return new APIResult<object>()
-                    {
-                        Message = "Categoria deletada com sucesso!"
-                    };
-                }
-            }
-            catch (Exception e)
-            {
-                return new APIResult<Object>()
-                {
-                    Success = false,
-                    Message = "Erro ao buscar todas categorias: " + e.Message,
-                };
-            }
-        }
+        
     }
 }

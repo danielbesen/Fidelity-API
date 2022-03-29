@@ -1,4 +1,5 @@
-﻿using Fidelity.Areas.Loyalts.Models;
+﻿using Fidelity.Areas.Enterprises.Models;
+using Fidelity.Areas.Loyalts.Models;
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Loyalts;
@@ -73,12 +74,14 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     var oLoyaltList = new List<LoyaltViewModel>();
+                    var enterpriseList = new EnterpriseViewModel();
                     foreach (var item in LoyaltyDAO.FindAll().ToList())
                     {
                         oLoyaltList.Add(new LoyaltViewModel()
                         {
                             Id = item.Id,
                             Description = item.Description,
+                            Enterprise = enterpriseList,
                             EnterpriseId = item.EnterpriseId,
                             Limit = item.Limit,
                             Name = item.Name

@@ -8,7 +8,7 @@ namespace Fidelity.Areas.Loyalts.Models
 {
     public class LoyaltViewModel
     {
-        public int? Id { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public EnterpriseViewModel Enterprise { get; set; }
@@ -21,5 +21,6 @@ namespace Fidelity.Areas.Loyalts.Models
         public int PromotionTypeId { get; set; }
         public int FidelityTypeId { get; set; }
         public double Quantity { get; set; }
+        public List<int> ProductList { get; set; }
     }
 }

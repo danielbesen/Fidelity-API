@@ -16,33 +16,51 @@ namespace Fidelity.Areas.Loyalts.Controllers
     public class LoyaltController : ApiController
     {
         /// <summary>
-        /// Requisição para inserir uma fidelidade ao sistema
+        /// Requisição para inserir uma fidelidade ao sistema.
         /// </summary>
         /// <returns>Client List Object></returns>
         [HttpPost]
         [Authorize]
-        [Route("new/loyalt")]
-        public APIResult<Object> NewLoyalt(LoyaltViewModel Model)
+        [Route("loyalts")]
+        public APIResult<Object> Add(LoyaltViewModel Model)
         {
             try
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oLoyalt = new Loyalt()
+                    using (var dbContextTransaction = context.Database.BeginTransaction())
                     {
-                        Name = Model.Name,
-                        Description = Model.Description,
-                        Limit = Model.Limit,
-                        EndDate = Model.EndDate,
-                        EnterpriseId = Model.EnterpriseId,
-                        FidelityTypeId = Model.FidelityTypeId,
-                        PromotionTypeId = Model.PromotionTypeId,
-                        ProductId = Model.ProductId,
-                        Quantity = Model.Quantity,
-                        StartDate = Model.StartDate
-                    };
+                        var oLoyalt = new Loyalt()
+                        {
+                            Name = Model.Name,
+                            Description = Model.Description,
+                            Limit = Model.Limit,
+                            EndDate = Model.EndDate,
+                            EnterpriseId = Model.EnterpriseId,
+                            FidelityTypeId = Model.FidelityTypeId,
+                            PromotionTypeId = Model.PromotionTypeId,
+                            ProductId = Model.ProductId,
+                            Quantity = Model.Quantity,
+                            StartDate = Model.StartDate
+                        };
 
-                    LoyaltyDAO.Insert(oLoyalt);
+                        LoyaltyDAO.SaveLoyalt(oLoyalt, context);
+
+                        if (Model.ProductList?.Count > 0)
+                        {
+                            foreach (var item in Model.ProductList)
+                            {
+                                var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
+                                {
+                                    ConsumedProductId = item,
+                                    LoyaltId = oLoyalt.Id,
+                                };
+                                FidelityDAO.SaveFidelity(oFidelity, context);
+                            }
+                        }
+
+                        dbContextTransaction.Commit();
+                    }
 
                     return new APIResult<Object>()
                     {
@@ -67,7 +85,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
         [HttpGet]
         [Authorize]
         [Route("loyalts")]
-        public APIResult<List<LoyaltViewModel>> GetLoyalts()
+        public APIResult<List<LoyaltViewModel>> Get()
         {
             try
             {
@@ -84,7 +102,13 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             Enterprise = enterpriseList,
                             EnterpriseId = item.EnterpriseId,
                             Limit = item.Limit,
-                            Name = item.Name
+                            Name = item.Name,
+                            ProductId = item.ProductId,
+                            FidelityTypeId = item.FidelityTypeId,
+                            Quantity = item.Quantity,
+                            PromotionTypeId = item.PromotionTypeId,
+                            EndDate = item.EndDate,
+                            StartDate = item.StartDate
                         });
                     }
 
@@ -106,7 +130,91 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 return new APIResult<List<LoyaltViewModel>>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar todas fidelidades: " + e.Message,
+                    Message = "Erro ao buscar todas fidelidades: " + e.Message + e.InnerException
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para atualizar uma fidelidade.
+        /// </summary>
+        /// <returns>APIResult Object></returns>
+        [HttpPut]
+        [Authorize]
+        [Route("loyalts")]
+        public APIResult<Object> Update(LoyaltViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oLoyalt = LoyaltyDAO.FindByKey(Model.Id);
+
+                    oLoyalt.Name = Model.Name;
+                    oLoyalt.Description = Model.Description;
+                    oLoyalt.Limit = Model.Limit;
+                    oLoyalt.EndDate = Model.EndDate;
+                    oLoyalt.FidelityTypeId = Model.FidelityTypeId;
+                    oLoyalt.PromotionTypeId = Model.PromotionTypeId;
+                    oLoyalt.ProductId = Model.ProductId;
+                    oLoyalt.Quantity = Model.Quantity;
+                    oLoyalt.StartDate = Model.StartDate;
+                    oLoyalt.AlterDate = DateTime.Now;
+
+                    LoyaltyDAO.Update(oLoyalt);
+
+                    return new APIResult<Object>()
+                    {
+                        Message = "Fidelidade atualizada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao atualizar fidelidade: " + e.Message + e.InnerException
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para deletar uma fidelidade.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>APIResult Object></returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("loyalts")]
+        public APIResult<Object> Delete(LoyaltViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+
+                    var Fidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == Model.Id).ToList();
+                    foreach (var fidel in Fidelities)
+                    {
+                        FidelityDAO.Delete(fidel);
+                    }
+
+                    var oLoyalt = LoyaltyDAO.FindByKey(Model.Id);
+                    LoyaltyDAO.Delete(oLoyalt);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Fidelidade deletada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao deletar fidelidade! " + e.Message + e.InnerException
                 };
             }
         }

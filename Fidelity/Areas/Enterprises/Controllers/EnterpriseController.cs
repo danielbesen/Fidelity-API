@@ -24,8 +24,8 @@ namespace Fidelity.Areas.Enterprises.Controllers
         /// <returns>API Result Object</returns>
         [HttpPost]
         [AllowAnonymous]
-        [Route("new/enterprise")]
-        public APIResult<Object> SignupEnterprise(UserViewModel Model)
+        [Route("enterprises")]
+        public APIResult<Object> Signup(UserViewModel Model)
         {
             try
             {
@@ -109,7 +109,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
                         return new APIResult<Object>()
                         {
                             Success = false,
-                            Message = "Erro na transação: " + e.Message,
+                            Message = "Erro na transação: " + e.Message + e.InnerException
                         };
                     }
                     #endregion
@@ -120,7 +120,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao validar Login: " + e.Message,
+                    Message = "Erro ao validar Login: " + e.Message + e.InnerException
                 };
             }
         }

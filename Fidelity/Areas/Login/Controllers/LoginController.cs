@@ -71,7 +71,7 @@ namespace Fidelity.Areas.Login.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao validar Login: " + e.Message,
+                    Message = "Erro ao validar Login: " + e.Message + e.InnerException
                 };
             }
         }

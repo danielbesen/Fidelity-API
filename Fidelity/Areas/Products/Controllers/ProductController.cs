@@ -5,10 +5,12 @@ using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Products;
 using FidelityLibrary.Persistance.FidelityDAO;
+using FidelityLibrary.Persistance.LoyaltyDAO;
 using FidelityLibrary.Persistance.ProductDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
@@ -17,14 +19,14 @@ namespace Fidelity.Areas.Products.Controllers
     public class ProductController : ApiController
     {
         /// <summary>
-        /// Requisição para buscar todos os clientes no sistema.
+        /// Requisição para cadastrar um novo produto
         /// </summary>
         /// <param name="Model"></param>
-        /// <returns>Client List Object></returns>
+        /// <returns>APIResult Object></returns>
         [HttpPost]
         [Authorize]
-        [Route("new/product")]
-        public APIResult<Object> NewProduct(ProductViewModel Model)
+        [Route("products")]
+        public APIResult<Object> Add(ProductViewModel Model)
         {
             try
             {
@@ -44,17 +46,17 @@ namespace Fidelity.Areas.Products.Controllers
 
                         ProductDAO.SaveProduct(oProduct, context);
 
-                        if (Model.FidelityList?.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelização
+                        if (Model.LoyaltList?.Count > 0) //Se a lista de fidelidades vinculadas for maior que zero, salvar nova linha de fidelização
                         {
                             //adicionar uma linha com a fidelização selecionada, mas com o produtoID criado
-                            foreach (var item in Model.FidelityList)
+                            foreach (var item in Model.LoyaltList)
                             {
-                                    var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
-                                    {
-                                        ConsumedProductId = oProduct.Id,
-                                        LoyaltId = item
-                                    };
-                                    FidelityDAO.SaveFidelity(oFidelity, context);
+                                var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
+                                {
+                                    ConsumedProductId = oProduct.Id,
+                                    LoyaltId = item
+                                };
+                                FidelityDAO.SaveFidelity(oFidelity, context);
                             }
                         }
 
@@ -73,32 +75,48 @@ namespace Fidelity.Areas.Products.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao criar produto! " + e.Message
+                    Message = "Erro ao criar produto! " + e.Message + e.InnerException
                 };
             }
         }
 
         /// <summary>
-        /// Requisição para buscar todos os clientes no sistema.
+        /// Requisição para buscar todos os produtos no sistema.
         /// </summary>
-        /// <returns>Client List Object></returns>
+        /// <returns>Product List Object></returns>
         [HttpGet]
         [Authorize]
         [Route("products")]
-        public APIResult<List<ProductViewModel>> GetProducts(PaginationParams Params)
+        public APIResult<List<ProductViewModel>> Get(PaginationParams Params)
         {
             try
             {
                 if (User.Identity.IsAuthenticated)
                 {
-                    var Products = new List<Product>();
-                    if (Params == null)
+                    var value = "";
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
                     {
-                        Products = ProductDAO.FindAll().ToList();
+                        value = parameter.Value.ToLower();
+                    }
+
+                    #region GET
+
+                    var Products = new List<Product>();
+
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        Products = ProductDAO.FindAll().Where(x => x.Description.ToLower().Contains(value)).ToList();
                     }
                     else
                     {
-                        Products = ProductDAO.FindAll().Skip((Params.Page - 1) * Params.PageSize).Take(Params.PageSize).ToList();
+                        if (Params == null)
+                        {
+                            Products = ProductDAO.FindAll().ToList();
+                        }
+                        else
+                        {
+                            Products = ProductDAO.FindAll().Skip((Params.Page - 1) * Params.PageSize).Take(Params.PageSize).ToList();
+                        }
                     }
 
                     var oProductList = new List<ProductViewModel>();
@@ -106,6 +124,7 @@ namespace Fidelity.Areas.Products.Controllers
                     {
                         oProductList.Add(new ProductViewModel()
                         {
+                            Id = item.Id,
                             EnterpriseId = item.EnterpriseId,
                             Name = item.Description,
                             CategoryId = item.CategoryId,
@@ -121,6 +140,8 @@ namespace Fidelity.Areas.Products.Controllers
                         Count = oProductList.Count,
                         Message = "Sucesso ao buscar produtos!"
                     };
+
+                    #endregion
                 }
                 else
                     return new APIResult<List<ProductViewModel>>()
@@ -135,7 +156,98 @@ namespace Fidelity.Areas.Products.Controllers
                 return new APIResult<List<ProductViewModel>>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar produtos! " + e.Message
+                    Message = "Erro ao buscar produtos! " + e.Message + e.InnerException
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para alterar um produto.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>Product List Object></returns>
+        [HttpPut]
+        [Authorize]
+        [Route("products")]
+        public APIResult<Object> Update(ProductViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oProduct = ProductDAO.FindByKey(Model.Id);
+
+                    oProduct.Description = Model.Name;
+                    oProduct.Status = Model.Status;
+                    oProduct.CategoryId = Model.CategoryId;
+                    oProduct.Image = Model.Image;
+                    oProduct.AlterDate = DateTime.Now;
+                    oProduct.Value = Model.Value;
+
+                    ProductDAO.Update(oProduct);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Produto atualizado com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao atualizar produto! " + e.Message + e.InnerException
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para deletar um produto.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>Product List Object></returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("products")]
+        public APIResult<Object> Delete(ProductViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var Loyalts = LoyaltyDAO.FindAll().Where(x => x.ProductId == Model.Id).ToList();
+                    if (Loyalts.Any())
+                    {
+                        return new APIResult<object>()
+                        {
+                            Success = false,
+                            Message = "Produto vinculado como prêmio de fidelidades. Remova-as primeiro."
+                        };
+                    }
+
+                    var Fidelities = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == Model.Id).ToList();
+                    foreach (var fidel in Fidelities)
+                    {
+                        FidelityDAO.Delete(fidel);
+                    }
+
+                    var oProduct = ProductDAO.FindByKey(Model.Id);
+
+                    ProductDAO.Delete(oProduct);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Produto deletado com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao deletar produto! " + e.Message + e.InnerException
                 };
             }
         }

@@ -7,6 +7,7 @@ namespace Fidelity.Areas.Products.Models
 {
     public class ProductViewModel
     {
+        public int Id { get; set; }
         public int EnterpriseId { get; set; }
         public string Name { get; set; }
 
@@ -18,6 +19,6 @@ namespace Fidelity.Areas.Products.Models
 
         public byte[] Image { get; set; }
 
-        public List<int> FidelityList { get; set; }
+        public List<int> LoyaltList { get; set; }
     }
 }

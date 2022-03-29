@@ -27,7 +27,7 @@ namespace Fidelity.Areas.Clients.Controllers
         [HttpGet]
         [Authorize]
         [Route("clients")]
-        public APIResult<List<ClientViewModel>> GetClients()
+        public APIResult<List<ClientViewModel>> Get()
         {
             try
             {
@@ -38,6 +38,7 @@ namespace Fidelity.Areas.Clients.Controllers
                     {
                         oClientList.Add(new ClientViewModel()
                         {
+                            Id = item.Id,
                             Cpf = item.Cpf,
                             Name = item.Name
                         });
@@ -61,7 +62,7 @@ namespace Fidelity.Areas.Clients.Controllers
                 return new APIResult<List<ClientViewModel>>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar todos clientes: " + e.Message,
+                    Message = "Erro ao buscar todos clientes: " + e.Message + e.InnerException
                 };
             }
         }
@@ -73,8 +74,8 @@ namespace Fidelity.Areas.Clients.Controllers
         /// <returns>API Result Object</returns>
         [HttpPost]
         [AllowAnonymous]
-        [Route("new/client")]
-        public APIResult<Object> SignupClient(UserViewModel Model)
+        [Route("clients")]
+        public APIResult<Object> Signup(UserViewModel Model)
         {
             try
             {
@@ -98,7 +99,8 @@ namespace Fidelity.Areas.Clients.Controllers
                             {
 
                                 var user = new User()
-                                {   Email = Model.Email.ToLower(),
+                                {
+                                    Email = Model.Email.ToLower(),
                                     Type = "C",
                                     Active = "1",
                                     Password = Encrypt.EncryptPass(Model.Password)
@@ -129,7 +131,7 @@ namespace Fidelity.Areas.Clients.Controllers
                         return new APIResult<Object>()
                         {
                             Success = false,
-                            Message = "Erro na transação: " + e.Message,
+                            Message = "Erro na transação: " + e.Message + e.InnerException
                         };
                     }
                     #endregion
@@ -140,7 +142,61 @@ namespace Fidelity.Areas.Clients.Controllers
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao validar Login: " + e.Message,
+                    Message = "Erro ao validar Login: " + e.Message + e.InnerException
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para buscar cliente por Documento.
+        /// </summary>
+        /// <returns>Client List Object></returns>
+        [HttpGet]
+        [Authorize]
+        [Route("clients/document")]
+        public APIResult<ClientViewModel> GetByDocument(ClientViewModel Model)
+        {
+            try
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    var oClient = ClientDAO.FindAll().FirstOrDefault(x => x.Cpf == Model.Cpf);
+
+                    if (oClient != null)
+                    {
+                        var Client = new ClientViewModel
+                        {
+                            Id = oClient.Id,
+                            Name = oClient.Name,
+                            Cpf = oClient.Cpf
+                        };
+
+                        return new APIResult<ClientViewModel>()
+                        {
+                            Result = Client
+                        };
+                    }
+                    else {
+                        return new APIResult<ClientViewModel>()
+                        {
+                            Success = false,
+                            Message = "Nenhum cliente encontrado!"
+                        };
+                    }
+                }
+                else
+                    return new APIResult<ClientViewModel>()
+                    {
+                        Success = false,
+                        Message = "Acesso negado!"
+                    };
+            }
+            catch (Exception e)
+            {
+                return new APIResult<ClientViewModel>()
+                {
+                    Success = false,
+                    Message = "Erro ao buscar todos clientes: " + e.Message + e.InnerException
                 };
             }
         }

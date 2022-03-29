@@ -1,7 +1,10 @@
 ﻿using Fidelity.Areas.Categories.Models;
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
+<<<<<<< HEAD
 using FidelityLibrary.Entity.Categories;
+=======
+>>>>>>> 56aab9eb998b5f0d313175984cf1a4ea211c5074
 using FidelityLibrary.Persistance.CategoryDAO;
 using System;
 using System.Collections.Generic;
@@ -19,8 +22,13 @@ namespace Fidelity.Areas.Categories.Controllers
         /// <returns>Category List Object></returns>
         [HttpGet]
         [Authorize]
+<<<<<<< HEAD
         [Route("category")]
         public APIResult<List<CategoryViewModel>> GetCategories()
+=======
+        [Route("categories")]
+        public APIResult<List<CategoryViewModel>> Get()
+>>>>>>> 56aab9eb998b5f0d313175984cf1a4ea211c5074
         {
             try
             {
@@ -54,7 +62,115 @@ namespace Fidelity.Areas.Categories.Controllers
                 return new APIResult<List<CategoryViewModel>>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar todas categorias: " + e.Message,
+                    Message = "Erro ao buscar todas categorias: " + e.Message + e.InnerException
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para cadastar uma nova categoria.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>Category List Object></returns>
+        [HttpPost]
+        [Authorize]
+        [Route("categories")]
+        public APIResult<Object> Add(CategoryViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oCategory = new FidelityLibrary.Entity.Categories.Category()
+                    {
+                        Name = Model.Name
+                    };
+
+                    CategoryDAO.Insert(oCategory);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Categoria cadastrada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao criar categoria! " + e.Message + e.InnerException
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para alterar uma categoria.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>Category List Object></returns>
+        [HttpPut]
+        [Authorize]
+        [Route("categories")]
+        public APIResult<Object> Update(CategoryViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oCategory = CategoryDAO.FindByKey(Model.Id);
+
+                    oCategory.Name = Model.Name;
+                    oCategory.AlterDate = DateTime.Now;
+
+                    CategoryDAO.Update(oCategory);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Categoria atualizada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao atualizar categoria! " + e.Message + e.InnerException
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para deletar uma categoria.
+        /// </summary>
+        /// <param name="Model"></param>
+        /// <returns>Category List Object></returns>
+        [HttpDelete]
+        [Authorize]
+        [Route("categories")]
+        public APIResult<Object> Delete(CategoryViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oCategory = CategoryDAO.FindByKey(Model.Id);
+
+                    CategoryDAO.Delete(oCategory);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Categoria deletada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao deletar categoria! " + e.Message + e.InnerException
                 };
             }
         }

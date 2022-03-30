@@ -132,7 +132,6 @@ namespace Fidelity.Areas.Products.Controllers
                     }
                     else
                     {
-
                         if (page == 0)
                         {
                             Products = ProductDAO.FindAll().ToList();

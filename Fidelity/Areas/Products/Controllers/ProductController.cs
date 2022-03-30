@@ -105,7 +105,7 @@ namespace Fidelity.Areas.Products.Controllers
                     var page = 0;
                     var pageSize = 0;
 
-                    if (parameters.ContainsKey("name")) 
+                    if (parameters.ContainsKey("name"))
                     {
                         name = parameters["name"];
                     }

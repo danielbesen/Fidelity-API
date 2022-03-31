@@ -7,8 +7,11 @@ namespace Fidelity.Areas.Employes.Models
 {
     public class EmployeeViewModel
     {
+        public int Id { get; set; }
+        public int UserId { get; set; }
+        public string Name { get; set; }
+        public int EnterpriseId { get; set; }
         public int AccessType { get; set; }
-
         public DateTime AlterDate { get; set; }
     }
 }

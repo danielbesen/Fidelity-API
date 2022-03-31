@@ -35,6 +35,8 @@ namespace FidelityLibrary.Entity.Loyalts
 
         [Column("id_produto")]
         public int? ProductId { get; set; }
+        
+        public List<int> ProductIdList { get; set; }
 
         [Column("id_tipo_promocao")]
         public int PromotionTypeId { get; set; }

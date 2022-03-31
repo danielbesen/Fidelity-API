@@ -39,7 +39,33 @@ namespace FidelityLibrary.Persistance.EmployeeDAO
             }
             catch (Exception e)
             {
-                throw new Exception("Transaction insert error: " + e);
+                throw new Exception("Erro ao cadastrar funcionário: " + e);
+            }
+        }
+
+        public static void PutEmployee(Employee Employee, ApplicationDbContext oContext)
+        {
+            try
+            {
+                oContext.Entry(Employee.Id).State = EntityState.Modified;
+                oContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro ao atualizar funcionário: " + e);
+            }
+        }
+
+        public static void DelEmployee(Employee Employee, ApplicationDbContext oContext)
+        {
+            try
+            {
+                oContext.Entry(Employee.Id).State = EntityState.Deleted;
+                oContext.SaveChanges();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro ao deletar funcionário: " + e);
             }
         }
     }

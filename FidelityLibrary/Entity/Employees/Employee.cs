@@ -20,8 +20,8 @@ namespace FidelityLibrary.Entity
         [Column("id_empresa")]
         public int EnterpriseId { get; set; }
 
-        //[Column("id_status")]
-        //public string Status { get; set; }
+        [Column("nome_func")]
+        public string Nome { get; set; }
 
         [Column("tipo_acesso")]
         public int AccessType { get; set; }

@@ -1,4 +1,5 @@
 ﻿using Fidelity.Areas.Enterprises.Models;
+using Fidelity.Areas.Products.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,5 +23,6 @@ namespace Fidelity.Areas.Loyalts.Models
         public int FidelityTypeId { get; set; }
         public double Quantity { get; set; }
         public List<int> ProductList { get; set; }
+        public List<ProductViewModel> ProductViewList { get; set; }
     }
 }

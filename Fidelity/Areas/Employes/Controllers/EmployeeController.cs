@@ -1,7 +1,14 @@
 ﻿using Fidelity.Areas.Employes.Models;
+using Fidelity.Areas.Enterprises.Models;
+using Fidelity.Areas.Users.Models;
 using Fidelity.Models;
+using FidelityLibrary.DataContext;
+using FidelityLibrary.Entity;
+using FidelityLibrary.Entity.Users;
+using FidelityLibrary.Models;
 using FidelityLibrary.Persistance.ClientDAO;
 using FidelityLibrary.Persistance.EmployeeDAO;
+using FidelityLibrary.Persistance.UserDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,21 +22,70 @@ namespace Fidelity.Areas.Employes.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("enploye")]
-        public APIResult<Object> Salvar(EmployeeViewModel Model)
+        public APIResult<Object> Salvar(EmployeeViewModel Model, UserViewModel UserModel)
         {
             try
             {
-                if (EmployeeDAO.FindAll().ToList().Any())
+                if ((UserDAO.FindAll().ToList().Any(x => x.Email == UserModel.Email && x.Type == UserModel.Type)) && (EmployeeDAO.FindAll().ToList().Any(x => x.Id == Model.Id && x.EnterpriseId == Model.EnterpriseId)))
                 {
+                    return new APIResult<Object>()
+                    {
+                        Success = false,
+                        Message = "Funcionário já cadastrado!",
+                    };
+                }
+                else
+                {
+                    #region Saving User and Employe
+                    try
+                    {
+                        using (var context = new ApplicationDbContext())
+                        {
+                            using (var dbContextTransaction = context.Database.BeginTransaction())
+                            {
+                                var user = new User()
+                                {
+                                    Email = UserModel.Email.ToLower(),
+                                    Type = "F",
+                                    Active = "1",
+                                    Password = Encrypt.EncryptPass(UserModel.Password)
+                                };
 
+                                UserDAO.SaveUser(user, context);
+
+                                var oEmploye = new Employee()
+                                {
+                                    Id = Model.Id,
+                                    UserId = user.Id,
+                                    EnterpriseId = Model.EnterpriseId,
+                                    Nome = Model.Name,
+                                    AccessType = Model.AccessType,
+                                    InsertDate = DateTime.Now
+                                };
+
+                                EmployeeDAO.SaveEmployee(oEmploye, context);
+
+                                dbContextTransaction.Commit();
+
+                                return new APIResult<Object>()
+                                {
+                                    Success = true,
+                                    Message = "Funcionário cadastrado com sucesso",
+                                };
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        return new APIResult<Object>()
+                        {
+                            Success = false,
+                            Message = "Erro na transação: " + e.Message + e.InnerException,
+                        };
+                    }
+                    #endregion
                 }
 
-                return new APIResult<Object>()
-                {
-                    Success = false,
-                    Message = "E-mail já cadastrado!",
-                }; ;
-                
             }
             catch (Exception e)
             {
@@ -48,16 +104,30 @@ namespace Fidelity.Areas.Employes.Controllers
         {
             try
             {
-                if (EmployeeDAO.FindAll().ToList().Any())
+                //
+
+                var oEmploy = EmployeeDAO.FindAll().FirstOrDefault(x => x.Id == Model.Id);
+
+                if (oEmploy != null)
                 {
+                    var oEmploye = new EmployeeViewModel
+                    {
+                        Id = Model.Id,
+                        AccessType = Model.AccessType
+                    };
+
+                    return new APIResult<Object>()
+                    {
+                        Result = oEmploye
+                    };
 
                 }
 
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "E-mail já cadastrado!",
-                }; ;
+                    Message = "Erro ao buscar Funcionario"
+                };
 
             }
             catch (Exception e)
@@ -84,8 +154,8 @@ namespace Fidelity.Areas.Employes.Controllers
 
                 return new APIResult<Object>()
                 {
-                    Success = false,
-                    Message = "E-mail já cadastrado!",
+                    Success = true,
+                    Message = "Funcionário atualizado com sucesso!"
                 }; ;
 
             }
@@ -106,16 +176,23 @@ namespace Fidelity.Areas.Employes.Controllers
         {
             try
             {
-                if (EmployeeDAO.FindAll().ToList().Any())
+                using (var context = new ApplicationDbContext())
                 {
+                    var oEmploye = new Employee
+                    {
+                        Id = Model.Id,
+                        AlterDate = DateTime.Now,
+                    };
 
+                    EmployeeDAO.DelEmployee(oEmploye, context);
+
+                    return new APIResult<object>()
+                    {
+                        Success = true,
+                        Message = "Funcionário deletada com sucesso!"
+                    };
                 }
 
-                return new APIResult<Object>()
-                {
-                    Success = false,
-                    Message = "E-mail já cadastrado!",
-                }; ;
 
             }
             catch (Exception e)

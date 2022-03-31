@@ -3,9 +3,13 @@
     "secrets1": {
       "type": "secrets"
     },
+    "secrets2": {
+      "type": "secrets",
+      "connectionId": "VaultUri"
+    },
     "mssql1": {
       "type": "mssql",
-      "connectionId": "FidelityDbConnectionString"
+      "connectionId": "ConnectionString"
     }
   }
 }

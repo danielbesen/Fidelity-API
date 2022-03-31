@@ -1,5 +1,6 @@
 ﻿using FidelityLibrary.Entity;
 using FidelityLibrary.Entity.Categories;
+using FidelityLibrary.Entity.Checkpoints;
 using FidelityLibrary.Entity.Fidelitys;
 using FidelityLibrary.Entity.Loyalts;
 using FidelityLibrary.Entity.Memberships;
@@ -34,5 +35,6 @@ namespace FidelityLibrary.DataContext
         public virtual DbSet<FidelityType> DbSetFidelityType { get; set; }
         public virtual DbSet<PromotionType> DbSetPromotionType { get; set; }
         public virtual DbSet<Category> DbSetCategory { get; set; }
+        public virtual DbSet<Checkpoint> DbSetCheckpoint { get; set; }
     }
 }

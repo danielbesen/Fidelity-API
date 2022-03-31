@@ -87,35 +87,58 @@ namespace Fidelity.Areas.Products.Controllers
         [HttpGet]
         [Authorize]
         [Route("products")]
-        public APIResult<List<ProductViewModel>> Get(PaginationParams Params)
+        public APIResult<List<ProductViewModel>> Get()
         {
             try
             {
                 if (User.Identity.IsAuthenticated)
                 {
-                    var value = "";
+                    #region GET PARAMS
+
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
                     foreach (var parameter in Request.GetQueryNameValuePairs())
                     {
-                        value = parameter.Value.ToLower();
+                        parameters.Add(parameter.Key, parameter.Value);
                     }
+
+                    var name = "";
+                    var page = 0;
+                    var pageSize = 0;
+
+                    if (parameters.ContainsKey("name"))
+                    {
+                        name = parameters["name"];
+                    }
+
+                    if (parameters.ContainsKey("page"))
+                    {
+                        page = Int32.Parse(parameters["page"]);
+                    }
+
+                    if (parameters.ContainsKey("pagesize"))
+                    {
+                        pageSize = Int32.Parse(parameters["pagesize"]);
+                    }
+
+                    #endregion
 
                     #region GET
 
                     var Products = new List<Product>();
 
-                    if (!string.IsNullOrEmpty(value))
+                    if (!string.IsNullOrEmpty(name))
                     {
-                        Products = ProductDAO.FindAll().Where(x => x.Description.ToLower().Contains(value)).ToList();
+                        Products = ProductDAO.FindAll().Where(x => x.Description.ToLower().Contains(name)).ToList();
                     }
                     else
                     {
-                        if (Params == null)
+                        if (page == 0)
                         {
                             Products = ProductDAO.FindAll().ToList();
                         }
                         else
                         {
-                            Products = ProductDAO.FindAll().Skip((Params.Page - 1) * Params.PageSize).Take(Params.PageSize).ToList();
+                            Products = ProductDAO.FindAll().Skip((page - 1) * pageSize).Take(pageSize).ToList();
                         }
                     }
 

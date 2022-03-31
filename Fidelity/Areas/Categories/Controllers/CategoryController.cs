@@ -12,7 +12,10 @@ namespace Fidelity.Areas.Categories.Controllers
 {
     public class CategoryController : ApiController
     {
-
+        /// <summary>
+        /// Requisição para buscar todas as categorias no sistema.
+        /// </summary>
+        /// <returns>APIResult List Object></returns>
         [HttpGet]
         [Authorize]
         [Route("categories")]
@@ -55,7 +58,10 @@ namespace Fidelity.Areas.Categories.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Requisição para adicionar uma categoria no sistema.
+        /// </summary>
+        /// <returns>APIResult List Object></returns>
         [HttpPost]
         [Authorize]
         [Route("categories")]
@@ -88,6 +94,10 @@ namespace Fidelity.Areas.Categories.Controllers
             }
         }
 
+        /// <summary>
+        /// Requisição para atualizar uma categoria no sistema.
+        /// </summary>
+        /// <returns>APIResult List Object></returns>
         [HttpPut]
         [Authorize]
         [Route("categories")]
@@ -120,6 +130,10 @@ namespace Fidelity.Areas.Categories.Controllers
             }
         }
 
+        /// <summary>
+        /// Requisição para deletar uma categoria no sistema.
+        /// </summary>
+        /// <returns>APIResult List Object></returns>
         [HttpDelete]
         [Authorize]
         [Route("categories")]

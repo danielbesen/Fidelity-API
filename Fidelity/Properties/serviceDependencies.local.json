@@ -3,10 +3,17 @@
     "secrets1": {
       "type": "secrets.user"
     },
-    "mssql1": {
+    "secrets2": {
       "secretStore": null,
-      "type": "mssql.local",
-      "connectionId": "FidelityDbConnectionString"
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/Fidelityvault",
+      "type": "secrets.keyVault",
+      "connectionId": "VaultUri"
+    },
+    "mssql1": {
+      "secretStore": "AzureKeyVault",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Sql/servers/fidelitydbserver/databases/Fidelity_db",
+      "type": "mssql.azure",
+      "connectionId": "ConnectionString"
     }
   }
 }

@@ -21,22 +21,22 @@ namespace Fidelity.Areas.Employes.Controllers
     {
         [HttpPost]
         [AllowAnonymous]
-        [Route("enploye")]
-        public APIResult<Object> Salvar(EmployeeViewModel Model, UserViewModel UserModel)
+        [Route("employees")]
+        public APIResult<Object> SignUp(UserViewModel Model)
         {
             try
             {
-                if ((UserDAO.FindAll().ToList().Any(x => x.Email == UserModel.Email && x.Type == UserModel.Type)) && (EmployeeDAO.FindAll().ToList().Any(x => x.Id == Model.Id && x.EnterpriseId == Model.EnterpriseId)))
+                if (UserDAO.FindAll().ToList().Any(x => x.Email == Model.Email))
                 {
                     return new APIResult<Object>()
                     {
                         Success = false,
-                        Message = "Funcionário já cadastrado!",
+                        Message = "E-mail já cadastrado!",
                     };
                 }
                 else
                 {
-                    #region Saving User and Employe
+                    #region Saving User and Employee
                     try
                     {
                         using (var context = new ApplicationDbContext())
@@ -45,22 +45,20 @@ namespace Fidelity.Areas.Employes.Controllers
                             {
                                 var user = new User()
                                 {
-                                    Email = UserModel.Email.ToLower(),
+                                    Email = Model.Email.ToLower(),
                                     Type = "F",
                                     Active = "1",
-                                    Password = Encrypt.EncryptPass(UserModel.Password)
+                                    Password = Encrypt.EncryptPass(Model.Password)
                                 };
 
                                 UserDAO.SaveUser(user, context);
 
                                 var oEmploye = new Employee()
                                 {
-                                    Id = Model.Id,
                                     UserId = user.Id,
-                                    EnterpriseId = Model.EnterpriseId,
-                                    Nome = Model.Name,
-                                    AccessType = Model.AccessType,
-                                    InsertDate = DateTime.Now
+                                    EnterpriseId = Model.Employee.EnterpriseId,
+                                    Name = Model.Employee.Name,
+                                    AccessType = Model.Employee.AccessType
                                 };
 
                                 EmployeeDAO.SaveEmployee(oEmploye, context);
@@ -70,7 +68,7 @@ namespace Fidelity.Areas.Employes.Controllers
                                 return new APIResult<Object>()
                                 {
                                     Success = true,
-                                    Message = "Funcionário cadastrado com sucesso",
+                                    Message = "Funcionário cadastrado com sucesso!",
                                 };
                             }
                         }
@@ -98,102 +96,95 @@ namespace Fidelity.Areas.Employes.Controllers
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        [Route("enploye")]
-        public APIResult<Object> Buscar(EmployeeViewModel Model)
+        [Authorize]
+        [Route("employees")]
+        public APIResult<List<EmployeeViewModel>> Get()
         {
             try
             {
-                //
+                var oEmployeeList = new List<EmployeeViewModel>();
 
-                var oEmploy = EmployeeDAO.FindAll().FirstOrDefault(x => x.Id == Model.Id);
-
-                if (oEmploy != null)
+                foreach (var item in EmployeeDAO.FindAll().ToList())
                 {
-                    var oEmploye = new EmployeeViewModel
+                    oEmployeeList.Add(new EmployeeViewModel()
                     {
-                        Id = Model.Id,
-                        AccessType = Model.AccessType
-                    };
-
-                    return new APIResult<Object>()
-                    {
-                        Result = oEmploye
-                    };
-
+                        Id = item.Id,
+                        AccessType = item.AccessType,
+                        EnterpriseId = item.EnterpriseId,
+                        Name = item.Name
+                    });
                 }
 
-                return new APIResult<Object>()
+                return new APIResult<List<EmployeeViewModel>>()
                 {
-                    Success = false,
-                    Message = "Erro ao buscar Funcionario"
+                    Result = oEmployeeList,
+                    Count = oEmployeeList.Count
                 };
 
             }
             catch (Exception e)
             {
-                return new APIResult<Object>()
+                return new APIResult<List<EmployeeViewModel>>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar Funcionario: " + e.Message + e.InnerException
+                    Message = "Erro ao buscar todos funcionários: " + e.Message + e.InnerException
                 };
             }
         }
 
         [HttpPut]
-        [AllowAnonymous]
-        [Route("enploye")]
-        public APIResult<Object> Atualizar(EmployeeViewModel Model)
+        [Authorize]
+        [Route("employees")]
+        public APIResult<Object> Update(EmployeeViewModel Model)
         {
             try
             {
-                if (EmployeeDAO.FindAll().ToList().Any())
+                using (var context = new ApplicationDbContext())
                 {
+                    var oEmployee = EmployeeDAO.FindByKey(Model.Id);
 
+                    oEmployee.Name = Model.Name;
+                    oEmployee.AccessType = Model.AccessType;
+                    oEmployee.AlterDate = DateTime.Now;
+
+                    EmployeeDAO.Update(oEmployee);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Funcionário atualizado com sucesso!"
+                    };
                 }
-
-                return new APIResult<Object>()
-                {
-                    Success = true,
-                    Message = "Funcionário atualizado com sucesso!"
-                }; ;
-
             }
             catch (Exception e)
             {
                 return new APIResult<Object>()
                 {
                     Success = false,
-                    Message = "Erro ao atualizar Funcionario: " + e.Message + e.InnerException
+                    Message = "Erro ao atualizar funcionário: " + e.Message + e.InnerException
                 };
             }
         }
 
         [HttpDelete]
-        [AllowAnonymous]
-        [Route("enploye")]
+        [Authorize]
+        [Route("employees")]
         public APIResult<Object> Delete(EmployeeViewModel Model)
         {
             try
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oEmploye = new Employee
-                    {
-                        Id = Model.Id,
-                        AlterDate = DateTime.Now,
-                    };
+                    var oEmployee = EmployeeDAO.FindByKey(Model.Id);
 
-                    EmployeeDAO.DelEmployee(oEmploye, context);
+                    EmployeeDAO.Delete(oEmployee);
 
                     return new APIResult<object>()
                     {
-                        Success = true,
-                        Message = "Funcionário deletada com sucesso!"
+                        Message = "Funcionário deletado com sucesso!"
+
+                        // deletar UserId também ou mudar tag para inativo invés de deletar funcionário??
                     };
                 }
-
-
             }
             catch (Exception e)
             {

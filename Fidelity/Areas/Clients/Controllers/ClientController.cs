@@ -15,6 +15,7 @@ using FidelityLibrary.Models;
 using FidelityLibrary.Persistance.Generics;
 using Fidelity.Areas.Users.Models;
 using Fidelity.Areas.Enterprises.Models;
+using System.Net.Http;
 
 namespace Fidelity.Areas.Clients.Controllers
 {
@@ -34,14 +35,49 @@ namespace Fidelity.Areas.Clients.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     var oClientList = new List<ClientViewModel>();
-                    foreach (var item in ClientDAO.FindAll().ToList())
+
+                    #region GET PARAMS
+
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
                     {
-                        oClientList.Add(new ClientViewModel()
+                        parameters.Add(parameter.Key, parameter.Value);
+                    }
+
+                    var cpf = "";
+
+                    if (parameters.ContainsKey("cpf"))
+                    {
+                        cpf = parameters["cpf"];
+                    }
+
+                    #endregion
+
+                    if (!string.IsNullOrEmpty(cpf))
+                    {
+                        var oClient = ClientDAO.FindAll().FirstOrDefault(x => x.Cpf == cpf);
+
+                        foreach (var item in ClientDAO.FindAll().Where(x => x.Cpf == cpf).ToList())
                         {
-                            Id = item.Id,
-                            Cpf = item.Cpf,
-                            Name = item.Name
-                        });
+                            oClientList.Add(new ClientViewModel()
+                            {
+                                Id = item.Id,
+                                Cpf = item.Cpf,
+                                Name = item.Name
+                            });
+                        }
+                    }
+                    else
+                    {
+                        foreach (var item in ClientDAO.FindAll().ToList())
+                        {
+                            oClientList.Add(new ClientViewModel()
+                            {
+                                Id = item.Id,
+                                Cpf = item.Cpf,
+                                Name = item.Name
+                            });
+                        }
                     }
 
                     return new APIResult<List<ClientViewModel>>()
@@ -75,7 +111,7 @@ namespace Fidelity.Areas.Clients.Controllers
         [HttpPost]
         [AllowAnonymous]
         [Route("clients")]
-        public APIResult<Object> Signup(UserViewModel Model)
+        public APIResult<Object> SignUp(UserViewModel Model)
         {
             try
             {
@@ -146,61 +182,6 @@ namespace Fidelity.Areas.Clients.Controllers
                 };
             }
         }
-
-        /// <summary>
-        /// Requisição para buscar cliente por Documento.
-        /// </summary>
-        /// <returns>Client List Object></returns>
-        [HttpGet]
-        [Authorize]
-        [Route("clients/document")]
-        public APIResult<ClientViewModel> GetByDocument(ClientViewModel Model)
-        {
-            try
-            {
-                if (User.Identity.IsAuthenticated)
-                {
-                    var oClient = ClientDAO.FindAll().FirstOrDefault(x => x.Cpf == Model.Cpf);
-
-                    if (oClient != null)
-                    {
-                        var Client = new ClientViewModel
-                        {
-                            Id = oClient.Id,
-                            Name = oClient.Name,
-                            Cpf = oClient.Cpf
-                        };
-
-                        return new APIResult<ClientViewModel>()
-                        {
-                            Result = Client
-                        };
-                    }
-                    else {
-                        return new APIResult<ClientViewModel>()
-                        {
-                            Success = false,
-                            Message = "Nenhum cliente encontrado!"
-                        };
-                    }
-                }
-                else
-                    return new APIResult<ClientViewModel>()
-                    {
-                        Success = false,
-                        Message = "Acesso negado!"
-                    };
-            }
-            catch (Exception e)
-            {
-                return new APIResult<ClientViewModel>()
-                {
-                    Success = false,
-                    Message = "Erro ao buscar todos clientes: " + e.Message + e.InnerException
-                };
-            }
-        }
-
 
     }
 }

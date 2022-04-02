@@ -96,52 +96,22 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     var oLoyaltList = new List<LoyaltViewModel>();
-                    var oProdutotList = new List<ProductViewModel>();
-                    var Products = new List<Product>();
-                    var enterpriseList = new EnterpriseViewModel();
                     foreach (var item in LoyaltyDAO.FindAll().ToList())
                     {
-                        var ConsumedProductIdLis = FidelityDAO.FindAll().Where(x => x.LoyaltId == item.Id).ToList();
-
-                        foreach (var itemProdList in ConsumedProductIdLis)
-                        {
-                            Products = ProductDAO.FindAll().Where(x => x.Id == itemProdList.ConsumedProductId).ToList();
-                            if (Products.Count > 0)
-                            {
-                                foreach (var itemProd in Products)
-                                {
-                                    oProdutotList.Add(new ProductViewModel()
-                                    {
-                                        Id = itemProd.Id,
-                                        EnterpriseId = itemProd.EnterpriseId,
-                                        Name = itemProd.Description,
-                                        CategoryId = itemProd.CategoryId,
-                                        Value = itemProd.Value,
-                                        Image = itemProd.Image,
-                                        Status = itemProd.Status
-                                    });
-                                }
-                            }
-                        }
-
                         oLoyaltList.Add(new LoyaltViewModel()
                         {
                             Id = item.Id,
                             Description = item.Description,
-                            Enterprise = enterpriseList,
                             EnterpriseId = item.EnterpriseId,
                             Limit = item.Limit,
                             Name = item.Name,
                             ProductId = item.ProductId,
-                            ProductViewList = oProdutotList,
                             FidelityTypeId = item.FidelityTypeId,
                             Quantity = item.Quantity,
                             PromotionTypeId = item.PromotionTypeId,
                             EndDate = item.EndDate,
                             StartDate = item.StartDate
                         });
-
-
                     }
 
                     return new APIResult<List<LoyaltViewModel>>()

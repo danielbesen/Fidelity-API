@@ -12,7 +12,6 @@ namespace Fidelity.Areas.Loyalts.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public EnterpriseViewModel Enterprise { get; set; }
         public int EnterpriseId { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -23,6 +22,5 @@ namespace Fidelity.Areas.Loyalts.Models
         public int FidelityTypeId { get; set; }
         public double Quantity { get; set; }
         public List<int> ProductList { get; set; }
-        public List<ProductViewModel> ProductViewList { get; set; }
     }
 }

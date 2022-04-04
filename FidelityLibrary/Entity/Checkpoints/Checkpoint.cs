@@ -20,9 +20,6 @@ namespace FidelityLibrary.Entity.Checkpoints
         [Column("id_fidelidade")]
         public int LoyaltId { get; set; }
 
-        [Column("id_produto")]
-        public int ProductId { get; set; }
-
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
     }

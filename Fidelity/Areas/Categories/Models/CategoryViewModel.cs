@@ -10,6 +10,6 @@ namespace Fidelity.Areas.Categories.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public DateTime DataInclusao { get; set; }
-        public DateTime DataAlteracao{ get; set; }
+        public DateTime? DataAlteracao{ get; set; }
     }
 }

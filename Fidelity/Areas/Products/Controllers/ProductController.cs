@@ -1,9 +1,11 @@
-﻿using Fidelity.Areas.Fidelities.Models;
+﻿using Fidelity.Areas.Categories.Models;
+using Fidelity.Areas.Fidelities.Models;
 using Fidelity.Areas.Loyalts.Models;
 using Fidelity.Areas.Products.Models;
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Products;
+using FidelityLibrary.Persistance.CategoryDAO;
 using FidelityLibrary.Persistance.FidelityDAO;
 using FidelityLibrary.Persistance.LoyaltyDAO;
 using FidelityLibrary.Persistance.ProductDAO;
@@ -145,6 +147,17 @@ namespace Fidelity.Areas.Products.Controllers
                     var oProductList = new List<ProductViewModel>();
                     foreach (var item in Products)
                     {
+                        var oCategory = CategoryDAO.FindByKey(item.CategoryId);
+
+                        var CategoryVM = new CategoryViewModel()
+                        {
+                            Id = oCategory.Id,
+                            Name = oCategory.Name,
+                            DataAlteracao = oCategory.AlterDate,
+                            DataInclusao = oCategory.InsertDate
+
+                        };
+
                         oProductList.Add(new ProductViewModel()
                         {
                             Id = item.Id,
@@ -153,7 +166,8 @@ namespace Fidelity.Areas.Products.Controllers
                             CategoryId = item.CategoryId,
                             Value = item.Value,
                             Image = item.Image,
-                            Status = item.Status
+                            Status = item.Status,
+                            Category = CategoryVM
                         });
                     }
 

@@ -34,6 +34,9 @@ namespace Fidelity.Areas.Checkpoints.Controllers
 
                     CheckpointDAO.Insert(oCheckpoint);
 
+                    // Criar progresso
+
+
                     return new APIResult<object>()
                     {
                         Message = "Checkpoint realizado com sucesso!"

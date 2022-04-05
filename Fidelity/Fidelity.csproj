@@ -271,6 +271,9 @@
     <Compile Include="Areas\Loyalts\Controllers\LoyaltController.cs" />
     <Compile Include="Areas\Loyalts\LoyaltsAreaRegistration.cs" />
     <Compile Include="Areas\Loyalts\Models\LoyaltViewModel.cs" />
+    <Compile Include="Areas\Memberships\Controllers\MembershipController.cs" />
+    <Compile Include="Areas\Memberships\MembershipsAreaRegistration.cs" />
+    <Compile Include="Areas\Memberships\Models\MembershipViewModel.cs" />
     <Compile Include="Areas\Products\Controllers\ProductController.cs" />
     <Compile Include="Areas\Products\Models\ProductViewModel.cs" />
     <Compile Include="Areas\Products\ProductsAreaRegistration.cs" />
@@ -327,6 +330,7 @@
     <Content Include="Areas\Categories\Views\web.config" />
     <Content Include="Areas\Fidelities\Views\web.config" />
     <Content Include="Areas\Checkpoints\Views\web.config" />
+    <Content Include="Areas\Memberships\Views\web.config" />
     <None Include="Properties\PublishProfiles\FidelityApp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\FidelityApp - Web Deploy1.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -372,6 +376,9 @@
     <Folder Include="Areas\Loyalts\Data\" />
     <Folder Include="Areas\Loyalts\Views\Loyalt\" />
     <Folder Include="Areas\Loyalts\Views\Shared\" />
+    <Folder Include="Areas\Memberships\Data\" />
+    <Folder Include="Areas\Memberships\Views\Membership\" />
+    <Folder Include="Areas\Memberships\Views\Shared\" />
     <Folder Include="Areas\Products\Data\" />
     <Folder Include="Areas\Products\Views\Product\" />
     <Folder Include="Areas\Products\Views\Shared\" />

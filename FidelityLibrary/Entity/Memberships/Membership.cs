@@ -13,7 +13,7 @@ namespace FidelityLibrary.Entity.Memberships
     {
 
         [Key, Column("id_plano")]
-        public int? Id { get; set; }
+        public int Id { get; set; }
 
         [Column("ds_plano")]
         public string Name { get; set; }
@@ -25,7 +25,7 @@ namespace FidelityLibrary.Entity.Memberships
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
 
         [Column("dt_alteracao")]
-        public DateTime AlterDate { get; set; }
+        public DateTime? AlterDate { get; set; }
 
     }
 }

@@ -97,8 +97,27 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 if (User.Identity.IsAuthenticated)
                 {
                     var oLoyaltList = new List<LoyaltViewModel>();
+
                     foreach (var item in LoyaltyDAO.FindAll().ToList())
                     {
+                        var oProductList = new List<ProductViewModel>();
+
+                        var oFidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == item.Id).ToList();
+                        foreach (var id in oFidelities)
+                        {
+                            var oProduct = ProductDAO.FindByKey(id.ConsumedProductId);
+
+                            oProductList.Add(new ProductViewModel()
+                            {
+                                Id = oProduct.Id,
+                                Name = oProduct.Description,
+                                Image = oProduct.Image,
+                                Status = oProduct.Status,
+                                Value = id.ConsumedProductId,
+                                CategoryId = id.ConsumedProductId,
+                            });
+                        }
+
                         oLoyaltList.Add(new LoyaltViewModel()
                         {
                             Id = item.Id,
@@ -111,7 +130,8 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             Quantity = item.Quantity,
                             PromotionTypeId = item.PromotionTypeId,
                             EndDate = item.EndDate,
-                            StartDate = item.StartDate
+                            StartDate = item.StartDate,
+                            Products = oProductList
                         });
                     }
 
@@ -228,7 +248,8 @@ namespace Fidelity.Areas.Loyalts.Controllers
                         {
                             Message = "Fidelidade deletada com sucesso!"
                         };
-                    } else
+                    }
+                    else
                     {
                         return new APIResult<object>()
                         {

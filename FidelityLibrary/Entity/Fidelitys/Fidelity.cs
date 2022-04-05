@@ -19,7 +19,7 @@ namespace FidelityLibrary.Entity.Fidelitys
         public int LoyaltId { get; set; }
 
         [Column("id_produto")]
-        public int? ConsumedProductId { get; set; }
+        public int ConsumedProductId { get; set; }
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;

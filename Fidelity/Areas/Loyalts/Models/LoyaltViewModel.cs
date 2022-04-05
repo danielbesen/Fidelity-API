@@ -22,5 +22,6 @@ namespace Fidelity.Areas.Loyalts.Models
         public int FidelityTypeId { get; set; }
         public double Quantity { get; set; }
         public List<int> ProductList { get; set; }
+        public List<ProductViewModel> Products { get; set; }
     }
 }

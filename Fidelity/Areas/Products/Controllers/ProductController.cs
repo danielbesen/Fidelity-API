@@ -233,36 +233,64 @@ namespace Fidelity.Areas.Products.Controllers
         [HttpDelete]
         [Authorize]
         [Route("products")]
-        public APIResult<Object> Delete(ProductViewModel Model)
+        public APIResult<Object> Delete()
         {
             try
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var Loyalts = LoyaltyDAO.FindAll().Where(x => x.ProductId == Model.Id).ToList();
-                    if (Loyalts.Any())
+                    #region GET PARAMS
+
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
+                    {
+                        parameters.Add(parameter.Key, parameter.Value);
+                    }
+
+                    var Id = 0;
+
+                    if (parameters.ContainsKey("id"))
+                    {
+                        Id = Int32.Parse(parameters["id"]);
+                    }
+
+                    #endregion
+
+                    if (Id != 0)
+                    {
+                        var Loyalts = LoyaltyDAO.FindAll().Where(x => x.ProductId == Id).ToList();
+                        if (Loyalts.Any())
+                        {
+                            return new APIResult<object>()
+                            {
+                                Success = false,
+                                Message = "Produto vinculado como prêmio de fidelidades. Remova-as primeiro."
+                            };
+                        }
+
+                        var Fidelities = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == Id).ToList();
+                        foreach (var fidel in Fidelities)
+                        {
+                            FidelityDAO.Delete(fidel);
+                        }
+
+                        var oProduct = ProductDAO.FindByKey(Id);
+
+                        ProductDAO.Delete(oProduct);
+
+                        return new APIResult<object>()
+                        {
+                            Message = "Produto deletado com sucesso!"
+                        };
+                    }
+                    else
                     {
                         return new APIResult<object>()
                         {
                             Success = false,
-                            Message = "Produto vinculado como prêmio de fidelidades. Remova-as primeiro."
+                            Message = "Nenhum ID informado!"
                         };
                     }
-
-                    var Fidelities = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == Model.Id).ToList();
-                    foreach (var fidel in Fidelities)
-                    {
-                        FidelityDAO.Delete(fidel);
-                    }
-
-                    var oProduct = ProductDAO.FindByKey(Model.Id);
-
-                    ProductDAO.Delete(oProduct);
-
-                    return new APIResult<object>()
-                    {
-                        Message = "Produto deletado com sucesso!"
-                    };
                 }
             }
             catch (Exception e)

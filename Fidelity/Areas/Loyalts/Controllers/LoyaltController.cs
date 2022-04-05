@@ -11,6 +11,7 @@ using FidelityLibrary.Persistance.ProductDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
@@ -189,26 +190,52 @@ namespace Fidelity.Areas.Loyalts.Controllers
         [HttpDelete]
         [Authorize]
         [Route("loyalts")]
-        public APIResult<Object> Delete(LoyaltViewModel Model)
+        public APIResult<Object> Delete()
         {
             try
             {
                 using (var context = new ApplicationDbContext())
                 {
+                    #region GET PARAMS
 
-                    var Fidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == Model.Id).ToList();
-                    foreach (var fidel in Fidelities)
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
                     {
-                        FidelityDAO.Delete(fidel);
+                        parameters.Add(parameter.Key, parameter.Value);
                     }
 
-                    var oLoyalt = LoyaltyDAO.FindByKey(Model.Id);
-                    LoyaltyDAO.Delete(oLoyalt);
+                    var Id = 0;
 
-                    return new APIResult<object>()
+                    if (parameters.ContainsKey("id"))
                     {
-                        Message = "Fidelidade deletada com sucesso!"
-                    };
+                        Id = Int32.Parse(parameters["id"]);
+                    }
+
+                    #endregion
+
+                    if (Id != 0)
+                    {
+                        var Fidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == Id).ToList();
+                        foreach (var fidel in Fidelities)
+                        {
+                            FidelityDAO.Delete(fidel);
+                        }
+
+                        var oLoyalt = LoyaltyDAO.FindByKey(Id);
+                        LoyaltyDAO.Delete(oLoyalt);
+
+                        return new APIResult<object>()
+                        {
+                            Message = "Fidelidade deletada com sucesso!"
+                        };
+                    } else
+                    {
+                        return new APIResult<object>()
+                        {
+                            Success = false,
+                            Message = "Nenhum ID informado!"
+                        };
+                    }
                 }
             }
             catch (Exception e)

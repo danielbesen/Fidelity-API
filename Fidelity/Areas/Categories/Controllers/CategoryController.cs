@@ -5,6 +5,7 @@ using FidelityLibrary.Persistance.CategoryDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
@@ -137,20 +138,47 @@ namespace Fidelity.Areas.Categories.Controllers
         [HttpDelete]
         [Authorize]
         [Route("categories")]
-        public APIResult<Object> Delete(CategoryViewModel Model)
+        public APIResult<Object> Delete()
         {
             try
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oCategory = CategoryDAO.FindByKey(Model.Id);
+                    #region GET PARAMS
 
-                    CategoryDAO.Delete(oCategory);
-
-                    return new APIResult<object>()
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
                     {
-                        Message = "Categoria deletada com sucesso!"
-                    };
+                        parameters.Add(parameter.Key, parameter.Value);
+                    }
+
+                    var Id = 0;
+
+                    if (parameters.ContainsKey("id"))
+                    {
+                        Id = Int32.Parse(parameters["id"]);
+                    }
+
+                    #endregion
+
+                    if (Id != 0)
+                    {
+                        var oCategory = CategoryDAO.FindByKey(Id);
+
+                        CategoryDAO.Delete(oCategory);
+
+                        return new APIResult<object>()
+                        {
+                            Message = "Categoria deletada com sucesso!"
+                        };
+                    } else
+                    {
+                        return new APIResult<object>()
+                        {
+                            Success = false,
+                            Message = "Nenhum ID informado!"
+                        };
+                    }
                 }
             }
             catch (Exception e)
@@ -163,6 +191,6 @@ namespace Fidelity.Areas.Categories.Controllers
             }
         }
 
-        
+
     }
 }

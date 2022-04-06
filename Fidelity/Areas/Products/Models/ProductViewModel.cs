@@ -1,4 +1,5 @@
 ﻿using Fidelity.Areas.Categories.Models;
+using Fidelity.Areas.Loyalts.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,5 +18,6 @@ namespace Fidelity.Areas.Products.Models
         public byte[] Image { get; set; }
         public List<int> LoyaltList { get; set; }
         public CategoryViewModel Category { get; set; }
+        public List<LoyaltViewModel> Loyalts { get; set; }
     }
 }

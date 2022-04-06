@@ -12,6 +12,7 @@ namespace FidelityLibrary.Entity.Checkpoints
     public class Checkpoint
     {
         [Key, Column("id_checkpoint")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? Id { get; set; }
 
         [Column("id_cliente")]

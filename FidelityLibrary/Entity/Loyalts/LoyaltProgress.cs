@@ -18,7 +18,7 @@ namespace FidelityLibrary.Entity.Loyalts
         public int ClientId { get; set; }
 
         [Column("id_checkpoint")]
-        public int id_checkpoint { get; set; }
+        public int? id_checkpoint { get; set; }
 
         [Column("nr_pontos")]
         public int Points { get; set; }

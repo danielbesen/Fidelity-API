@@ -148,6 +148,27 @@ namespace Fidelity.Areas.Products.Controllers
                     foreach (var item in Products)
                     {
                         var oCategory = CategoryDAO.FindByKey(item.CategoryId);
+                        var oLoyaltListIds = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == item.Id).ToList();
+
+                        var LoyaltsVM = new List<LoyaltViewModel>();
+
+                        foreach (var loyalt in oLoyaltListIds)
+                        {
+                            var oLoyalt = LoyaltyDAO.FindByKey(loyalt.LoyaltId);
+
+                            LoyaltsVM.Add(new LoyaltViewModel()
+                            {
+                                Id = oLoyalt.Id,
+                                Description = oLoyalt.Description,
+                                Name = oLoyalt.Name,
+                                EnterpriseId = oLoyalt.EnterpriseId,
+                                ProductId = oLoyalt.ProductId,
+                                Limit = oLoyalt.Limit,
+                                Quantity = oLoyalt.Quantity,
+                                StartDate = oLoyalt.StartDate,
+                                EndDate = oLoyalt.EndDate
+                            });
+                        }
 
                         var CategoryVM = new CategoryViewModel()
                         {
@@ -155,7 +176,6 @@ namespace Fidelity.Areas.Products.Controllers
                             Name = oCategory.Name,
                             DataAlteracao = oCategory.AlterDate,
                             DataInclusao = oCategory.InsertDate
-
                         };
 
                         oProductList.Add(new ProductViewModel()
@@ -167,7 +187,8 @@ namespace Fidelity.Areas.Products.Controllers
                             Value = item.Value,
                             Image = item.Image,
                             Status = item.Status,
-                            Category = CategoryVM
+                            Category = CategoryVM,
+                            Loyalts = LoyaltsVM
                         });
                     }
 

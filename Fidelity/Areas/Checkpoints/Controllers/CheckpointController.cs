@@ -2,6 +2,7 @@
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Checkpoints;
+using FidelityLibrary.Entity.Loyalts;
 using FidelityLibrary.Persistance.CheckpointDAO;
 using System;
 using System.Collections.Generic;
@@ -34,8 +35,13 @@ namespace Fidelity.Areas.Checkpoints.Controllers
 
                     CheckpointDAO.Insert(oCheckpoint);
 
-                    // Criar progresso
+                    var oProgress = new LoyaltProgress()
+                    {
+                        ClientId = Model.ClientId,
+                        id_checkpoint = oCheckpoint.Id,
+                        //Points = 
 
+                    };
 
                     return new APIResult<object>()
                     {

@@ -105,6 +105,7 @@
     <Compile Include="Persistance\EnterpriseDAO\EnterpriseDAO.cs" />
     <Compile Include="Persistance\FidelityDAO\FidelityDAO.cs" />
     <Compile Include="Persistance\Generics\GenericDAO.cs" />
+    <Compile Include="Persistance\LoyaltProgressDAO\LoyaltProgressDAO.cs" />
     <Compile Include="Persistance\LoyaltyDAO\LoyaltyDAO.cs" />
     <Compile Include="Persistance\MembershipDAO\MembershipDAO.cs" />
     <Compile Include="Persistance\ProductDAO\ProductDAO.cs" />

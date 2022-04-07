@@ -62,9 +62,9 @@ namespace Fidelity.Areas.Users.Controllers
 
                             MailMessage mail = new MailMessage();
 
-                            mail.From = new MailAddress("de@gmail.com");
-                            mail.To.Add("para@gmail.com");
-                            mail.Subject = "Teste";
+                            mail.From = new MailAddress("gdanielmaromba@gmail.com");
+                            mail.To.Add(oUser.Email);
+                            mail.Subject = "Fidelity APP - Nova senha";
                             mail.Body = "Sua nova senha é " + Password;
 
                             using (var smtp = new SmtpClient("smtp.gmail.com"))
@@ -73,7 +73,7 @@ namespace Fidelity.Areas.Users.Controllers
                                 smtp.Port = 587;
                                 smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
                                 smtp.UseDefaultCredentials = false;
-                                smtp.Credentials = new NetworkCredential("@gmail.com", "");
+                                smtp.Credentials = new NetworkCredential("gdanielmaromba@gmail.com", "eusougrande");
                                 smtp.Send(mail);
                             }
 

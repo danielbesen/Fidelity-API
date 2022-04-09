@@ -12,6 +12,7 @@ using FidelityLibrary.Persistance.UserDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
@@ -102,9 +103,34 @@ namespace Fidelity.Areas.Employes.Controllers
         {
             try
             {
+                #region GET PARAMS
+
+                Dictionary<string, string> parameters = new Dictionary<string, string>();
+                foreach (var parameter in Request.GetQueryNameValuePairs())
+                {
+                    parameters.Add(parameter.Key, parameter.Value);
+                }
+
+                var company = 0;
+
+                if (parameters.ContainsKey("company"))
+                {
+                    company = Int32.Parse(parameters["company"]);
+                }
+                else
+                {
+                    return new APIResult<List<EmployeeViewModel>>()
+                    {
+                        Success = false,
+                        Message = "Nenhuma empresa informada!"
+                    };
+                }
+
+                #endregion
+
                 var oEmployeeList = new List<EmployeeViewModel>();
 
-                foreach (var item in EmployeeDAO.FindAll().ToList())
+                foreach (var item in EmployeeDAO.FindAll().Where(x => x.EnterpriseId == company).ToList())
                 {
                     oEmployeeList.Add(new EmployeeViewModel()
                     {

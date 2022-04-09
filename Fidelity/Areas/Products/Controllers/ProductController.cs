@@ -244,6 +244,7 @@ namespace Fidelity.Areas.Products.Controllers
                     oProduct.Image = Model.Image;
                     oProduct.AlterDate = DateTime.Now;
                     oProduct.Value = Model.Value;
+                    oProduct.Status = Model.Status;
 
                     if (Model.LoyaltList?.Count > 0)
                     {

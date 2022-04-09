@@ -166,7 +166,10 @@ namespace Fidelity.Areas.Products.Controllers
                                 Limit = oLoyalt.Limit,
                                 Quantity = oLoyalt.Quantity,
                                 StartDate = oLoyalt.StartDate,
-                                EndDate = oLoyalt.EndDate
+                                EndDate = oLoyalt.EndDate,
+                                FidelityTypeId = oLoyalt.FidelityTypeId,
+                                ConsumedProductId = oLoyalt.FidelityTypeId,
+                                PromotionTypeId = oLoyalt.PromotionTypeId
                             });
                         }
 

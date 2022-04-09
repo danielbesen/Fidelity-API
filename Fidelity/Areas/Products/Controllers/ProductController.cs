@@ -106,6 +106,19 @@ namespace Fidelity.Areas.Products.Controllers
                     var name = "";
                     var page = 0;
                     var pageSize = 0;
+                    var company = 0;
+
+                    if (parameters.ContainsKey("company"))
+                    {
+                        company = Int32.Parse(parameters["company"]);
+                    } else
+                    {
+                        return new APIResult<List<ProductViewModel>>()
+                        {
+                            Success = false,
+                            Message = "Nenhuma empresa informada!"
+                        };
+                    }
 
                     if (parameters.ContainsKey("name"))
                     {
@@ -130,17 +143,17 @@ namespace Fidelity.Areas.Products.Controllers
 
                     if (!string.IsNullOrEmpty(name))
                     {
-                        Products = ProductDAO.FindAll().Where(x => x.Description.ToLower().Contains(name)).ToList();
+                        Products = ProductDAO.FindAll().Where(x => x.Description.ToLower().Contains(name) && x.EnterpriseId == company).ToList();
                     }
                     else
                     {
                         if (page == 0)
                         {
-                            Products = ProductDAO.FindAll().ToList();
+                            Products = ProductDAO.FindAll().Where(x => x.EnterpriseId == company).ToList();
                         }
                         else
                         {
-                            Products = ProductDAO.FindAll().Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                            Products = ProductDAO.FindAll().Skip((page - 1) * pageSize).Take(pageSize).Where(x => x.EnterpriseId == company).ToList();
                         }
                     }
 

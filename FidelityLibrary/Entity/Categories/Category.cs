@@ -18,6 +18,9 @@ namespace FidelityLibrary.Entity.Categories
         [Column("ds_categoria")]
         public string Name { get; set; }
 
+        [Column("id_empresa")]
+        public int EnterpriseId { get; set; }
+
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
 

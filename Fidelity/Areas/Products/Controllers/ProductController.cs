@@ -152,7 +152,7 @@ namespace Fidelity.Areas.Products.Controllers
                         }
                         else
                         {
-                            Products = ProductDAO.FindAll().Skip((page - 1) * pageSize).Take(pageSize).Where(x => x.EnterpriseId == company).ToList();
+                            Products = ProductDAO.FindAll().Where(x => x.EnterpriseId == company).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                         }
                     }
 

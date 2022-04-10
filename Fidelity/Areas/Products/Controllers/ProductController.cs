@@ -111,7 +111,8 @@ namespace Fidelity.Areas.Products.Controllers
                     if (parameters.ContainsKey("company"))
                     {
                         company = Int32.Parse(parameters["company"]);
-                    } else
+                    }
+                    else
                     {
                         return new APIResult<List<ProductViewModel>>()
                         {
@@ -136,8 +137,6 @@ namespace Fidelity.Areas.Products.Controllers
                     }
 
                     #endregion
-
-                    #region GET
 
                     var Products = new List<Product>();
 
@@ -186,13 +185,15 @@ namespace Fidelity.Areas.Products.Controllers
                             });
                         }
 
-                        var CategoryVM = new CategoryViewModel()
+                        var CategoryVM = new CategoryViewModel();
+
+                        if (oCategory != null) 
                         {
-                            Id = oCategory.Id,
-                            Name = oCategory.Name,
-                            DataAlteracao = oCategory.AlterDate,
-                            DataInclusao = oCategory.InsertDate
-                        };
+                            CategoryVM.Id = oCategory.Id;
+                            CategoryVM.Name = oCategory.Name;
+                            CategoryVM.DataAlteracao = oCategory.AlterDate;
+                            CategoryVM.DataInclusao = oCategory.InsertDate;
+                        }
 
                         oProductList.Add(new ProductViewModel()
                         {
@@ -203,7 +204,7 @@ namespace Fidelity.Areas.Products.Controllers
                             Value = item.Value,
                             Image = item.Image,
                             Status = item.Status,
-                            Category = CategoryVM,
+                            Category = oCategory != null ? CategoryVM : null,
                             Loyalts = LoyaltsVM
                         });
                     }
@@ -214,8 +215,6 @@ namespace Fidelity.Areas.Products.Controllers
                         Count = oProductList.Count,
                         Message = "Sucesso ao buscar produtos!"
                     };
-
-                    #endregion
                 }
                 else
                     return new APIResult<List<ProductViewModel>>()

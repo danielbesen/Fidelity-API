@@ -45,6 +45,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             PromotionTypeId = Model.PromotionTypeId,
                             ProductId = Model.ProductId,
                             ProductIdList = Model.ProductList,
+                            CouponValue = Model.CouponValue,// adiciona valor do cupom
                             Quantity = Model.Quantity,
                             StartDate = Model.StartDate
                         };
@@ -131,6 +132,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             PromotionTypeId = item.PromotionTypeId,
                             EndDate = item.EndDate,
                             StartDate = item.StartDate,
+                            CouponValue = item.CouponValue,
                             Products = oProductList
                         });
                     }
@@ -181,6 +183,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                     oLoyalt.PromotionTypeId = Model.PromotionTypeId;
                     oLoyalt.ProductId = Model.ProductId;
                     oLoyalt.Quantity = Model.Quantity;
+                    oLoyalt.CouponValue = Model.CouponValue;
                     oLoyalt.StartDate = Model.StartDate;
                     oLoyalt.AlterDate = DateTime.Now;
 

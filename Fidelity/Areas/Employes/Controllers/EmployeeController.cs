@@ -19,6 +19,10 @@ namespace Fidelity.Areas.Employes.Controllers
 {
     public class EmployeeController : ApiController
     {
+        /// <summary>
+        /// Requisição para Cadastrar funcionário no sistema.
+        /// </summary>
+        /// <returns>Product List Object></returns>
         [HttpPost]
         [AllowAnonymous]
         [Route("employees")]
@@ -95,6 +99,10 @@ namespace Fidelity.Areas.Employes.Controllers
             }
         }
 
+        /// <summary>
+        /// Requisição para Busca funcionário no sistema.
+        /// </summary>
+        /// <returns>Product List Object></returns>
         [HttpGet]
         [Authorize]
         [Route("employees")]
@@ -132,6 +140,11 @@ namespace Fidelity.Areas.Employes.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Requisição para Atualiza funcionário no sistema.
+        /// </summary>
+        /// <returns>Product List Object></returns>
         [HttpPut]
         [Authorize]
         [Route("employees")]
@@ -165,6 +178,10 @@ namespace Fidelity.Areas.Employes.Controllers
             }
         }
 
+        /// <summary>
+        /// Requisição para Deleta um funcionário no sistema.
+        /// </summary>
+        /// <returns>Product List Object></returns>
         [HttpDelete]
         [Authorize]
         [Route("employees")]
@@ -181,6 +198,8 @@ namespace Fidelity.Areas.Employes.Controllers
                     return new APIResult<object>()
                     {
                         Message = "Funcionário deletado com sucesso!"
+
+                        // fazer inativo funcionário
 
                         // deletar UserId também ou mudar tag para inativo invés de deletar funcionário??
                     };

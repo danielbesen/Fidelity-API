@@ -45,12 +45,16 @@ namespace FidelityLibrary.Entity.Loyalts
         public int FidelityTypeId { get; set; }
 
         [Column("qtde")]
-        public double Quantity { get; set; }
+        public double Quantity { get; set; }        
+        
+        [Column("valor_cupom")]
+        public double CouponValue { get; set; } // adiciona valor do cupom 
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
 
         [Column("dt_alteracao")]
         public DateTime? AlterDate { get; set; }
+
     }
 }

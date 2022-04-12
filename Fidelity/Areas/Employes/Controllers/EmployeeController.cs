@@ -63,7 +63,9 @@ namespace Fidelity.Areas.Employes.Controllers
                                     UserId = user.Id,
                                     EnterpriseId = Model.Employee.EnterpriseId,
                                     Name = Model.Employee.Name,
-                                    AccessType = Model.Employee.AccessType
+                                    AccessType = Model.Employee.AccessType,
+                                    Image = Model.Employee.Image,
+
                                 };
 
                                 EmployeeDAO.SaveEmployee(oEmploye, context);

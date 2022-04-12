@@ -12,5 +12,6 @@ namespace Fidelity.Areas.Employes.Models
         public int EnterpriseId { get; set; }
         public int AccessType { get; set; }
         public DateTime AlterDate { get; set; }
+        public byte[] Image { get; set; }
     }
 }

@@ -106,6 +106,20 @@ namespace Fidelity.Areas.Products.Controllers
                     var name = "";
                     var page = 0;
                     var pageSize = 0;
+                    var company = 0;
+
+                    if (parameters.ContainsKey("company"))
+                    {
+                        company = Int32.Parse(parameters["company"]);
+                    }
+                    else
+                    {
+                        return new APIResult<List<ProductViewModel>>()
+                        {
+                            Success = false,
+                            Message = "Nenhuma empresa informada!"
+                        };
+                    }
 
                     if (parameters.ContainsKey("name"))
                     {
@@ -124,23 +138,21 @@ namespace Fidelity.Areas.Products.Controllers
 
                     #endregion
 
-                    #region GET
-
                     var Products = new List<Product>();
 
                     if (!string.IsNullOrEmpty(name))
                     {
-                        Products = ProductDAO.FindAll().Where(x => x.Description.ToLower().Contains(name)).ToList();
+                        Products = ProductDAO.FindAll().Where(x => x.Description.ToLower().Contains(name) && x.EnterpriseId == company).ToList();
                     }
                     else
                     {
                         if (page == 0)
                         {
-                            Products = ProductDAO.FindAll().ToList();
+                            Products = ProductDAO.FindAll().Where(x => x.EnterpriseId == company).ToList();
                         }
                         else
                         {
-                            Products = ProductDAO.FindAll().Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                            Products = ProductDAO.FindAll().Where(x => x.EnterpriseId == company).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                         }
                     }
 
@@ -166,17 +178,22 @@ namespace Fidelity.Areas.Products.Controllers
                                 Limit = oLoyalt.Limit,
                                 Quantity = oLoyalt.Quantity,
                                 StartDate = oLoyalt.StartDate,
-                                EndDate = oLoyalt.EndDate
+                                EndDate = oLoyalt.EndDate,
+                                FidelityTypeId = oLoyalt.FidelityTypeId,
+                                ConsumedProductId = oLoyalt.FidelityTypeId,
+                                PromotionTypeId = oLoyalt.PromotionTypeId
                             });
                         }
 
-                        var CategoryVM = new CategoryViewModel()
+                        var CategoryVM = new CategoryViewModel();
+
+                        if (oCategory != null) 
                         {
-                            Id = oCategory.Id,
-                            Name = oCategory.Name,
-                            DataAlteracao = oCategory.AlterDate,
-                            DataInclusao = oCategory.InsertDate
-                        };
+                            CategoryVM.Id = oCategory.Id;
+                            CategoryVM.Name = oCategory.Name;
+                            CategoryVM.DataAlteracao = oCategory.AlterDate;
+                            CategoryVM.DataInclusao = oCategory.InsertDate;
+                        }
 
                         oProductList.Add(new ProductViewModel()
                         {
@@ -187,7 +204,7 @@ namespace Fidelity.Areas.Products.Controllers
                             Value = item.Value,
                             Image = item.Image,
                             Status = item.Status,
-                            Category = CategoryVM,
+                            Category = oCategory != null ? CategoryVM : null,
                             Loyalts = LoyaltsVM
                         });
                     }
@@ -198,8 +215,6 @@ namespace Fidelity.Areas.Products.Controllers
                         Count = oProductList.Count,
                         Message = "Sucesso ao buscar produtos!"
                     };
-
-                    #endregion
                 }
                 else
                     return new APIResult<List<ProductViewModel>>()
@@ -241,6 +256,27 @@ namespace Fidelity.Areas.Products.Controllers
                     oProduct.Image = Model.Image;
                     oProduct.AlterDate = DateTime.Now;
                     oProduct.Value = Model.Value;
+                    oProduct.Status = Model.Status;
+
+                    if (Model.LoyaltList?.Count > 0)
+                    {
+                        foreach (var item in Model.LoyaltList)
+                        {
+                            var oFidelities = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == oProduct.Id).ToList();
+
+                            foreach (var fidelity in oFidelities)
+                            {
+                                FidelityDAO.Delete(fidelity);
+                            }
+
+                            var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
+                            {
+                                ConsumedProductId = oProduct.Id,
+                                LoyaltId = item
+                            };
+                            FidelityDAO.Insert(oFidelity);
+                        }
+                    }
 
                     ProductDAO.Update(oProduct);
 

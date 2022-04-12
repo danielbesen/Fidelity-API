@@ -97,9 +97,34 @@ namespace Fidelity.Areas.Loyalts.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
+                    #region GET PARAMS
+
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
+                    {
+                        parameters.Add(parameter.Key, parameter.Value);
+                    }
+
+                    var company = 0;
+
+                    if (parameters.ContainsKey("company"))
+                    {
+                        company = Int32.Parse(parameters["company"]);
+                    }
+                    else
+                    {
+                        return new APIResult<List<LoyaltViewModel>>()
+                        {
+                            Success = false,
+                            Message = "Nenhuma empresa informada!"
+                        };
+                    }
+
+                    #endregion
+
                     var oLoyaltList = new List<LoyaltViewModel>();
 
-                    foreach (var item in LoyaltyDAO.FindAll().ToList())
+                    foreach (var item in LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company).ToList())
                     {
                         var oProductList = new List<ProductViewModel>();
 
@@ -186,6 +211,27 @@ namespace Fidelity.Areas.Loyalts.Controllers
                     oLoyalt.CouponValue = Model.CouponValue;
                     oLoyalt.StartDate = Model.StartDate;
                     oLoyalt.AlterDate = DateTime.Now;
+
+                    if (Model.ProductList?.Count > 0)
+                    {
+                        foreach (var item in Model.ProductList)
+                        {
+                            var oFidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == oLoyalt.Id).ToList();
+
+                            foreach (var fidelity in oFidelities)
+                            {
+                                FidelityDAO.Delete(fidelity);
+                            }
+
+                            var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
+                            {
+                                ConsumedProductId = item,
+                                LoyaltId = oLoyalt.Id,
+                            };
+
+                            FidelityDAO.Insert(oFidelity);
+                        }
+                    }
 
                     LoyaltyDAO.Update(oLoyalt);
 

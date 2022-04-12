@@ -26,13 +26,39 @@ namespace Fidelity.Areas.Categories.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
+                    #region GET PARAMS
+
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
+                    {
+                        parameters.Add(parameter.Key, parameter.Value);
+                    }
+
+                    var company = 0;
+
+                    if (parameters.ContainsKey("company"))
+                    {
+                        company = Int32.Parse(parameters["company"]);
+                    }
+                    else
+                    {
+                        return new APIResult<List<CategoryViewModel>>()
+                        {
+                            Success = false,
+                            Message = "Nenhuma empresa informada!"
+                        };
+                    }
+
+                    #endregion
+
                     var oCategoryList = new List<CategoryViewModel>();
-                    foreach (var item in CategoryDAO.FindAll().ToList())
+                    foreach (var item in CategoryDAO.FindAll().Where(x => x.EnterpriseId == company).ToList())
                     {
                         oCategoryList.Add(new CategoryViewModel()
                         {
                             Id = item.Id,
-                            Name = item.Name
+                            Name = item.Name,
+                            EnterpriseId = item.EnterpriseId
                         });
                     }
 
@@ -74,7 +100,8 @@ namespace Fidelity.Areas.Categories.Controllers
                 {
                     var oCategory = new FidelityLibrary.Entity.Categories.Category()
                     {
-                        Name = Model.Name
+                        Name = Model.Name,
+                        EnterpriseId = Model.EnterpriseId
                     };
 
                     CategoryDAO.Insert(oCategory);

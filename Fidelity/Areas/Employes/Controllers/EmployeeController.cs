@@ -53,7 +53,10 @@ namespace Fidelity.Areas.Employes.Controllers
                                     Email = Model.Email.ToLower(),
                                     Type = "F",
                                     Active = "1",
-                                    Password = Encrypt.EncryptPass(Model.Password)
+                                    Password = Encrypt.EncryptPass(Model.Password),
+                                    Image = Model.Image,
+                                    InsertDate = DateTime.Now
+
                                 };
 
                                 UserDAO.SaveUser(user, context);
@@ -64,8 +67,7 @@ namespace Fidelity.Areas.Employes.Controllers
                                     EnterpriseId = Model.Employee.EnterpriseId,
                                     Name = Model.Employee.Name,
                                     AccessType = Model.Employee.AccessType,
-                                    Image = Model.Employee.Image,
-
+                                    InsertDate = DateTime.Now
                                 };
 
                                 EmployeeDAO.SaveEmployee(oEmploye, context);
@@ -109,7 +111,7 @@ namespace Fidelity.Areas.Employes.Controllers
         [HttpGet]
         [Authorize]
         [Route("employees")]
-        public APIResult<List<EmployeeViewModel>> Get()
+        public APIResult<object> Get()
         {
             try
             {
@@ -129,7 +131,7 @@ namespace Fidelity.Areas.Employes.Controllers
                 }
                 else
                 {
-                    return new APIResult<List<EmployeeViewModel>>()
+                    return new APIResult<object>()
                     {
                         Success = false,
                         Message = "Nenhuma empresa informada!"
@@ -139,28 +141,41 @@ namespace Fidelity.Areas.Employes.Controllers
                 #endregion
 
                 var oEmployeeList = new List<EmployeeViewModel>();
+                var oUserList = new List<UserViewModel>();
 
                 foreach (var item in EmployeeDAO.FindAll().Where(x => x.EnterpriseId == company).ToList())
                 {
                     oEmployeeList.Add(new EmployeeViewModel()
                     {
                         Id = item.Id,
+                        UserId = item.UserId,
                         AccessType = item.AccessType,
                         EnterpriseId = item.EnterpriseId,
                         Name = item.Name
                     });
+
+                    foreach (var user in UserDAO.FindAll().Where(x => x.Id == item.UserId).ToList())
+                    {
+                        oUserList.Add(new UserViewModel()
+                        {
+                            Image = user.Image,
+                            Active = user.Active,
+                            Email = user.Email
+                        });
+                    }
                 }
 
-                return new APIResult<List<EmployeeViewModel>>()
+                return new APIResult<object>()
                 {
                     Result = oEmployeeList,
+                    ResultUser = oUserList,
                     Count = oEmployeeList.Count
                 };
 
             }
             catch (Exception e)
             {
-                return new APIResult<List<EmployeeViewModel>>()
+                return new APIResult<object>()
                 {
                     Success = false,
                     Message = "Erro ao buscar todos funcionários: " + e.Message + e.InnerException

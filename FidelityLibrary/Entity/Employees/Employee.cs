@@ -32,7 +32,5 @@ namespace FidelityLibrary.Entity
         [Column("dt_alteracao")]
         public DateTime? AlterDate { get; set; }
 
-        [Column("img_func")]
-        public byte[] Image { get; set; }
     }
 }

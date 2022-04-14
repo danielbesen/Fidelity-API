@@ -240,6 +240,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             };
 
                             FidelityDAO.Insert(oFidelity);
+                            System.Threading.Thread.Sleep(100);
                         }
                     }
 

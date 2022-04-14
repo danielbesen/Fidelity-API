@@ -4,6 +4,7 @@ using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Checkpoints;
 using FidelityLibrary.Entity.Loyalts;
 using FidelityLibrary.Persistance.CheckpointDAO;
+using FidelityLibrary.Persistance.LoyaltProgressDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,12 +36,23 @@ namespace Fidelity.Areas.Checkpoints.Controllers
 
                     CheckpointDAO.Insert(oCheckpoint);
 
+                    var LastLoyaltProgress = LoyaltProgressDAO.FindAll().LastOrDefault(x => x.ClientId == Model.ClientId);
+                    int oPoints = 0;
+
+                    if (LastLoyaltProgress != null)
+                    {
+                        oPoints = LastLoyaltProgress.Points + 1;
+                    } else
+                    {
+                        oPoints = 1;
+                    }
+
                     var oProgress = new LoyaltProgress()
                     {
                         ClientId = Model.ClientId,
-                        id_checkpoint = oCheckpoint.Id,
-                        //Points = 
-
+                        CheckpointId = oCheckpoint.Id,
+                        Points = oPoints,
+                        Status = 0,
                     };
 
                     return new APIResult<object>()

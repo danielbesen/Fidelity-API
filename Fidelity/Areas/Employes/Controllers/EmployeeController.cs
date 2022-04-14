@@ -55,8 +55,6 @@ namespace Fidelity.Areas.Employes.Controllers
                                     Active = "1",
                                     Password = Encrypt.EncryptPass(Model.Password),
                                     Image = Model.Image,
-                                    InsertDate = DateTime.Now
-
                                 };
 
                                 UserDAO.SaveUser(user, context);
@@ -66,8 +64,7 @@ namespace Fidelity.Areas.Employes.Controllers
                                     UserId = user.Id,
                                     EnterpriseId = Model.Employee.EnterpriseId,
                                     Name = Model.Employee.Name,
-                                    AccessType = Model.Employee.AccessType,
-                                    InsertDate = DateTime.Now
+                                    AccessType = Model.Employee.AccessType
                                 };
 
                                 EmployeeDAO.SaveEmployee(oEmploye, context);
@@ -140,36 +137,35 @@ namespace Fidelity.Areas.Employes.Controllers
 
                 #endregion
 
-                var oEmployeeList = new List<EmployeeViewModel>();
                 var oUserList = new List<UserViewModel>();
 
                 foreach (var item in EmployeeDAO.FindAll().Where(x => x.EnterpriseId == company).ToList())
                 {
-                    oEmployeeList.Add(new EmployeeViewModel()
+                    var oEmployee = new EmployeeViewModel()
                     {
                         Id = item.Id,
                         UserId = item.UserId,
                         AccessType = item.AccessType,
                         EnterpriseId = item.EnterpriseId,
-                        Name = item.Name
-                    });
+                        Name = item.Name   
+                    };
 
-                    foreach (var user in UserDAO.FindAll().Where(x => x.Id == item.UserId).ToList())
+                    var oUser = UserDAO.FindByKey(item.UserId);
+
+                    oUserList.Add(new UserViewModel()
                     {
-                        oUserList.Add(new UserViewModel()
-                        {
-                            Image = user.Image,
-                            Active = user.Active,
-                            Email = user.Email
-                        });
-                    }
+                        Image = oUser.Image,
+                        Active = oUser.Active,
+                        Email = oUser.Email,
+                        Type = oUser.Type,
+                        Employee = oEmployee,
+                    });
                 }
 
                 return new APIResult<object>()
                 {
-                    Result = oEmployeeList,
-                    ResultUser = oUserList,
-                    Count = oEmployeeList.Count
+                    Result = oUserList,
+                    Count = oUserList.Count
                 };
 
             }
@@ -202,6 +198,8 @@ namespace Fidelity.Areas.Employes.Controllers
                     oEmployee.Name = Model.Name;
                     oEmployee.AccessType = Model.AccessType;
                     oEmployee.AlterDate = DateTime.Now;
+
+                    //Atualizar o status do usuario (id == Model.UserId)
 
                     EmployeeDAO.Update(oEmployee);
 

@@ -28,10 +28,5 @@ namespace Fidelity.Models
         /// Object Return
         /// </summary>
         public T Result { get; set; }
-
-        /// <summary>
-        /// Object User Return
-        /// </summary>
-        public T ResultUser { get; set; }
     }
 }

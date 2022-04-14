@@ -48,7 +48,7 @@ namespace FidelityLibrary.Entity.Loyalts
         public double Quantity { get; set; }        
         
         [Column("valor_cupom")]
-        public double CouponValue { get; set; } // adiciona valor do cupom 
+        public double? CouponValue { get; set; } 
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;

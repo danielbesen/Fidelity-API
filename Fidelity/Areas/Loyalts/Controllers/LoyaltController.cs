@@ -45,7 +45,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             PromotionTypeId = Model.PromotionTypeId,
                             ProductId = Model.ProductId,
                             ProductIdList = Model.ProductList,
-                            CouponValue = Model.CouponValue,// adiciona valor do cupom
+                            CouponValue = Model.CouponValue,
                             Quantity = Model.Quantity,
                             StartDate = Model.StartDate
                         };

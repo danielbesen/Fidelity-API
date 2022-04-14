@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
@@ -99,28 +100,35 @@ namespace Fidelity.Areas.Loyalts.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
+                    var company = 0;
+                    var identity = User.Identity as ClaimsIdentity;
+                    if (identity != null)
+                    {
+                        company = Convert.ToInt32(identity.FindFirst("company").Value);
+                    }
+
                     #region GET PARAMS
 
-                    Dictionary<string, string> parameters = new Dictionary<string, string>();
-                    foreach (var parameter in Request.GetQueryNameValuePairs())
-                    {
-                        parameters.Add(parameter.Key, parameter.Value);
-                    }
+                    //Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    //foreach (var parameter in Request.GetQueryNameValuePairs())
+                    //{
+                    //    parameters.Add(parameter.Key, parameter.Value);
+                    //}
 
-                    var company = 0;
+                    //var company = 0;
 
-                    if (parameters.ContainsKey("company"))
-                    {
-                        company = Int32.Parse(parameters["company"]);
-                    }
-                    else
-                    {
-                        return new APIResult<List<LoyaltViewModel>>()
-                        {
-                            Success = false,
-                            Message = "Nenhuma empresa informada!"
-                        };
-                    }
+                    //if (parameters.ContainsKey("company"))
+                    //{
+                    //    company = Int32.Parse(parameters["company"]);
+                    //}
+                    //else
+                    //{
+                    //    return new APIResult<List<LoyaltViewModel>>()
+                    //    {
+                    //        Success = false,
+                    //        Message = "Nenhuma empresa informada!"
+                    //    };
+                    //}
 
                     #endregion
 

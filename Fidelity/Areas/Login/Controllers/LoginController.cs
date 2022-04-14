@@ -38,11 +38,28 @@ namespace Fidelity.Areas.Login.Controllers
                 {
                     var oNewUser = UserDAO.GetUser(Model.Email);
 
+                    #region Test
+
+                    int oEnterpriseId = oNewUser.Type == "E" ? EnterpriseDAO.FindByUserId(oNewUser.Id).Id : oNewUser.Type == "F" ? EmployeeDAO.FindByUserId(oNewUser.Id).EnterpriseId : -1;
+                    object oToken = null;
+
+                    if (oEnterpriseId != -1)
+                    {
+                        oToken = Encrypt.GetTokenCompany(Model.Email, Model.Password, oEnterpriseId);
+                    } else
+                    {
+                        oToken = Encrypt.GetToken(Model.Email, Model.Password);
+                    }
+
+                    #endregion
+
                     return new APIResult<Object>()
                     {
+
+
                         Result = new LoginResult<Object>()
                         {
-                            Token = Encrypt.GetToken(Model.Email, Model.Password),
+                            Token = oToken,
                             Property = oNewUser.Type == "C" ? ClientDAO.FindByUserId(oNewUser.Id) : oNewUser.Type == "E" ? EnterpriseDAO.FindByUserId(oNewUser.Id) : EmployeeDAO.FindByUserId(oNewUser.Id),
                             Type = oNewUser.Type.ToString()
                         },

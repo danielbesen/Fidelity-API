@@ -13,6 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 
@@ -95,6 +96,14 @@ namespace Fidelity.Areas.Products.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
+
+                    var company = 0;
+                    var identity = User.Identity as ClaimsIdentity;
+                    if (identity != null)
+                    {
+                        company = Convert.ToInt32(identity.FindFirst("company").Value);
+                    }
+
                     #region GET PARAMS
 
                     Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -106,20 +115,21 @@ namespace Fidelity.Areas.Products.Controllers
                     var name = "";
                     var page = 0;
                     var pageSize = 0;
-                    var company = 0;
 
-                    if (parameters.ContainsKey("company"))
-                    {
-                        company = Int32.Parse(parameters["company"]);
-                    }
-                    else
-                    {
-                        return new APIResult<List<ProductViewModel>>()
-                        {
-                            Success = false,
-                            Message = "Nenhuma empresa informada!"
-                        };
-                    }
+                    //var company = 0;
+
+                    //if (parameters.ContainsKey("company"))
+                    //{
+                    //    company = Int32.Parse(parameters["company"]);
+                    //}
+                    //else
+                    //{
+                    //    return new APIResult<List<ProductViewModel>>()
+                    //    {
+                    //        Success = false,
+                    //        Message = "Nenhuma empresa informada!"
+                    //    };
+                    //}
 
                     if (parameters.ContainsKey("name"))
                     {

@@ -59,7 +59,7 @@ namespace Fidelity.Areas.Employes.Controllers
 
                                 UserDAO.SaveUser(user, context);
 
-                                var oEmploye = new Employee()
+                                var oEmployee = new Employee()
                                 {
                                     UserId = user.Id,
                                     EnterpriseId = Model.Employee.EnterpriseId,
@@ -67,7 +67,7 @@ namespace Fidelity.Areas.Employes.Controllers
                                     AccessType = Model.Employee.AccessType
                                 };
 
-                                EmployeeDAO.SaveEmployee(oEmploye, context);
+                                EmployeeDAO.SaveEmployee(oEmployee, context);
 
                                 dbContextTransaction.Commit();
 
@@ -147,7 +147,7 @@ namespace Fidelity.Areas.Employes.Controllers
                         UserId = item.UserId,
                         AccessType = item.AccessType,
                         EnterpriseId = item.EnterpriseId,
-                        Name = item.Name   
+                        Name = item.Name
                     };
 
                     var oUser = UserDAO.FindByKey(item.UserId);
@@ -193,14 +193,22 @@ namespace Fidelity.Areas.Employes.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oEmployee = EmployeeDAO.FindByKey(Model.Employee.Id);
+                    var oUser = UserDAO.FindByKey(Model.Employee.UserId);
 
+                    if (Model.Password != null)
+                    {
+                        oUser.Password = Encrypt.EncryptPass(Model.Password);
+                    }
+
+                    oUser.Email = Model.Email;
+                    oUser.Image = Model.Image;
+                    oUser.Active = Model.Active;
+                    oUser.AlterDate = DateTime.Now;
+
+                    var oEmployee = EmployeeDAO.FindByKey(Model.Employee.Id);
                     oEmployee.Name = Model.Employee.Name;
                     oEmployee.AccessType = Model.Employee.AccessType;
                     oEmployee.AlterDate = DateTime.Now;
-
-                    //Atualizar o status do usuario (id == Model.UserId)
-                    //e senha
 
                     EmployeeDAO.Update(oEmployee);
 

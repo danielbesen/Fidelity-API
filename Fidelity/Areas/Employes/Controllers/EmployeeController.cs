@@ -187,19 +187,20 @@ namespace Fidelity.Areas.Employes.Controllers
         [HttpPut]
         [Authorize]
         [Route("employees")]
-        public APIResult<Object> Update(EmployeeViewModel Model)
+        public APIResult<Object> Update(UserViewModel Model)
         {
             try
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oEmployee = EmployeeDAO.FindByKey(Model.Id);
+                    var oEmployee = EmployeeDAO.FindByKey(Model.Employee.Id);
 
-                    oEmployee.Name = Model.Name;
-                    oEmployee.AccessType = Model.AccessType;
+                    oEmployee.Name = Model.Employee.Name;
+                    oEmployee.AccessType = Model.Employee.AccessType;
                     oEmployee.AlterDate = DateTime.Now;
 
                     //Atualizar o status do usuario (id == Model.UserId)
+                    //e senha
 
                     EmployeeDAO.Update(oEmployee);
 

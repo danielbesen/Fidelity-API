@@ -231,6 +231,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             foreach (var fidelity in oFidelities)
                             {
                                 FidelityDAO.Delete(fidelity);
+                                System.Threading.Thread.Sleep(300);
                             }
 
                             var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
@@ -240,7 +241,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             };
 
                             FidelityDAO.Insert(oFidelity);
-                            System.Threading.Thread.Sleep(100);
+                            System.Threading.Thread.Sleep(300);
                         }
                     }
 

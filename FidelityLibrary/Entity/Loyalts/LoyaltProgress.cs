@@ -12,6 +12,7 @@ namespace FidelityLibrary.Entity.Loyalts
     public class LoyaltProgress
     {
         [Key, Column("id_progresso_fidelidade")]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int? Id { get; set; }
 
         [Column("id_cliente")]

@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 
@@ -26,7 +27,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
         [HttpPost]
         [Authorize]
         [Route("loyalts")]
-        public APIResult<Object> Add(LoyaltViewModel Model)
+        public APIResult<object> Add(LoyaltViewModel Model)
         {
             try
             {
@@ -62,6 +63,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                                     LoyaltId = oLoyalt.Id,
                                 };
                                 FidelityDAO.SaveFidelity(oFidelity, context);
+                                System.Threading.Thread.Sleep(100);
                             }
                         }
 

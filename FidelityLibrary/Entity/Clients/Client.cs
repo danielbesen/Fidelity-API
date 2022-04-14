@@ -16,7 +16,7 @@ namespace FidelityLibrary.Entity
         public int Id { get; set; }
 
         [Column("id_usuario")]
-        public int? UserId { get; set; }
+        public int UserId { get; set; }
 
         [Column("nome")]
         [Required(ErrorMessage = "O nome do usuário é obrigatório", AllowEmptyStrings = false)]

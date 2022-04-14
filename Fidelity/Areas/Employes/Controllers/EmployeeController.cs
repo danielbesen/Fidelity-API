@@ -21,7 +21,7 @@ namespace Fidelity.Areas.Employes.Controllers
     public class EmployeeController : ApiController
     {
         /// <summary>
-        /// Requisição para Cadastrar funcionário no sistema.
+        /// Requisição para cadastrar funcionário no sistema.
         /// </summary>
         /// <returns>Product List Object></returns>
         [HttpPost]
@@ -102,7 +102,7 @@ namespace Fidelity.Areas.Employes.Controllers
         }
 
         /// <summary>
-        /// Requisição para Busca funcionário no sistema.
+        /// Requisição para buscar funcionário no sistema.
         /// </summary>
         /// <returns>Product List Object></returns>
         [HttpGet]
@@ -181,7 +181,7 @@ namespace Fidelity.Areas.Employes.Controllers
 
 
         /// <summary>
-        /// Requisição para Atualiza funcionário no sistema.
+        /// Requisição para atualizar funcionário no sistema.
         /// </summary>
         /// <returns>Product List Object></returns>
         [HttpPut]
@@ -229,7 +229,7 @@ namespace Fidelity.Areas.Employes.Controllers
         }
 
         /// <summary>
-        /// Requisição para Deleta um funcionário no sistema.
+        /// Requisição para deletar um funcionário no sistema.
         /// </summary>
         /// <returns>Product List Object></returns>
         [HttpDelete]

@@ -222,18 +222,17 @@ namespace Fidelity.Areas.Loyalts.Controllers
                     oLoyalt.StartDate = Model.StartDate;
                     oLoyalt.AlterDate = DateTime.Now;
 
+                    var oFidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == oLoyalt.Id).ToList();
+                    foreach (var fidelity in oFidelities)
+                    {
+                        FidelityDAO.Delete(fidelity);
+                        System.Threading.Thread.Sleep(300);
+                    }
+
                     if (Model.ProductList?.Count > 0)
                     {
                         foreach (var item in Model.ProductList)
                         {
-                            var oFidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == oLoyalt.Id).ToList();
-
-                            foreach (var fidelity in oFidelities)
-                            {
-                                FidelityDAO.Delete(fidelity);
-                                System.Threading.Thread.Sleep(300);
-                            }
-
                             var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
                             {
                                 ConsumedProductId = item,

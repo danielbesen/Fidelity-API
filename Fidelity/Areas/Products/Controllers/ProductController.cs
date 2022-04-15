@@ -284,7 +284,7 @@ namespace Fidelity.Areas.Products.Controllers
                                 LoyaltId = item
                             };
                             FidelityDAO.Insert(oFidelity);
-                            System.Threading.Thread.Sleep(9000);
+                            System.Threading.Thread.Sleep(900);
                         }
                     }
 

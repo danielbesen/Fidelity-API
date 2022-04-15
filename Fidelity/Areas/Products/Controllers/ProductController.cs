@@ -268,23 +268,23 @@ namespace Fidelity.Areas.Products.Controllers
                     oProduct.Value = Model.Value;
                     oProduct.Status = Model.Status;
 
+                    var oFidelities = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == oProduct.Id).ToList();
+                    foreach (var fidelity in oFidelities)
+                    {
+                        FidelityDAO.Delete(fidelity);
+                    }
+
                     if (Model.LoyaltList?.Count > 0)
                     {
                         foreach (var item in Model.LoyaltList)
                         {
-                            var oFidelities = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == oProduct.Id).ToList();
-
-                            foreach (var fidelity in oFidelities)
-                            {
-                                FidelityDAO.Delete(fidelity);
-                            }
-
                             var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
                             {
                                 ConsumedProductId = oProduct.Id,
                                 LoyaltId = item
                             };
                             FidelityDAO.Insert(oFidelity);
+                            System.Threading.Thread.Sleep(9000);
                         }
                     }
 

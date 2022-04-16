@@ -18,14 +18,14 @@ namespace FidelityLibrary.Entity.Loyalts
         [Column("id_cliente")]
         public int ClientId { get; set; }
 
-        [Column("id_checkpoint")]
-        public int? CheckpointId { get; set; }
-
         [Column("nr_pontos")]
-        public int Points { get; set; }
+        public double Points { get; set; }
 
         [Column("status")]
-        public int Status { get; set; }
+        public bool Status { get; set; }
+
+        [Column("id_fidelidade")]
+        public int LoyaltId { get; set; }
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;

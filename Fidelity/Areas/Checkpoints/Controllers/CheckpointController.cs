@@ -30,24 +30,16 @@ namespace Fidelity.Areas.Checkpoints.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oCheckpoint = new Checkpoint()
-                    {
-                        ClientId = Model.ClientId,
-                        LoyaltId = Model.LoyaltId,
-                    };
-
-                    CheckpointDAO.Insert(oCheckpoint);
-
                     var oFidelity = LoyaltyDAO.FindByKey(Model.LoyaltId);
                     var oFidelityType = oFidelity.FidelityTypeId;
                     var oFidelityQtde = oFidelity.Quantity; //Quantidade à ser alcançada
 
+                    var LastLoyaltProgress = LoyaltProgressDAO.FindAll().LastOrDefault(x => x.ClientId == Model.ClientId && x.LoyaltId == Model.LoyaltId);
+                    double oPoints = 0;
+                    bool oStatus = false;
+
                     if (oFidelityType == 2) //Pontuação
                     {
-                        var LastLoyaltProgress = LoyaltProgressDAO.FindAll().LastOrDefault(x => x.ClientId == Model.ClientId);
-                        int oPoints = 0;
-                        int oStatus = 0;
-
                         if (LastLoyaltProgress != null)
                         {
                             oPoints = LastLoyaltProgress.Points + 1;
@@ -59,14 +51,54 @@ namespace Fidelity.Areas.Checkpoints.Controllers
 
                         if (oPoints == oFidelityQtde) //Ganhou
                         {
-                            oStatus = 1;
+                            oStatus = true;
                             oPoints = 0;
                         }
 
                         var oProgress = new LoyaltProgress()
                         {
                             ClientId = Model.ClientId,
-                            CheckpointId = oCheckpoint.Id,
+                            Points = oPoints,
+                            Status = oStatus,
+                            LoyaltId = Model.LoyaltId,
+                        };
+
+                        LoyaltProgressDAO.Insert(oProgress);
+
+                        return new APIResult<LoyaltProgressViewModel>()
+                        {
+                            Message = "Checkpoint realizado com sucesso!",
+                            Result = new LoyaltProgressViewModel()
+                            {
+                                ClientId = Model.ClientId,
+                                LoyaltId = Model.LoyaltId,
+                                Id = oProgress.Id,
+                                Points = oPoints,
+                                Status = oStatus
+                            }
+                        };
+                    }
+                    else //Valor
+                    {
+                        if (LastLoyaltProgress != null)
+                        {
+                            oPoints = LastLoyaltProgress.Points + Model.Value;
+                        }
+                        else
+                        {
+                            oPoints = Model.Value;
+                        }
+
+                        if (oPoints >= oFidelityQtde) //Ganhou
+                        {
+                            oStatus = true;
+                            oPoints = 0;
+                        }
+
+                        var oProgress = new LoyaltProgress()
+                        {
+                            ClientId = Model.ClientId,
+                            LoyaltId = Model.LoyaltId,
                             Points = oPoints,
                             Status = oStatus,
                         };
@@ -80,21 +112,13 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                             {
                                 ClientId = Model.ClientId,
                                 Id = oProgress.Id,
-                                CheckpointId = oProgress.CheckpointId,
+                                LoyaltId = oProgress.LoyaltId,
                                 Points = oPoints,
                                 Status = oStatus
                             }
-                    };
-                } else if (oFidelityType == 3) //Valor
-                {
-
+                        };
+                    }
                 }
-
-                return new APIResult<LoyaltProgressViewModel>()
-                {
-                    Message = "Checkpoint realizado com sucesso!"
-                };
-            }
             }
             catch (Exception e)
             {
@@ -102,8 +126,35 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                 {
                     Success = false,
                     Message = "Erro ao realizar checkpoint! " + e.Message + e.InnerException
-    };
-}
+                };
+            }
         }
+
+
+        ///// <summary>
+        ///// Requisição para buscar progresso de cliente no sistema.
+        ///// </summary>
+        ///// <returns>APIResult List Object></returns>
+        //[HttpGet]
+        //[Authorize]
+        //[Route("checkpoints")]
+        //public APIResult<LoyaltProgressViewModel> Get()
+        //{
+        //    try
+        //    {
+        //        using (var context = new ApplicationDbContext())
+        //        {
+
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return new APIResult<LoyaltProgressViewModel>()
+        //        {
+        //            Success = false,
+        //            Message = "Erro ao buscar progresso de cliente! " + e.Message + e.InnerException
+        //        };
+        //    }
+        //}
     }
 }

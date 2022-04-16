@@ -9,8 +9,8 @@ namespace Fidelity.Areas.Loyalts.Models
     {
         public int? Id { get; set; }
         public int ClientId { get; set; }
-        public int? CheckpointId { get; set; }
-        public int Points { get; set; }
-        public int Status { get; set; }
+        public int LoyaltId { get; set; }
+        public double Points { get; set; }
+        public bool Status { get; set; }
     }
 }

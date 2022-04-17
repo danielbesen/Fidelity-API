@@ -218,7 +218,8 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                     return new APIResult<List<LoyaltProgressViewModel>>()
                     {
                         Message = "Busca de progressos realizada com sucesso!",
-                        Result = ListProgressListLastVM
+                        Result = ListProgressListLastVM,
+                        Count = ListProgressListLastVM.Count
                     };
 
                 }

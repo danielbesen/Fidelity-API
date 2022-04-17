@@ -1,4 +1,5 @@
-﻿using Fidelity.Areas.Users.Models;
+﻿using Fidelity.Areas.Enterprises.Models;
+using Fidelity.Areas.Users.Models;
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity;
@@ -121,6 +122,61 @@ namespace Fidelity.Areas.Enterprises.Controllers
                 {
                     Success = false,
                     Message = "Erro ao validar Login: " + e.Message + e.InnerException
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para buscar empresas participantes no sistema.
+        /// </summary>
+        /// <returns>APIResult List Object></returns>
+        [HttpGet]
+        [Authorize]
+        [Route("enterprises")]
+        public APIResult<List<EnterpriseViewModel>> Get()
+        {
+            try
+            {
+                if (User.Identity.IsAuthenticated)
+                {
+                    var oEnterpriseList = new List<EnterpriseViewModel>();
+                    foreach (var item in EnterpriseDAO.FindAll().ToList())
+                    {
+                        oEnterpriseList.Add(new EnterpriseViewModel()
+                        {
+                            Name = item.Name,
+                            AlterDate = item.AlterDate,
+                            Active = item.Active,
+                            Address = item.Address,
+                            AddressNum = item.AddressNum,
+                            Branch = item.Branch,
+                            City = item.City,
+                            Cnpj = item.Cnpj,
+                            MembershipId = item.MembershipId,
+                            State = item.State,
+                            Tel = item.Tel
+                        });
+                    }
+
+                    return new APIResult<List<EnterpriseViewModel>>()
+                    {
+                        Result = oEnterpriseList,
+                        Count = oEnterpriseList.Count
+                    };
+                }
+                else
+                    return new APIResult<List<EnterpriseViewModel>>()
+                    {
+                        Success = false,
+                        Message = "Acesso negado!"
+                    };
+            }
+            catch (Exception e)
+            {
+                return new APIResult<List<EnterpriseViewModel>>()
+                {
+                    Success = false,
+                    Message = "Erro ao buscar as empresas participantes: " + e.Message + e.InnerException
                 };
             }
         }

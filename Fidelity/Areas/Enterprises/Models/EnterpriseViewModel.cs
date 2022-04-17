@@ -27,6 +27,6 @@ namespace Fidelity.Areas.Enterprises.Models
 
         public bool Active { get; set; }
 
-        public DateTime AlterDate { get; set; }
+        public DateTime? AlterDate { get; set; }
     }
 }

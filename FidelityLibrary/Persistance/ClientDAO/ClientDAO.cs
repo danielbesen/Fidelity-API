@@ -30,6 +30,24 @@ namespace FidelityLibrary.Persistance.ClientDAO
             }
         }
 
+        public static Client FindByCPF(string Cpf)
+        {
+            try
+            {
+                var oClient = new Client();
+                using (var context = new ApplicationDbContext())
+                {
+                    oClient = context.DbSetClient.FirstOrDefault(x => x.Cpf == Cpf);
+                };
+
+                return oClient;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Erro ao buscar cliente pelo CPF: " + e.Message);
+            }
+        }
+
         public static void SaveClient(Client Client, ApplicationDbContext oContext)
         {
             try

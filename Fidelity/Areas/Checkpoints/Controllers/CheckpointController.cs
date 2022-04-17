@@ -5,11 +5,13 @@ using FidelityLibrary.DataContext;
 using FidelityLibrary.Entity.Checkpoints;
 using FidelityLibrary.Entity.Loyalts;
 using FidelityLibrary.Persistance.CheckpointDAO;
+using FidelityLibrary.Persistance.ClientDAO;
 using FidelityLibrary.Persistance.LoyaltProgressDAO;
 using FidelityLibrary.Persistance.LoyaltyDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
@@ -131,30 +133,101 @@ namespace Fidelity.Areas.Checkpoints.Controllers
         }
 
 
-        ///// <summary>
-        ///// Requisição para buscar progresso de cliente no sistema.
-        ///// </summary>
-        ///// <returns>APIResult List Object></returns>
-        //[HttpGet]
-        //[Authorize]
-        //[Route("checkpoints")]
-        //public APIResult<LoyaltProgressViewModel> Get()
-        //{
-        //    try
-        //    {
-        //        using (var context = new ApplicationDbContext())
-        //        {
+        /// <summary>
+        /// Requisição para buscar progresso de cliente no sistema.
+        /// </summary>
+        /// <returns>APIResult List Object></returns>
+        [HttpGet]
+        [Authorize]
+        [Route("checkpoints")]
+        public APIResult<List<LoyaltProgressViewModel>> Get()
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    #region GET PARAMS
 
-        //        }
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        return new APIResult<LoyaltProgressViewModel>()
-        //        {
-        //            Success = false,
-        //            Message = "Erro ao buscar progresso de cliente! " + e.Message + e.InnerException
-        //        };
-        //    }
-        //}
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
+                    {
+                        parameters.Add(parameter.Key, parameter.Value);
+                    }
+
+                    var cpf = "";
+                    if (parameters.ContainsKey("cpf"))
+                    {
+                        cpf = parameters["cpf"];
+                    }
+
+                    #endregion
+
+                    if (string.IsNullOrEmpty(cpf))
+                    {
+                        return new APIResult<List<LoyaltProgressViewModel>>()
+                        {
+                            Success = false,
+                            Message = "Nenhum cpf informado!"
+                        };
+                    }
+                    var oClientId = ClientDAO.FindByCPF(cpf).Id;
+                    var ClientProgressList = LoyaltProgressDAO.FindAll().Where(x => x.ClientId == oClientId).ToList();
+
+                    // Pegar última linha de onde o id_fidelidade for o mesmo
+                    var ListProgressListLast = new List<LoyaltProgress>();
+                    var ListProgressListLastVM = new List<LoyaltProgressViewModel>();
+                    var ListOfLoyaltIds = new List<int>();
+
+                    foreach (var item in ClientProgressList)
+                    {
+                        if (!ListOfLoyaltIds.Contains(item.LoyaltId))
+                        {
+                            ListOfLoyaltIds.Add(item.LoyaltId);
+                        }
+                    }
+
+                    foreach (var item in ListOfLoyaltIds)
+                    {
+                        ListProgressListLast.Add(ClientProgressList.LastOrDefault(x => x.LoyaltId == item));
+                    }
+
+                    if (ListProgressListLast == null)
+                    {
+                        return new APIResult<List<LoyaltProgressViewModel>>()
+                        {
+                            Success = false,
+                            Message = "Nenhum progresso encontrado",
+                        };
+                    }
+
+                    foreach (var item in ListProgressListLast)
+                    {
+                        ListProgressListLastVM.Add(new LoyaltProgressViewModel()
+                        {
+                            Id = item.Id,
+                            ClientId = item.ClientId,
+                            LoyaltId = item.LoyaltId,
+                            Points = item.Points,
+                            Status = item.Status
+                        });
+                    }
+
+                    return new APIResult<List<LoyaltProgressViewModel>>()
+                    {
+                        Message = "Busca de progressos realizada com sucesso!",
+                        Result = ListProgressListLastVM
+                    };
+
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<List<LoyaltProgressViewModel>>()
+                {
+                    Success = false,
+                    Message = "Erro ao buscar progresso de cliente! " + e.Message + e.InnerException
+                };
+            }
+        }
     }
 }

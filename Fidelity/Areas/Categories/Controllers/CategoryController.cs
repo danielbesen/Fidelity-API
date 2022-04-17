@@ -34,31 +34,6 @@ namespace Fidelity.Areas.Categories.Controllers
                         company = Convert.ToInt32(identity.FindFirst("company").Value);
                     }
 
-                    #region GET PARAMS
-
-                    //Dictionary<string, string> parameters = new Dictionary<string, string>();
-                    //foreach (var parameter in Request.GetQueryNameValuePairs())
-                    //{
-                    //    parameters.Add(parameter.Key, parameter.Value);
-                    //}
-
-                    //var company = 0;
-
-                    //if (parameters.ContainsKey("company"))
-                    //{
-                    //    company = Int32.Parse(parameters["company"]);
-                    //}
-                    //else
-                    //{
-                    //    return new APIResult<List<CategoryViewModel>>()
-                    //    {
-                    //        Success = false,
-                    //        Message = "Nenhuma empresa informada!"
-                    //    };
-                    //}
-
-                    #endregion
-
                     var oCategoryList = new List<CategoryViewModel>();
                     foreach (var item in CategoryDAO.FindAll().Where(x => x.EnterpriseId == company).ToList())
                     {

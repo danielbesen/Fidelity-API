@@ -218,7 +218,9 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                             Client = new Clients.Models.ClientViewModel()
                             {
                                 Name = oClientDB.Name,
-                                Cpf = oClientDB.Cpf
+                                Cpf = oClientDB.Cpf,
+                                Id = oClientDB.Id,
+                                UserId = oClientDB.UserId
                             },
                             Loyalt = new LoyaltViewModel()
                             {

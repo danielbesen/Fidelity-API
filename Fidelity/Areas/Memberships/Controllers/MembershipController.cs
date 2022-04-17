@@ -19,14 +19,11 @@ namespace Fidelity.Areas.Memberships.Controllers
         /// </summary>
         /// <returns>APIResult List Object></returns>
         [HttpGet]
-        [Authorize]
         [Route("memberships")]
         public APIResult<List<MembershipViewModel>> Get()
         {
             try
             {
-                if (User.Identity.IsAuthenticated)
-                {
                     var oMemberList = new List<MembershipViewModel>();
                     foreach (var item in MembershipDAO.FindAll().ToList())
                     {
@@ -34,6 +31,7 @@ namespace Fidelity.Areas.Memberships.Controllers
                         {
                             Id = item.Id,
                             Name = item.Name,
+                            Description = item.Description,
                             Value = item.Value
                         });
                     }
@@ -42,13 +40,6 @@ namespace Fidelity.Areas.Memberships.Controllers
                     {
                         Result = oMemberList,
                         Count = oMemberList.Count
-                    };
-                }
-                else
-                    return new APIResult<List<MembershipViewModel>>()
-                    {
-                        Success = false,
-                        Message = "Acesso negado!"
                     };
             }
             catch (Exception e)
@@ -77,7 +68,8 @@ namespace Fidelity.Areas.Memberships.Controllers
                     var oMembership = new Membership()
                     {
                         Name = Model.Name,
-                        Value = Model.Value
+                        Value = Model.Value,
+                        Description = Model.Description
                     };
 
                     MembershipDAO.Insert(oMembership);
@@ -115,6 +107,7 @@ namespace Fidelity.Areas.Memberships.Controllers
 
                     oMembership.Name = Model.Name;
                     oMembership.Value = Model.Value;
+                    oMembership.Description = Model.Description;
                     oMembership.AlterDate = DateTime.Now;
 
                     MembershipDAO.Update(oMembership);

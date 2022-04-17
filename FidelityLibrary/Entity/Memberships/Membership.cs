@@ -15,8 +15,11 @@ namespace FidelityLibrary.Entity.Memberships
         [Key, Column("id_plano")]
         public int Id { get; set; }
 
-        [Column("ds_plano")]
+        [Column("nome")]
         public string Name { get; set; }
+
+        [Column("descricao_plano")]
+        public string Description { get; set; }
 
         [Column("valor")]
         public double Value { get; set; }

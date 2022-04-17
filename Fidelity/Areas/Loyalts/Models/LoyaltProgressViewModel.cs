@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Fidelity.Areas.Clients.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,5 +13,7 @@ namespace Fidelity.Areas.Loyalts.Models
         public int LoyaltId { get; set; }
         public double Points { get; set; }
         public bool Status { get; set; }
+        public LoyaltViewModel Loyalt { get; set; }
+        public ClientViewModel Client { get; set; }
     }
 }

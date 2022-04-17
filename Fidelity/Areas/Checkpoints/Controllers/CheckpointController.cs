@@ -205,13 +205,35 @@ namespace Fidelity.Areas.Checkpoints.Controllers
 
                     foreach (var item in ListProgressListLast)
                     {
+                        var oLoyaltDB = LoyaltyDAO.FindByKey(item.LoyaltId);
+                        var oClientDB = ClientDAO.FindByKey(item.ClientId);
+
                         ListProgressListLastVM.Add(new LoyaltProgressViewModel()
                         {
                             Id = item.Id,
                             ClientId = item.ClientId,
                             LoyaltId = item.LoyaltId,
                             Points = item.Points,
-                            Status = item.Status
+                            Status = item.Status,
+                            Client = new Clients.Models.ClientViewModel()
+                            {
+                                Name = oClientDB.Name,
+                                Cpf = oClientDB.Cpf
+                            },
+                            Loyalt = new LoyaltViewModel()
+                            {
+                                CouponValue = oLoyaltDB.CouponValue,
+                                Name = oLoyaltDB.Name,
+                                Limit = oLoyaltDB.Limit,
+                                ProductId = oLoyaltDB.ProductId,
+                                Description = oLoyaltDB.Description,
+                                EnterpriseId = oLoyaltDB.EnterpriseId,
+                                FidelityTypeId = oLoyaltDB.FidelityTypeId,
+                                PromotionTypeId = oLoyaltDB.PromotionTypeId,
+                                Quantity = oLoyaltDB.Quantity,
+                                StartDate = oLoyaltDB.StartDate,
+                                EndDate = oLoyaltDB.EndDate
+                            }
                         });
                     }
 

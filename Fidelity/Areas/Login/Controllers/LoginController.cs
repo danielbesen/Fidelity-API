@@ -55,8 +55,6 @@ namespace Fidelity.Areas.Login.Controllers
 
                     return new APIResult<Object>()
                     {
-
-
                         Result = new LoginResult<Object>()
                         {
                             Token = oToken,

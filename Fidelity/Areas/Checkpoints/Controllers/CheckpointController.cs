@@ -105,7 +105,10 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                             Status = oStatus,
                         };
 
-                        LoyaltProgressDAO.Insert(oProgress);
+                        LoyaltProgressDAO.Insert(oProgress); //Insiro como true
+
+                        //oProgress.Status = false;
+                        //LoyaltProgressDAO.Insert(oProgress); // Insiro como false para resetar
 
                         return new APIResult<LoyaltProgressViewModel>()
                         {

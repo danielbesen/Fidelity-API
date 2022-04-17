@@ -224,6 +224,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                             },
                             Loyalt = new LoyaltViewModel()
                             {
+                                Id = oLoyaltDB.Id,
                                 CouponValue = oLoyaltDB.CouponValue,
                                 Name = oLoyaltDB.Name,
                                 Limit = oLoyaltDB.Limit,

@@ -1,4 +1,5 @@
 ﻿using Fidelity.Areas.Enterprises.Models;
+using Fidelity.Areas.Loyalts.Models;
 using Fidelity.Areas.Users.Models;
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
@@ -7,10 +8,12 @@ using FidelityLibrary.Entity.Users;
 using FidelityLibrary.Models;
 using FidelityLibrary.Persistance.EmployeeDAO;
 using FidelityLibrary.Persistance.EnterpriseDAO;
+using FidelityLibrary.Persistance.LoyaltyDAO;
 using FidelityLibrary.Persistance.UserDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Web;
 using System.Web.Http;
 
@@ -139,7 +142,74 @@ namespace Fidelity.Areas.Enterprises.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
+                    #region GET PARAMS
+
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
+                    {
+                        parameters.Add(parameter.Key, parameter.Value);
+                    }
+
+                    var Id = 0;
+
+                    if (parameters.ContainsKey("id"))
+                    {
+                        Id = Convert.ToInt32(parameters["id"]);
+                    }
+
+                    #endregion
+
+
                     var oEnterpriseList = new List<EnterpriseViewModel>();
+
+                    if (Id != 0)
+                    {
+                        var oLoyaltList = new List<LoyaltViewModel>();
+                        var oEnterprise = EnterpriseDAO.FindByKey(Id);
+                        var oLoyaltsDB = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == Id).ToList();
+                        foreach (var item in oLoyaltsDB)
+                        {
+                            oLoyaltList.Add(new LoyaltViewModel()
+                            {
+                                Id = item.Id,
+                                EnterpriseId = item.EnterpriseId,
+                                CouponValue = item.CouponValue,
+                                Description = item.Description,
+                                EndDate = item.EndDate,
+                                FidelityTypeId = item.FidelityTypeId,
+                                Limit = item.Limit,
+                                Name = item.Name,
+                                ProductId = item.ProductId,
+                                PromotionTypeId = item.PromotionTypeId,
+                                Quantity = item.Quantity,
+                                StartDate = item.StartDate
+                            });
+                        }
+
+                        oEnterpriseList.Add(new EnterpriseViewModel()
+                        {
+                            Id = oEnterprise.Id,
+                            Name = oEnterprise.Name,
+                            AlterDate = oEnterprise.AlterDate,
+                            Active = oEnterprise.Active,
+                            Address = oEnterprise.Address,
+                            AddressNum = oEnterprise.AddressNum,
+                            Branch = oEnterprise.Branch,
+                            City = oEnterprise.City,
+                            Cnpj = oEnterprise.Cnpj,
+                            MembershipId = oEnterprise.MembershipId,
+                            State = oEnterprise.State,
+                            Tel = oEnterprise.Tel,
+                            Loyalts = oLoyaltList
+                        });
+
+                        return new APIResult<List<EnterpriseViewModel>>()
+                        {
+                            Result = oEnterpriseList,
+                            Count = oEnterpriseList.Count
+                        };
+                    }
+
                     foreach (var item in EnterpriseDAO.FindAll().ToList())
                     {
                         oEnterpriseList.Add(new EnterpriseViewModel()
@@ -154,7 +224,8 @@ namespace Fidelity.Areas.Enterprises.Controllers
                             Cnpj = item.Cnpj,
                             MembershipId = item.MembershipId,
                             State = item.State,
-                            Tel = item.Tel
+                            Tel = item.Tel,
+                            Id = item.Id,
                         });
                     }
 

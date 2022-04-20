@@ -199,7 +199,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         return new APIResult<List<LoyaltProgressViewModel>>()
                         {
                             Success = false,
-                            Message = "Nenhum progresso encontrado",
+                            Message = "Nenhum progresso encontrado!",
                         };
                     }
 

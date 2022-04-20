@@ -40,15 +40,15 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                     double oPoints = 0;
                     bool oStatus = false;
 
-                    if (oFidelityType == 2) //Pontuação
+                    if (oFidelityType == 2 || oFidelityType == 3) //Pontuação
                     {
                         if (LastLoyaltProgress != null)
                         {
-                            oPoints = LastLoyaltProgress.Points + 1;
+                            oPoints = LastLoyaltProgress.Points + Model.Value;
                         }
                         else
                         {
-                            oPoints = 1;
+                            oPoints = Model.Value;
                         }
 
                         if (oPoints == oFidelityQtde) //Ganhou
@@ -194,7 +194,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         ListProgressListLast.Add(ClientProgressList.LastOrDefault(x => x.LoyaltId == item));
                     }
 
-                    if (ListProgressListLast == null)
+                    if (!ListProgressListLast.Any())
                     {
                         return new APIResult<List<LoyaltProgressViewModel>>()
                         {

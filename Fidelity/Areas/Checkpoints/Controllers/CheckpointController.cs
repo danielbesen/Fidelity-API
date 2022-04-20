@@ -40,89 +40,43 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                     double oPoints = 0;
                     bool oStatus = false;
 
-                    if (oFidelityType == 2 || oFidelityType == 3) //Pontuação
+                    if (LastLoyaltProgress != null)
                     {
-                        if (LastLoyaltProgress != null)
-                        {
-                            oPoints = LastLoyaltProgress.Points + Model.Value;
-                        }
-                        else
-                        {
-                            oPoints = Model.Value;
-                        }
-
-                        if (oPoints == oFidelityQtde) //Ganhou
-                        {
-                            oStatus = true;
-                            oPoints = 0;
-                        }
-
-                        var oProgress = new LoyaltProgress()
-                        {
-                            ClientId = Model.ClientId,
-                            Points = oPoints,
-                            Status = oStatus,
-                            LoyaltId = Model.LoyaltId,
-                        };
-
-                        LoyaltProgressDAO.Insert(oProgress);
-
-                        return new APIResult<LoyaltProgressViewModel>()
-                        {
-                            Message = "Checkpoint realizado com sucesso!",
-                            Result = new LoyaltProgressViewModel()
-                            {
-                                ClientId = Model.ClientId,
-                                LoyaltId = Model.LoyaltId,
-                                Id = oProgress.Id,
-                                Points = oPoints,
-                                Status = oStatus
-                            }
-                        };
+                        oPoints = LastLoyaltProgress.Points + Model.Value;
                     }
-                    else //Valor
+                    else
                     {
-                        if (LastLoyaltProgress != null)
-                        {
-                            oPoints = LastLoyaltProgress.Points + Model.Value;
-                        }
-                        else
-                        {
-                            oPoints = Model.Value;
-                        }
+                        oPoints = Model.Value;
+                    }
 
-                        if (oPoints >= oFidelityQtde) //Ganhou
-                        {
-                            oStatus = true;
-                            oPoints = 0;
-                        }
+                    if (oPoints == oFidelityQtde) //Ganhou
+                    {
+                        oStatus = true;
+                        oPoints = 0;
+                    }
 
-                        var oProgress = new LoyaltProgress()
+                    var oProgress = new LoyaltProgress()
+                    {
+                        ClientId = Model.ClientId,
+                        Points = oPoints,
+                        Status = oStatus,
+                        LoyaltId = Model.LoyaltId,
+                    };
+
+                    LoyaltProgressDAO.Insert(oProgress);
+
+                    return new APIResult<LoyaltProgressViewModel>()
+                    {
+                        Message = "Checkpoint realizado com sucesso!",
+                        Result = new LoyaltProgressViewModel()
                         {
                             ClientId = Model.ClientId,
                             LoyaltId = Model.LoyaltId,
+                            Id = oProgress.Id,
                             Points = oPoints,
-                            Status = oStatus,
-                        };
-
-                        LoyaltProgressDAO.Insert(oProgress); //Insiro como true
-
-                        //oProgress.Status = false;
-                        //LoyaltProgressDAO.Insert(oProgress); // Insiro como false para resetar
-
-                        return new APIResult<LoyaltProgressViewModel>()
-                        {
-                            Message = "Checkpoint realizado com sucesso!",
-                            Result = new LoyaltProgressViewModel()
-                            {
-                                ClientId = Model.ClientId,
-                                Id = oProgress.Id,
-                                LoyaltId = oProgress.LoyaltId,
-                                Points = oPoints,
-                                Status = oStatus
-                            }
-                        };
-                    }
+                            Status = oStatus
+                        }
+                    };
                 }
             }
             catch (Exception e)

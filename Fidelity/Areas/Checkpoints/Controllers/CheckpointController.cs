@@ -49,7 +49,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         oPoints = Model.Value;
                     }
 
-                    if (oPoints == oFidelityQtde) //Ganhou
+                    if (oPoints >= oFidelityQtde) //Ganhou
                     {
                         oStatus = true;
                         oPoints = 0;

@@ -9,6 +9,7 @@ namespace Fidelity.Areas.Enterprises.Models
     public class EnterpriseViewModel
     {
         public int Id { get; set; }
+        public int UserId { get; set; }
         public string Name { get; set; }
         public string Cnpj { get; set; }
         public string Tel { get; set; }

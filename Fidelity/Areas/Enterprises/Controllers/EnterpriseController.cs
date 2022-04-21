@@ -189,6 +189,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
                         oEnterpriseList.Add(new EnterpriseViewModel()
                         {
                             Id = oEnterprise.Id,
+                            UserId = oEnterprise.UserId,
                             Name = oEnterprise.Name,
                             AlterDate = oEnterprise.AlterDate,
                             Active = oEnterprise.Active,
@@ -226,6 +227,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
                             State = item.State,
                             Tel = item.Tel,
                             Id = item.Id,
+                            UserId = item.UserId,
                         });
                     }
 
@@ -248,6 +250,62 @@ namespace Fidelity.Areas.Enterprises.Controllers
                 {
                     Success = false,
                     Message = "Erro ao buscar as empresas participantes: " + e.Message + e.InnerException
+                };
+            }
+        }
+
+        /// <summary>
+        /// Requisição para atualizar empresa no sistema.
+        /// </summary>
+        /// <returns>Enterprise List Object></returns>
+        [HttpPut]
+        [Authorize]
+        [Route("enterprises")]
+        public APIResult<Object> Update(UserViewModel Model)
+        {
+            try
+            {
+                using (var context = new ApplicationDbContext())
+                {
+                    var oUser = UserDAO.FindByKey(Model.Enterprise.UserId);
+
+                    if (Model.Password != null)
+                    {
+                        oUser.Password = Encrypt.EncryptPass(Model.Password);
+                    }
+
+                    oUser.Email = Model.Email;
+                    oUser.Image = Model.Image;
+                    oUser.Active = Model.Active ? "1" : "0";
+                    oUser.AlterDate = DateTime.Now;
+
+                    var oCompany = EnterpriseDAO.FindByKey(Model.Enterprise.Id);
+
+                    oCompany.Name = Model.Enterprise.Name;
+                    oCompany.Address = Model.Enterprise.Address;
+                    oCompany.AddressNum = Model.Enterprise.AddressNum;
+                    oCompany.Branch = Model.Enterprise.Branch;
+                    oCompany.City = Model.Enterprise.City;
+                    oCompany.Cnpj = Model.Enterprise.Cnpj.Replace(".", "").Replace("/", "").Replace("-", "");
+                    oCompany.MembershipId = Model.Enterprise.MembershipId;
+                    oCompany.State = Model.Enterprise.State;
+                    oCompany.Tel = Model.Enterprise.Tel;
+                    oCompany.Active = Model.Active;
+
+                    EnterpriseDAO.Update(oCompany);
+
+                    return new APIResult<object>()
+                    {
+                        Message = "Empresa atualizada com sucesso!"
+                    };
+                }
+            }
+            catch (Exception e)
+            {
+                return new APIResult<Object>()
+                {
+                    Success = false,
+                    Message = "Erro ao atualizar empresa: " + e.Message + e.InnerException
                 };
             }
         }

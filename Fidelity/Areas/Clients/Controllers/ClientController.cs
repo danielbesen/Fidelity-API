@@ -70,7 +70,7 @@ namespace Fidelity.Areas.Clients.Controllers
                             oUserList.Add(new UserViewModel
                             {
                                 Image = oUser.Image,
-                                Active = oUser.Active,
+                                Active = oUser.Active == "1" ? true : false,
                                 Email = oUser.Email,
                                 Type = oUser.Type,
                                 Client = oClient,
@@ -94,7 +94,7 @@ namespace Fidelity.Areas.Clients.Controllers
                             oUserList.Add(new UserViewModel
                             {
                                 Image = oUser.Image,
-                                Active = oUser.Active,
+                                Active = oUser.Active == "1" ? true : false,
                                 Email = oUser.Email,
                                 Type = oUser.Type,
                                 Client = oClient,
@@ -227,7 +227,7 @@ namespace Fidelity.Areas.Clients.Controllers
 
                     oUser.Email = Model.Email;
                     oUser.Image = Model.Image;
-                    oUser.Active = Model.Active;
+                    oUser.Active = Model.Active ? "1" : "0";
                     oUser.AlterDate = DateTime.Now;
 
                     var oClient = ClientDAO.FindByKey(Model.Client.Id);

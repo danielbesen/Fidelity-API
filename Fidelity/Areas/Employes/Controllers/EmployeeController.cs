@@ -163,7 +163,7 @@ namespace Fidelity.Areas.Employes.Controllers
                     oUserList.Add(new UserViewModel()
                     {
                         Image = oUser.Image,
-                        Active = oUser.Active,
+                        Active = oUser.Active == "1" ? true : false,
                         Email = oUser.Email,
                         Type = oUser.Type,
                         Employee = oEmployee,
@@ -210,7 +210,7 @@ namespace Fidelity.Areas.Employes.Controllers
 
                     oUser.Email = Model.Email;
                     oUser.Image = Model.Image;
-                    oUser.Active = Model.Active;
+                    oUser.Active = Model.Active ? "1" : "0";
                     oUser.AlterDate = DateTime.Now;
 
                     var oEmployee = EmployeeDAO.FindByKey(Model.Employee.Id);

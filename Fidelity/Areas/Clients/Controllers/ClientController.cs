@@ -170,7 +170,7 @@ namespace Fidelity.Areas.Clients.Controllers
                                 {
                                     UserId = user.Id,
                                     Name = Model.Client.Name,
-                                    Cpf = Model.Client.Cpf
+                                    Cpf = Model.Client.Cpf.Replace(".","").Replace("-", "")
                                 };
 
                                 ClientDAO.SaveClient(client, context);
@@ -232,7 +232,7 @@ namespace Fidelity.Areas.Clients.Controllers
 
                     var oClient = ClientDAO.FindByKey(Model.Client.Id);
                     oClient.Name = Model.Client.Name;
-                    oClient.Cpf = Model.Client.Cpf;
+                    oClient.Cpf = Model.Client.Cpf.Replace(".", "").Replace("-", "");
                     oClient.AlterDate = DateTime.Now;
 
                     ClientDAO.Update(oClient);

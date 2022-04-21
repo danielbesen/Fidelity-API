@@ -75,7 +75,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
                                     AddressNum = Model.Enterprise.AddressNum,
                                     Branch = Model.Enterprise.Branch,
                                     City = Model.Enterprise.City,
-                                    Cnpj = Model.Enterprise.Cnpj,
+                                    Cnpj = Model.Enterprise.Cnpj.Replace(".", "").Replace("/", "").Replace("-", ""),
                                     MembershipId = Model.Enterprise.MembershipId,
                                     State = Model.Enterprise.State,
                                     Tel = Model.Enterprise.Tel,

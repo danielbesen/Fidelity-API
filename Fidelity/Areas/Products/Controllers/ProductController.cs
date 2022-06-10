@@ -96,7 +96,6 @@ namespace Fidelity.Areas.Products.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
-
                     var company = 0;
                     var identity = User.Identity as ClaimsIdentity;
                     if (identity != null)
@@ -116,24 +115,9 @@ namespace Fidelity.Areas.Products.Controllers
                     var page = 0;
                     var pageSize = 0;
 
-                    //var company = 0;
-
-                    //if (parameters.ContainsKey("company"))
-                    //{
-                    //    company = Int32.Parse(parameters["company"]);
-                    //}
-                    //else
-                    //{
-                    //    return new APIResult<List<ProductViewModel>>()
-                    //    {
-                    //        Success = false,
-                    //        Message = "Nenhuma empresa informada!"
-                    //    };
-                    //}
-
                     if (parameters.ContainsKey("name"))
                     {
-                        name = parameters["name"];
+                        name = parameters["name"].ToLower();
                     }
 
                     if (parameters.ContainsKey("page"))

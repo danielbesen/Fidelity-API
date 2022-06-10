@@ -109,33 +109,58 @@ namespace Fidelity.Areas.Loyalts.Controllers
 
                     #region GET PARAMS
 
-                    //Dictionary<string, string> parameters = new Dictionary<string, string>();
-                    //foreach (var parameter in Request.GetQueryNameValuePairs())
-                    //{
-                    //    parameters.Add(parameter.Key, parameter.Value);
-                    //}
+                    Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    foreach (var parameter in Request.GetQueryNameValuePairs())
+                    {
+                        parameters.Add(parameter.Key, parameter.Value);
+                    }
 
-                    //var company = 0;
+                    var name = "";
+                    var page = 0;
+                    var pageSize = 0;
 
-                    //if (parameters.ContainsKey("company"))
-                    //{
-                    //    company = Int32.Parse(parameters["company"]);
-                    //}
-                    //else
-                    //{
-                    //    return new APIResult<List<LoyaltViewModel>>()
-                    //    {
-                    //        Success = false,
-                    //        Message = "Nenhuma empresa informada!"
-                    //    };
-                    //}
+                    if (parameters.ContainsKey("name"))
+                    {
+                        name = parameters["name"].ToLower();
+                    }
+
+                    if (parameters.ContainsKey("page"))
+                    {
+                        page = Int32.Parse(parameters["page"]);
+                    }
+
+                    if (parameters.ContainsKey("pagesize"))
+                    {
+                        pageSize = Int32.Parse(parameters["pagesize"]);
+                    }
 
                     #endregion
 
-                    var oLoyaltList = new List<LoyaltViewModel>();
+                    var LoyaltList = new List<Loyalt>();
 
-                    foreach (var item in LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company).ToList())
+                    if (!string.IsNullOrEmpty(name))
                     {
+                        LoyaltList = LoyaltyDAO.FindAll().Where(x => x.Name.ToLower().Contains(name) && x.EnterpriseId == company).ToList();
+                    }
+                    else
+                    {
+                        if (page == 0)
+                        {
+                            LoyaltList = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company).ToList();
+                        }
+                        else
+                        {
+                            LoyaltList = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                        }
+                    }
+
+
+                    var oLoyaltList = new List<LoyaltViewModel>();
+                    foreach (var item in LoyaltList)
+                    {
+
+                        #region Product
+
                         var oProductList = new List<ProductViewModel>();
 
                         var oFidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == item.Id).ToList();
@@ -153,6 +178,8 @@ namespace Fidelity.Areas.Loyalts.Controllers
                                 CategoryId = id.ConsumedProductId,
                             });
                         }
+
+                        #endregion
 
                         oLoyaltList.Add(new LoyaltViewModel()
                         {

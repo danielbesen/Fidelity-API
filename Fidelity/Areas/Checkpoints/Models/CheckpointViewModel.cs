@@ -10,7 +10,6 @@ namespace Fidelity.Areas.Checkpoints.Models
         public int  Id { get; set; }
         public int ClientId { get; set; }
         public int LoyaltId { get; set; }
-
         public int EnterpriseId { get; set; }
         public double Value { get; set; }
     }

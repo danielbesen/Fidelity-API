@@ -27,70 +27,77 @@ namespace Fidelity.Areas.Checkpoints.Controllers
         [HttpPost]
         [Authorize]
         [Route("checkpoints")]
-        public APIResult<LoyaltProgressViewModel> Add(CheckpointViewModel Model)
+        public APIResult<List<LoyaltProgressViewModel>> Add(CheckpointListViewModel Model)
         {
             try
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oFidelity = LoyaltyDAO.FindByKey(Model.LoyaltId);
-                    var oFidelityType = oFidelity.FidelityTypeId;
-                    var oFidelityQtde = oFidelity.Quantity; //Quantidade à ser alcançada
+                    var oListProgressVM = new List<LoyaltProgressViewModel>();
 
-                    var LastLoyaltProgress = LoyaltProgressDAO.FindAll().LastOrDefault(x => x.ClientId == Model.ClientId && x.LoyaltId == Model.LoyaltId && x.EnterpriseId == Model.EnterpriseId);
-                    double oPoints = 0;
-                    bool oStatus = false;
-
-                    if (LastLoyaltProgress != null)
+                    foreach (var checkpoint in Model.Checkpoints)
                     {
-                        oPoints = LastLoyaltProgress.Points + Model.Value;
-                    }
-                    else
-                    {
-                        oPoints = Model.Value;
-                    }
+                        var oFidelity = LoyaltyDAO.FindByKey(checkpoint.LoyaltId);
+                        var oFidelityType = oFidelity.FidelityTypeId;
+                        var oFidelityQtde = oFidelity.Quantity; //Quantidade à ser alcançada
 
-                    if (oPoints >= oFidelityQtde) //Ganhou
-                    {
-                        oStatus = true;
-                        oPoints = 0;
-                    }
+                        var LastLoyaltProgress = LoyaltProgressDAO.FindAll().LastOrDefault(x => x.ClientId == checkpoint.ClientId && x.LoyaltId == checkpoint.LoyaltId && x.EnterpriseId == checkpoint.EnterpriseId);
+                        double oPoints = 0;
+                        bool oStatus = false;
 
-                    var oProgress = new LoyaltProgress()
-                    {
-                        ClientId = Model.ClientId,
-                        Points = oPoints,
-                        Status = oStatus,
-                        LoyaltId = Model.LoyaltId,
-                        EnterpriseId = Model.EnterpriseId,
-                    };
-
-                    LoyaltProgressDAO.Insert(oProgress);
-
-                    if (LastLoyaltProgress != null)
-                    {
-                        var oLoyaltP = LoyaltProgressDAO.FindByKey(LastLoyaltProgress.Id);
-                        LoyaltProgressDAO.Delete(oLoyaltP);
-                    }
-
-                    return new APIResult<LoyaltProgressViewModel>()
-                    {
-                        Message = "Checkpoint realizado com sucesso!",
-                        Count = 1,
-                        Result = new LoyaltProgressViewModel()
+                        if (LastLoyaltProgress != null)
                         {
-                            ClientId = Model.ClientId,
-                            LoyaltId = Model.LoyaltId,
+                            oPoints = LastLoyaltProgress.Points + checkpoint.Value;
+                        }
+                        else
+                        {
+                            oPoints = checkpoint.Value;
+                        }
+
+                        if (oPoints >= oFidelityQtde) //Ganhou
+                        {
+                            oStatus = true;
+                            oPoints = 0;
+                        }
+
+                        var oProgress = new LoyaltProgress()
+                        {
+                            ClientId = checkpoint.ClientId,
+                            Points = oPoints,
+                            Status = oStatus,
+                            LoyaltId = checkpoint.LoyaltId,
+                            EnterpriseId = checkpoint.EnterpriseId,
+                        };
+
+                        LoyaltProgressDAO.Insert(oProgress);
+
+                        if (LastLoyaltProgress != null)
+                        {
+                            var oLoyaltP = LoyaltProgressDAO.FindByKey(LastLoyaltProgress.Id);
+                            LoyaltProgressDAO.Delete(oLoyaltP);
+                        }
+
+                        oListProgressVM.Add(new LoyaltProgressViewModel()
+                        {
+                            ClientId = checkpoint.ClientId,
+                            LoyaltId = checkpoint.LoyaltId,
                             Id = oProgress.Id,
                             Points = oPoints,
                             Status = oStatus
-                        }
+                        });
+                    }
+
+                    return new APIResult<List<LoyaltProgressViewModel>>()
+                    {
+                        Message = "Checkpoint(s) realizado(s) com sucesso!",
+                        Count = oListProgressVM.Count,
+                        Result = oListProgressVM
                     };
                 }
             }
             catch (Exception e)
             {
-                return new APIResult<LoyaltProgressViewModel>()
+                return new APIResult<List<LoyaltProgressViewModel>>()
                 {
                     Success = false,
                     Message = "Erro ao realizar checkpoint! " + e.Message + e.InnerException

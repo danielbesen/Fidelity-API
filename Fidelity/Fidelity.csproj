@@ -227,6 +227,7 @@
     <Compile Include="Areas\Categories\Models\CategoryViewModel.cs" />
     <Compile Include="Areas\Checkpoints\CheckpointsAreaRegistration.cs" />
     <Compile Include="Areas\Checkpoints\Controllers\CheckpointController.cs" />
+    <Compile Include="Areas\Checkpoints\Models\CheckpointListViewModel.cs" />
     <Compile Include="Areas\Checkpoints\Models\CheckpointViewModel.cs" />
     <Compile Include="Areas\Clients\Controllers\ClientController.cs" />
     <Compile Include="Areas\Clients\Models\ClientViewModel.cs" />

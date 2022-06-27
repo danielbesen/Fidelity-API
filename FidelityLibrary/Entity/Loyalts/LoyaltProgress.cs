@@ -27,6 +27,9 @@ namespace FidelityLibrary.Entity.Loyalts
         [Column("id_fidelidade")]
         public int LoyaltId { get; set; }
 
+        [Column("id_empresa")]
+        public int EnterpriseId { get; set; }
+
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
     }

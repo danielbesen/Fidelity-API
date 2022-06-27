@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Security.Claims;
 using System.Web;
 using System.Web.Http;
 
@@ -36,7 +37,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                     var oFidelityType = oFidelity.FidelityTypeId;
                     var oFidelityQtde = oFidelity.Quantity; //Quantidade à ser alcançada
 
-                    var LastLoyaltProgress = LoyaltProgressDAO.FindAll().LastOrDefault(x => x.ClientId == Model.ClientId && x.LoyaltId == Model.LoyaltId);
+                    var LastLoyaltProgress = LoyaltProgressDAO.FindAll().LastOrDefault(x => x.ClientId == Model.ClientId && x.LoyaltId == Model.LoyaltId && x.EnterpriseId == Model.EnterpriseId);
                     double oPoints = 0;
                     bool oStatus = false;
 
@@ -61,13 +62,21 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         Points = oPoints,
                         Status = oStatus,
                         LoyaltId = Model.LoyaltId,
+                        EnterpriseId = Model.EnterpriseId,
                     };
 
                     LoyaltProgressDAO.Insert(oProgress);
 
+                    if (LastLoyaltProgress != null)
+                    {
+                        var oLoyaltP = LoyaltProgressDAO.FindByKey(LastLoyaltProgress.Id);
+                        LoyaltProgressDAO.Delete(oLoyaltP);
+                    }
+
                     return new APIResult<LoyaltProgressViewModel>()
                     {
                         Message = "Checkpoint realizado com sucesso!",
+                        Count = 1,
                         Result = new LoyaltProgressViewModel()
                         {
                             ClientId = Model.ClientId,
@@ -129,26 +138,10 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                     }
                     var oClientId = ClientDAO.FindByCPF(cpf).Id;
                     var ClientProgressList = LoyaltProgressDAO.FindAll().Where(x => x.ClientId == oClientId).ToList();
-
-                    // Pegar última linha de onde o id_fidelidade for o mesmo
-                    var ListProgressListLast = new List<LoyaltProgress>();
                     var ListProgressListLastVM = new List<LoyaltProgressViewModel>();
-                    var ListOfLoyaltIds = new List<int>();
 
-                    foreach (var item in ClientProgressList)
-                    {
-                        if (!ListOfLoyaltIds.Contains(item.LoyaltId))
-                        {
-                            ListOfLoyaltIds.Add(item.LoyaltId);
-                        }
-                    }
 
-                    foreach (var item in ListOfLoyaltIds)
-                    {
-                        ListProgressListLast.Add(ClientProgressList.LastOrDefault(x => x.LoyaltId == item));
-                    }
-
-                    if (!ListProgressListLast.Any())
+                    if (!ClientProgressList.Any())
                     {
                         return new APIResult<List<LoyaltProgressViewModel>>()
                         {
@@ -157,7 +150,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         };
                     }
 
-                    foreach (var item in ListProgressListLast)
+                    foreach (var item in ClientProgressList)
                     {
                         var oLoyaltDB = LoyaltyDAO.FindByKey(item.LoyaltId);
                         var oClientDB = ClientDAO.FindByKey(item.ClientId);

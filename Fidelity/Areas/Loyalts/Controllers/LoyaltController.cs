@@ -100,13 +100,6 @@ namespace Fidelity.Areas.Loyalts.Controllers
             {
                 if (User.Identity.IsAuthenticated)
                 {
-                    var company = 0;
-                    var identity = User.Identity as ClaimsIdentity;
-                    if (identity != null)
-                    {
-                        company = Convert.ToInt32(identity.FindFirst("company").Value);
-                    }
-
                     #region GET PARAMS
 
                     Dictionary<string, string> parameters = new Dictionary<string, string>();
@@ -135,6 +128,27 @@ namespace Fidelity.Areas.Loyalts.Controllers
                     }
 
                     #endregion
+
+                    var company = 0;
+                    var identity = User.Identity as ClaimsIdentity;
+                    if (identity.FindFirst("company") != null)
+                    {
+                        company = Convert.ToInt32(identity.FindFirst("company").Value);
+                    }
+                    else
+                    {
+                        if (parameters.ContainsKey("company"))
+                        {
+                            company = Int32.Parse(parameters["company"]);
+                        } else
+                        {
+                            return new APIResult<List<LoyaltViewModel>>()
+                            {
+                                Success = false,
+                                Message = "Nenhuma empresa informada!"
+                            };
+                        }
+                    }
 
                     var LoyaltList = new List<Loyalt>();
 

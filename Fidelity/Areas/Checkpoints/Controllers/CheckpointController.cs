@@ -69,19 +69,23 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                             EnterpriseId = checkpoint.EnterpriseId,
                         };
 
-                        LoyaltProgressDAO.Insert(oProgress);
-
+                        var oLoyaltP = new LoyaltProgress();
                         if (LastLoyaltProgress != null)
                         {
-                            var oLoyaltP = LoyaltProgressDAO.FindByKey(LastLoyaltProgress.Id);
-                            LoyaltProgressDAO.Delete(oLoyaltP);
+                            oLoyaltP = LoyaltProgressDAO.FindByKey(LastLoyaltProgress.Id);
+                            oLoyaltP.Status = oStatus;
+                            oLoyaltP.Points = oPoints;
+                            LoyaltProgressDAO.Update(oLoyaltP);
+                        } else
+                        {
+                            LoyaltProgressDAO.Insert(oProgress);
                         }
 
                         oListProgressVM.Add(new LoyaltProgressViewModel()
                         {
                             ClientId = checkpoint.ClientId,
                             LoyaltId = checkpoint.LoyaltId,
-                            Id = oProgress.Id,
+                            Id = oProgress.Id != null ? oProgress.Id : oLoyaltP.Id,
                             Points = oPoints,
                             Status = oStatus
                         });

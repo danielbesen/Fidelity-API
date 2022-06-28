@@ -147,8 +147,16 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                             Message = "Nenhum cpf informado!"
                         };
                     }
+
+                    var company = 0;
+                    var identity = User.Identity as ClaimsIdentity;
+                    if (identity.FindFirst("company") != null)
+                    {
+                        company = Convert.ToInt32(identity.FindFirst("company").Value);
+                    }
+
                     var oClientId = ClientDAO.FindByCPF(cpf).Id;
-                    var ClientProgressList = LoyaltProgressDAO.FindAll().Where(x => x.ClientId == oClientId).ToList();
+                    var ClientProgressList = company == 0 ? LoyaltProgressDAO.FindAll().Where(x => x.ClientId == oClientId).ToList() : LoyaltProgressDAO.FindAll().Where(x => x.ClientId == oClientId && x.EnterpriseId == company).ToList();
                     var ListProgressListLastVM = new List<LoyaltProgressViewModel>();
 
 

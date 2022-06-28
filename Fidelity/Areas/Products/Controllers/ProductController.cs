@@ -242,6 +242,24 @@ namespace Fidelity.Areas.Products.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
+
+                    //#region GET PARAMS
+
+                    //Dictionary<string, string> parameters = new Dictionary<string, string>();
+                    //foreach (var parameter in Request.GetQueryNameValuePairs())
+                    //{
+                    //    parameters.Add(parameter.Key, parameter.Value);
+                    //}
+
+                    //var id = 0;
+                    //if (parameters.ContainsKey("id"))
+                    //{
+                    //    id = Convert.ToInt32(parameters["id"]);
+                    //}
+
+                    //#endregion
+
+
                     var oProduct = ProductDAO.FindByKey(Model.Id);
 
                     oProduct.Description = Model.Name;

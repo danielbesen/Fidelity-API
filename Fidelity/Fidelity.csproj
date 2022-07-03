@@ -231,6 +231,8 @@
     <Compile Include="Areas\Checkpoints\Models\CheckpointViewModel.cs" />
     <Compile Include="Areas\Clients\Controllers\ClientController.cs" />
     <Compile Include="Areas\Clients\Models\ClientViewModel.cs" />
+    <Compile Include="Areas\Dashboards\Controllers\DashboardController.cs" />
+    <Compile Include="Areas\Dashboards\DashboardsAreaRegistration.cs" />
     <Compile Include="Areas\Employes\Controllers\EmployeeController.cs" />
     <Compile Include="Areas\Employes\EmployesAreaRegistration.cs" />
     <Compile Include="Areas\Employes\Models\EmployeeViewModel.cs" />
@@ -333,6 +335,7 @@
     <Content Include="Areas\Fidelities\Views\web.config" />
     <Content Include="Areas\Checkpoints\Views\web.config" />
     <Content Include="Areas\Memberships\Views\web.config" />
+    <Content Include="Areas\Dashboards\Views\web.config" />
     <None Include="Properties\PublishProfiles\FidelityApp - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\FidelityApp - Web Deploy1.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
@@ -365,6 +368,9 @@
     <Folder Include="Areas\Checkpoints\Views\Checkpoint\" />
     <Folder Include="Areas\Checkpoints\Views\Shared\" />
     <Folder Include="Areas\Clients\Views\" />
+    <Folder Include="Areas\Dashboards\Data\" />
+    <Folder Include="Areas\Dashboards\Views\Dashboard\" />
+    <Folder Include="Areas\Dashboards\Views\Shared\" />
     <Folder Include="Areas\Employes\Data\" />
     <Folder Include="Areas\Employes\Views\Employee\" />
     <Folder Include="Areas\Employes\Views\Shared\" />

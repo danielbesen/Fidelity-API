@@ -1,4 +1,6 @@
-﻿using Fidelity.Models;
+﻿using Fidelity.Areas.Dashboards.Models;
+using Fidelity.Areas.Loyalts.Models;
+using Fidelity.Models;
 using FidelityLibrary.Entity.Loyalts;
 using FidelityLibrary.Persistance.LoyaltProgressDAO;
 using FidelityLibrary.Persistance.LoyaltyDAO;
@@ -35,17 +37,31 @@ namespace Fidelity.Areas.Dashboards.Controllers
 
                 if (company != 0)
                 {
-                    Loyalts = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company).GroupBy(x => x.LoyaltId).OrderByDescending(y => y.Count()).SelectMany(z => z).Select(a => a.LoyaltId).Distinct().ToList();
+                    Loyalts = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company).GroupBy(x => x.LoyaltId).OrderByDescending(y => y.Count()).SelectMany(z => z).Select(a => a.LoyaltId).ToList();
                 }
 
                 if (Loyalts.Count > 0)
                 {
+                    var oDashboardList = new List<EnterpriseDashboardViewModel>();
+                    foreach (var item in Loyalts.Distinct())
+                    {
+                        var oLoyalt = LoyaltyDAO.FindByKey(item);
 
-                    //foreach (var item in Loyalts)
-                    //{                  
-                    //    var Loyalts = LoyaltyDAO.FindByKey(item)
-                    //}
-                } else
+                        var dict = Loyalts.GroupBy(x => x).ToDictionary(x => x.Key, q => q.Count());
+                        oDashboardList.Add(new EnterpriseDashboardViewModel()
+                        {
+                            Name = oLoyalt.Name,
+                            Number = dict[item]
+                        });
+                    }
+
+                    return new APIResult<object>()
+                    {
+                        Result = oDashboardList,
+                        Count = oDashboardList.Count()
+                    };
+                }
+                else
                 {
                     return new APIResult<object>()
                     {
@@ -53,14 +69,6 @@ namespace Fidelity.Areas.Dashboards.Controllers
                         Message = "Nenhuma fidelidade encontrada!"
                     };
                 }
-                //return new APIResult<object>()
-                //{
-                //    Result = oUserList,
-                //    Count = oUserList.Count
-                //};
-
-                return null;
-
             }
             catch (Exception e)
             {

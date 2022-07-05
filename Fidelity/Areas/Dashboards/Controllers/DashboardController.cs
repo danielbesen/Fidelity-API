@@ -43,11 +43,11 @@ namespace Fidelity.Areas.Dashboards.Controllers
                 if (Loyalts.Count > 0)
                 {
                     var oDashboardList = new List<EnterpriseDashboardViewModel>();
+                    var dict = Loyalts.GroupBy(x => x).ToDictionary(x => x.Key, q => q.Count());
                     foreach (var item in Loyalts.Distinct())
                     {
                         var oLoyalt = LoyaltyDAO.FindByKey(item);
 
-                        var dict = Loyalts.GroupBy(x => x).ToDictionary(x => x.Key, q => q.Count());
                         oDashboardList.Add(new EnterpriseDashboardViewModel()
                         {
                             Name = oLoyalt.Name,
@@ -66,7 +66,7 @@ namespace Fidelity.Areas.Dashboards.Controllers
                     return new APIResult<object>()
                     {
                         Success = false,
-                        Message = "Nenhuma fidelidade encontrada!"
+                        Message = "Nenhuma fidelidade para essa empresa encontrada!"
                     };
                 }
             }
@@ -75,7 +75,7 @@ namespace Fidelity.Areas.Dashboards.Controllers
                 return new APIResult<object>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar todos funcionários: " + e.Message + e.InnerException
+                    Message = "Erro ao buscar dados: " + e.Message + e.InnerException
                 };
             }
         }

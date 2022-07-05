@@ -1,5 +1,7 @@
 ﻿using Fidelity.Models;
+using FidelityLibrary.Entity.Loyalts;
 using FidelityLibrary.Persistance.LoyaltProgressDAO;
+using FidelityLibrary.Persistance.LoyaltyDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,13 +30,29 @@ namespace Fidelity.Areas.Dashboards.Controllers
                 {
                     company = Convert.ToInt32(identity.FindFirst("company").Value);
                 }
-                
+
+                var Loyalts = new List<int>();
+
                 if (company != 0)
                 {
-                    var Loyalts = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company).GroupBy(x => x.LoyaltId).OrderByDescending(y => y.Count()).SelectMany(z => z).Select(a => a.LoyaltId).Distinct().ToList();
-
+                    Loyalts = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company).GroupBy(x => x.LoyaltId).OrderByDescending(y => y.Count()).SelectMany(z => z).Select(a => a.LoyaltId).Distinct().ToList();
                 }
 
+                if (Loyalts.Count > 0)
+                {
+
+                    //foreach (var item in Loyalts)
+                    //{                  
+                    //    var Loyalts = LoyaltyDAO.FindByKey(item)
+                    //}
+                } else
+                {
+                    return new APIResult<object>()
+                    {
+                        Success = false,
+                        Message = "Nenhuma fidelidade encontrada!"
+                    };
+                }
                 //return new APIResult<object>()
                 //{
                 //    Result = oUserList,

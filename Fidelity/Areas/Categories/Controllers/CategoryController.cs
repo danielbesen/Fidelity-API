@@ -120,7 +120,7 @@ namespace Fidelity.Areas.Categories.Controllers
                 {
                     var oCategory = CategoryDAO.FindByKey(Model.Id);
 
-                    oCategory.Name = Model.Name;
+                    oCategory.Name = Model.Name ?? "";
                     oCategory.AlterDate = DateTime.Now;
 
                     CategoryDAO.Update(oCategory);

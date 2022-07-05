@@ -281,15 +281,15 @@ namespace Fidelity.Areas.Enterprises.Controllers
 
                     var oCompany = EnterpriseDAO.FindByKey(Model.Enterprise.Id);
 
-                    oCompany.Name = Model.Enterprise.Name;
-                    oCompany.Address = Model.Enterprise.Address;
-                    oCompany.AddressNum = Model.Enterprise.AddressNum;
-                    oCompany.Branch = Model.Enterprise.Branch;
-                    oCompany.City = Model.Enterprise.City;
+                    oCompany.Name = Model.Enterprise.Name ?? "";
+                    oCompany.Address = Model.Enterprise.Address ?? "";
+                    oCompany.AddressNum = Model.Enterprise.AddressNum ?? "";
+                    oCompany.Branch = Model.Enterprise.Branch ?? "";
+                    oCompany.City = Model.Enterprise.City ?? "";
                     oCompany.Cnpj = Model.Enterprise.Cnpj.Replace(".", "").Replace("/", "").Replace("-", "");
-                    oCompany.MembershipId = Model.Enterprise.MembershipId;
-                    oCompany.State = Model.Enterprise.State;
-                    oCompany.Tel = Model.Enterprise.Tel;
+                    oCompany.MembershipId = Model.Enterprise.MembershipId ?? 1;
+                    oCompany.State = Model.Enterprise.State ?? "";
+                    oCompany.Tel = Model.Enterprise.Tel ?? "";
                     oCompany.Active = Model.Active;
 
                     EnterpriseDAO.Update(oCompany);

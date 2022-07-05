@@ -48,11 +48,11 @@ namespace FidelityLibrary.Persistance.Generics
             }
             catch (DbEntityValidationException e)
             {
-                throw new DbEntityValidationException(e.Message);
+                throw new DbEntityValidationException(e.Message + e.InnerException);
             }
             catch (Exception e)
             {
-                throw new Exception(e.Message);
+                throw new Exception(e.Message + e.InnerException);
             }
         }
 

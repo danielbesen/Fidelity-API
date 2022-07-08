@@ -36,7 +36,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
                 {
                     using (var dbContextTransaction = context.Database.BeginTransaction())
                     {
-                        var oLoyalt = new Loyalt()
+                        var Loyalt = new Loyalt()
                         {
                             Name = Model.Name,
                             Description = Model.Description,
@@ -46,24 +46,25 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             FidelityTypeId = Model.FidelityTypeId,
                             PromotionTypeId = Model.PromotionTypeId,
                             ProductId = Model.ProductId,
-                            ProductIdList = Model.ProductList,
                             CouponValue = Model.CouponValue,
                             Quantity = Model.Quantity,
-                            StartDate = Model.StartDate
+                            StartDate = Model.StartDate,
+                            Status = Model.Status
                         };
 
-                        LoyaltyDAO.SaveLoyalt(oLoyalt, context);
+                        LoyaltyDAO.SaveLoyalt(Loyalt, context);
 
                         if (Model.ProductList?.Count > 0)
                         {
                             foreach (var item in Model.ProductList)
                             {
-                                var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
+                                var Fidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
                                 {
                                     ConsumedProductId = item,
-                                    LoyaltId = oLoyalt.Id,
+                                    LoyaltId = Loyalt.Id,
+                                    Status = true
                                 };
-                                FidelityDAO.SaveFidelity(oFidelity, context);
+                                FidelityDAO.SaveFidelity(Fidelity, context);
                                 System.Threading.Thread.Sleep(100);
                             }
                         }
@@ -154,22 +155,22 @@ namespace Fidelity.Areas.Loyalts.Controllers
 
                     if (!string.IsNullOrEmpty(name))
                     {
-                        LoyaltList = LoyaltyDAO.FindAll().Where(x => x.Name.ToLower().Contains(name) && x.EnterpriseId == company).ToList();
+                        LoyaltList = LoyaltyDAO.FindAll().Where(x => x.Name.ToLower().Contains(name) && x.EnterpriseId == company && x.Status).ToList();
                     }
                     else
                     {
                         if (page == 0)
                         {
-                            LoyaltList = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company).ToList();
+                            LoyaltList = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company && x.Status).ToList();
                         }
                         else
                         {
-                            LoyaltList = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                            LoyaltList = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company && x.Status).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                         }
                     }
 
 
-                    var oLoyaltList = new List<LoyaltViewModel>();
+                    var LoyaltListVM = new List<LoyaltViewModel>();
                     foreach (var item in LoyaltList)
                     {
 
@@ -177,7 +178,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
 
                         var oProductList = new List<ProductViewModel>();
 
-                        var oFidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == item.Id).ToList();
+                        var oFidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == item.Id && x.Status).ToList();
                         foreach (var id in oFidelities)
                         {
                             var oProduct = ProductDAO.FindByKey(id.ConsumedProductId);
@@ -189,13 +190,13 @@ namespace Fidelity.Areas.Loyalts.Controllers
                                 Image = oProduct.Image,
                                 Status = oProduct.Status,
                                 Value = id.ConsumedProductId,
-                                CategoryId = id.ConsumedProductId,
+                                CategoryId = id.ConsumedProductId
                             });
                         }
 
                         #endregion
 
-                        oLoyaltList.Add(new LoyaltViewModel()
+                        LoyaltListVM.Add(new LoyaltViewModel()
                         {
                             Id = item.Id,
                             Description = item.Description,
@@ -209,14 +210,15 @@ namespace Fidelity.Areas.Loyalts.Controllers
                             EndDate = item.EndDate,
                             StartDate = item.StartDate,
                             CouponValue = item.CouponValue,
+                            Status = item.Status,
                             Products = oProductList
                         });
                     }
 
                     return new APIResult<List<LoyaltViewModel>>()
                     {
-                        Result = oLoyaltList,
-                        Count = oLoyaltList.Count
+                        Result = LoyaltListVM,
+                        Count = LoyaltListVM.Count
                     };
                 }
                 else
@@ -249,43 +251,60 @@ namespace Fidelity.Areas.Loyalts.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oLoyalt = LoyaltyDAO.FindByKey(Model.Id);
+                    var Loyalt = LoyaltyDAO.FindByKey(Model.Id);
 
-                    oLoyalt.Name = Model.Name;
-                    oLoyalt.Description = Model.Description;
-                    oLoyalt.Limit = Model.Limit;
-                    oLoyalt.EndDate = Model.EndDate;
-                    oLoyalt.FidelityTypeId = Model.FidelityTypeId;
-                    oLoyalt.PromotionTypeId = Model.PromotionTypeId;
-                    oLoyalt.ProductId = Model.ProductId;
-                    oLoyalt.Quantity = Model.Quantity;
-                    oLoyalt.CouponValue = Model.CouponValue;
-                    oLoyalt.StartDate = Model.StartDate;
-                    oLoyalt.AlterDate = DateTime.Now;
+                    Loyalt.Name = Model.Name;
+                    Loyalt.Description = Model.Description;
+                    Loyalt.Limit = Model.Limit;
+                    Loyalt.EndDate = Model.EndDate;
+                    Loyalt.FidelityTypeId = Model.FidelityTypeId;
+                    Loyalt.PromotionTypeId = Model.PromotionTypeId;
+                    Loyalt.ProductId = Model.ProductId;
+                    Loyalt.Quantity = Model.Quantity;
+                    Loyalt.CouponValue = Model.CouponValue;
+                    Loyalt.Status = Model.Status;
+                    Loyalt.StartDate = Model.StartDate;
+                    Loyalt.AlterDate = DateTime.Now;
 
-                    var oFidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == oLoyalt.Id).ToList();
-                    foreach (var fidelity in oFidelities)
+                    var ExistingProductsIds = FidelityDAO.FindAll().Where(x => x.LoyaltId == Loyalt.Id).ToDictionary(x => x.ConsumedProductId, q => q.Status);
+
+                    foreach (var item in Model.ProductList)
                     {
-                        FidelityDAO.Delete(fidelity);
-                        System.Threading.Thread.Sleep(300);
-                    }
-
-                    if (Model.ProductList?.Count > 0)
-                    {
-                        foreach (var item in Model.ProductList)
+                        if (!ExistingProductsIds.Keys.Contains(item))
                         {
-                            var oFidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
+                            var Fidelity = new FidelityLibrary.Entity.Fidelitys.Fidelity()
                             {
                                 ConsumedProductId = item,
-                                LoyaltId = oLoyalt.Id,
+                                LoyaltId = Loyalt.Id,
+                                Status = true
                             };
 
-                            FidelityDAO.Insert(oFidelity);
+                            FidelityDAO.Insert(Fidelity);
                             System.Threading.Thread.Sleep(300);
+                        } else
+                        {
+                            if (!ExistingProductsIds[item])
+                            {
+                                var Fidel = FidelityDAO.FindAll().FirstOrDefault(x => x.LoyaltId == Model.Id && x.ConsumedProductId == item);
+                                Fidel.Status = true;
+                                FidelityDAO.Update(Fidel);
+                                System.Threading.Thread.Sleep(100);
+                            }
                         }
                     }
 
-                    LoyaltyDAO.Update(oLoyalt);
+                    foreach (var item in ExistingProductsIds.Keys)
+                    {
+                        if (!Model.ProductList.Contains(item) && ExistingProductsIds[item])
+                        {
+                            var Fidel = FidelityDAO.FindAll().FirstOrDefault(x => x.LoyaltId == Model.Id && x.ConsumedProductId == item);
+                            Fidel.Status = false;
+                            FidelityDAO.Update(Fidel);
+                            System.Threading.Thread.Sleep(100);
+                        }
+                    }
+
+                    LoyaltyDAO.Update(Loyalt);
 
                     return new APIResult<Object>()
                     {
@@ -336,14 +355,16 @@ namespace Fidelity.Areas.Loyalts.Controllers
 
                     if (Id != 0)
                     {
-                        var Fidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == Id).ToList();
+                        var Fidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == Id && x.Status).ToList();
                         foreach (var fidel in Fidelities)
                         {
-                            FidelityDAO.Delete(fidel);
+                            fidel.Status = false;
+                            FidelityDAO.Update(fidel);
                         }
 
-                        var oLoyalt = LoyaltyDAO.FindByKey(Id);
-                        LoyaltyDAO.Delete(oLoyalt);
+                        var Loyalt = LoyaltyDAO.FindByKey(Id);
+                        Loyalt.Status = false;
+                        LoyaltyDAO.Update(Loyalt);
 
                         return new APIResult<object>()
                         {

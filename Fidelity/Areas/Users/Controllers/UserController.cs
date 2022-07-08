@@ -47,23 +47,23 @@ namespace Fidelity.Areas.Users.Controllers
                 }
                 else
                 {
-                    var oUser = UserDAO.GetUser(Email);
+                    var User = UserDAO.GetUser(Email);
 
                     var Password = CreatePassword(8);
-                    oUser.Password = Encrypt.EncryptPass(Password);
+                    User.Password = Encrypt.EncryptPass(Password);
 
                     using (var context = new ApplicationDbContext())
                     {
                         using (var dbContextTransaction = context.Database.BeginTransaction())
                         {
-                            UserDAO.UpdateUser(oUser, context);
+                            UserDAO.UpdateUser(User, context);
 
                             #region Envio de e-mail
 
                             MailMessage mail = new MailMessage();
 
                             mail.From = new MailAddress("gdanielmaromba@gmail.com");
-                            mail.To.Add(oUser.Email);
+                            mail.To.Add(User.Email);
                             mail.Subject = "Fidelity APP - Nova senha";
                             mail.Body = "Sua nova senha é " + Password;
 

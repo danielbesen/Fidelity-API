@@ -24,10 +24,10 @@ namespace Fidelity.Areas.Memberships.Controllers
         {
             try
             {
-                    var oMemberList = new List<MembershipViewModel>();
+                    var MemberList = new List<MembershipViewModel>();
                     foreach (var item in MembershipDAO.FindAll().ToList())
                     {
-                        oMemberList.Add(new MembershipViewModel()
+                    MemberList.Add(new MembershipViewModel()
                         {
                             Id = item.Id,
                             Name = item.Name,
@@ -38,8 +38,8 @@ namespace Fidelity.Areas.Memberships.Controllers
 
                     return new APIResult<List<MembershipViewModel>>()
                     {
-                        Result = oMemberList,
-                        Count = oMemberList.Count
+                        Result = MemberList,
+                        Count = MemberList.Count
                     };
             }
             catch (Exception e)
@@ -65,14 +65,14 @@ namespace Fidelity.Areas.Memberships.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oMembership = new Membership()
+                    var Membership = new Membership()
                     {
                         Name = Model.Name,
                         Value = Model.Value,
                         Description = Model.Description
                     };
 
-                    MembershipDAO.Insert(oMembership);
+                    MembershipDAO.Insert(Membership);
 
                     return new APIResult<object>()
                     {
@@ -103,14 +103,14 @@ namespace Fidelity.Areas.Memberships.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oMembership = MembershipDAO.FindByKey(Model.Id);
+                    var Membership = MembershipDAO.FindByKey(Model.Id);
 
-                    oMembership.Name = Model.Name;
-                    oMembership.Value = Model.Value;
-                    oMembership.Description = Model.Description;
-                    oMembership.AlterDate = DateTime.Now;
+                    Membership.Name = Model.Name;
+                    Membership.Value = Model.Value;
+                    Membership.Description = Model.Description;
+                    Membership.AlterDate = DateTime.Now;
 
-                    MembershipDAO.Update(oMembership);
+                    MembershipDAO.Update(Membership);
 
                     return new APIResult<object>()
                     {
@@ -160,9 +160,9 @@ namespace Fidelity.Areas.Memberships.Controllers
 
                     if (Id != 0)
                     {
-                        var oMembership = MembershipDAO.FindByKey(Id);
+                        var Membership = MembershipDAO.FindByKey(Id);
 
-                        MembershipDAO.Delete(oMembership);
+                        MembershipDAO.Delete(Membership);
 
                         return new APIResult<object>()
                         {

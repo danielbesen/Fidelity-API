@@ -51,13 +51,13 @@ namespace Fidelity.Areas.Clients.Controllers
 
                     #endregion
 
-                    var oUserList = new List<UserViewModel>();
+                    var UserList = new List<UserViewModel>();
 
                     if (!string.IsNullOrEmpty(cpf))
                     {
                         foreach (var item in ClientDAO.FindAll().Where(x => x.Cpf == cpf).ToList())
                         {
-                            var oClient = new ClientViewModel()
+                            var Client = new ClientViewModel()
                             {
                                 Id = item.Id,
                                 Cpf = item.Cpf,
@@ -65,47 +65,47 @@ namespace Fidelity.Areas.Clients.Controllers
                                 UserId = item.UserId
                             };
 
-                            var oUser = UserDAO.FindByKey(item.UserId);
+                            var User = UserDAO.FindByKey(item.UserId);
 
-                            oUserList.Add(new UserViewModel
+                            UserList.Add(new UserViewModel
                             {
-                                Image = oUser.Image,
-                                Active = oUser.Active == "1" ? true : false,
-                                Email = oUser.Email,
-                                Type = oUser.Type,
-                                Client = oClient,
+                                Image = User.Image,
+                                Status = User.Status,
+                                Email = User.Email,
+                                Type = User.Type,
+                                Client = Client,
                             });
                         }
                     }
                     else
                     {
-                        foreach (var item in ClientDAO.FindAll().ToList())
+                        foreach (var item in ClientDAO.FindAll().Join(UserDAO.FindAll(), c => c.UserId, u => u.Id, (c, u) => new { C = c, U = u }).Where(CU => CU.C.UserId == CU.U.Id && CU.U.Status).ToList())
                         {
-                            var oClient = new ClientViewModel()
+                            var Client = new ClientViewModel()
                             {
-                                Id = item.Id,
-                                Cpf = item.Cpf,
-                                Name = item.Name,
-                                UserId = item.UserId
+                                Id = item.C.Id,
+                                Cpf = item.C.Cpf,
+                                Name = item.C.Name,
+                                UserId = item.C.UserId
                             };
 
-                            var oUser = UserDAO.FindByKey(item.UserId);
+                            var User = UserDAO.FindByKey(item.C.UserId);
 
-                            oUserList.Add(new UserViewModel
+                            UserList.Add(new UserViewModel
                             {
-                                Image = oUser.Image,
-                                Active = oUser.Active == "1" ? true : false,
-                                Email = oUser.Email,
-                                Type = oUser.Type,
-                                Client = oClient,
+                                Image = User.Image,
+                                Status = User.Status,
+                                Email = User.Email,
+                                Type = User.Type,
+                                Client = Client,
                             });
                         }
                     }
 
                     return new APIResult<List<UserViewModel>>()
                     {
-                        Result = oUserList,
-                        Count = oUserList.Count
+                        Result = UserList,
+                        Count = UserList.Count
                     };
                 }
                 else
@@ -160,7 +160,7 @@ namespace Fidelity.Areas.Clients.Controllers
                                 {
                                     Email = Model.Email.ToLower(),
                                     Type = "C",
-                                    Active = "1",
+                                    Status = true,
                                     Password = Encrypt.EncryptPass(Model.Password)
                                 };
 
@@ -234,24 +234,25 @@ namespace Fidelity.Areas.Clients.Controllers
 
                     #endregion
 
-                    var oUser = UserDAO.FindByKey(Model.Client.UserId);
+                    var User = UserDAO.FindByKey(Model.Client.UserId);
 
                     if (Model.Password != null)
                     {
-                        oUser.Password = Encrypt.EncryptPass(Model.Password);
+                        User.Password = Encrypt.EncryptPass(Model.Password);
                     }
 
-                    oUser.Email = Model.Email;
-                    oUser.Image = Model.Image;
-                    oUser.Active = Model.Active ? "1" : "0";
-                    oUser.AlterDate = DateTime.Now;
+                    User.Email = Model.Email;
+                    User.Image = Model.Image;
+                    User.Status = Model.Status;
+                    User.AlterDate = DateTime.Now;
 
-                    var oClient = ClientDAO.FindByKey(Model.Client.Id);
-                    oClient.Name = Model.Client.Name;
-                    oClient.Cpf = Model.Client.Cpf.Replace(".", "").Replace("-", "");
-                    oClient.AlterDate = DateTime.Now;
+                    var Client = ClientDAO.FindByKey(Model.Client.Id);
+                    Client.Name = Model.Client.Name;
+                    Client.Cpf = Model.Client.Cpf.Replace(".", "").Replace("-", "");
+                    Client.AlterDate = DateTime.Now;
 
-                    ClientDAO.Update(oClient);
+                    ClientDAO.Update(Client);
+                    UserDAO.Update(User);
 
                     return new APIResult<object>()
                     {

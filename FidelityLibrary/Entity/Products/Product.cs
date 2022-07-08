@@ -25,10 +25,10 @@ namespace FidelityLibrary.Entity.Products
         public double Value { get; set; }
 
         [Column("id_categoria")]
-        public int CategoryId { get; set; }
+        public int? CategoryId { get; set; }
 
         [Column("status")]
-        public string Status { get; set; }
+        public bool Status { get; set; } = true;
 
         [Column("img_produto")]
         public byte[] Image { get; set; }

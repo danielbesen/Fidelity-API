@@ -57,7 +57,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
                                 {
                                     Email = Model.Email.ToLower(),
                                     Type = "E",
-                                    Active = "1",
+                                    Status = true,
                                     Password = Encrypt.EncryptPass(Model.Password)
                                 };
 
@@ -78,8 +78,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
                                     Cnpj = Model.Enterprise.Cnpj.Replace(".", "").Replace("/", "").Replace("-", ""),
                                     MembershipId = Model.Enterprise.MembershipId,
                                     State = Model.Enterprise.State,
-                                    Tel = Model.Enterprise.Tel,
-                                    Active = true
+                                    Tel = Model.Enterprise.Tel
                                 };
 
                                 EnterpriseDAO.SaveEnterprise(Enterprise, context);
@@ -160,16 +159,16 @@ namespace Fidelity.Areas.Enterprises.Controllers
                     #endregion
 
 
-                    var oEnterpriseList = new List<EnterpriseViewModel>();
+                    var EnterpriseList = new List<EnterpriseViewModel>();
 
                     if (Id != 0)
                     {
-                        var oLoyaltList = new List<LoyaltViewModel>();
-                        var oEnterprise = EnterpriseDAO.FindByKey(Id);
-                        var oLoyaltsDB = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == Id).ToList();
-                        foreach (var item in oLoyaltsDB)
+                        var LoyaltList = new List<LoyaltViewModel>();
+                        var Enterprise = EnterpriseDAO.FindByKey(Id);
+                        var LoyaltsDB = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == Id && x.Status).ToList();
+                        foreach (var item in LoyaltsDB)
                         {
-                            oLoyaltList.Add(new LoyaltViewModel()
+                            LoyaltList.Add(new LoyaltViewModel()
                             {
                                 Id = item.Id,
                                 EnterpriseId = item.EnterpriseId,
@@ -186,55 +185,55 @@ namespace Fidelity.Areas.Enterprises.Controllers
                             });
                         }
 
-                        oEnterpriseList.Add(new EnterpriseViewModel()
+                        EnterpriseList.Add(new EnterpriseViewModel()
                         {
-                            Id = oEnterprise.Id,
-                            UserId = oEnterprise.UserId,
-                            Name = oEnterprise.Name,
-                            AlterDate = oEnterprise.AlterDate,
-                            Active = oEnterprise.Active,
-                            Address = oEnterprise.Address,
-                            AddressNum = oEnterprise.AddressNum,
-                            Branch = oEnterprise.Branch,
-                            City = oEnterprise.City,
-                            Cnpj = oEnterprise.Cnpj,
-                            MembershipId = oEnterprise.MembershipId,
-                            State = oEnterprise.State,
-                            Tel = oEnterprise.Tel,
-                            Loyalts = oLoyaltList
+                            Id = Enterprise.Id,
+                            UserId = Enterprise.UserId,
+                            Name = Enterprise.Name,
+                            AlterDate = Enterprise.AlterDate,
+                            Status = UserDAO.FindAll().FirstOrDefault(x => x.Id == Enterprise.UserId).Status,
+                            Address = Enterprise.Address,
+                            AddressNum = Enterprise.AddressNum,
+                            Branch = Enterprise.Branch,
+                            City = Enterprise.City,
+                            Cnpj = Enterprise.Cnpj,
+                            MembershipId = Enterprise.MembershipId,
+                            State = Enterprise.State,
+                            Tel = Enterprise.Tel,
+                            Loyalts = LoyaltList
                         });
 
                         return new APIResult<List<EnterpriseViewModel>>()
                         {
-                            Result = oEnterpriseList,
-                            Count = oEnterpriseList.Count
+                            Result = EnterpriseList,
+                            Count = EnterpriseList.Count
                         };
                     }
 
-                    foreach (var item in EnterpriseDAO.FindAll().ToList())
+                    foreach (var item in EnterpriseDAO.FindAll().Join(UserDAO.FindAll(), e => e.UserId, u => u.Id, (e, u) => new { E = e, U = u }).Where(EU => EU.E.UserId == EU.U.Id && EU.U.Status).ToList())
                     {
-                        oEnterpriseList.Add(new EnterpriseViewModel()
+                        EnterpriseList.Add(new EnterpriseViewModel()
                         {
-                            Name = item.Name,
-                            AlterDate = item.AlterDate,
-                            Active = item.Active,
-                            Address = item.Address,
-                            AddressNum = item.AddressNum,
-                            Branch = item.Branch,
-                            City = item.City,
-                            Cnpj = item.Cnpj,
-                            MembershipId = item.MembershipId,
-                            State = item.State,
-                            Tel = item.Tel,
-                            Id = item.Id,
-                            UserId = item.UserId,
+                            Name = item.E.Name,
+                            AlterDate = item.E.AlterDate,
+                            Status = item.U.Status,
+                            Address = item.E.Address,
+                            AddressNum = item.E.AddressNum,
+                            Branch = item.E.Branch,
+                            City = item.E.City,
+                            Cnpj = item.E.Cnpj,
+                            MembershipId = item.E.MembershipId,
+                            State = item.E.State,
+                            Tel = item.E.Tel,
+                            Id = item.E.Id,
+                            UserId = item.U.Id,
                         });
                     }
 
                     return new APIResult<List<EnterpriseViewModel>>()
                     {
-                        Result = oEnterpriseList,
-                        Count = oEnterpriseList.Count
+                        Result = EnterpriseList,
+                        Count = EnterpriseList.Count
                     };
                 }
                 else
@@ -267,32 +266,32 @@ namespace Fidelity.Areas.Enterprises.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oUser = UserDAO.FindByKey(Model.Enterprise.UserId);
+                    var User = UserDAO.FindByKey(Model.Enterprise.UserId);
 
                     if (Model.Password != null)
                     {
-                        oUser.Password = Encrypt.EncryptPass(Model.Password);
+                        User.Password = Encrypt.EncryptPass(Model.Password);
                     }
 
-                    oUser.Email = Model.Email;
-                    oUser.Image = Model.Image;
-                    oUser.Active = Model.Active ? "1" : "0";
-                    oUser.AlterDate = DateTime.Now;
+                    User.Email = Model.Email;
+                    User.Image = Model.Image;
+                    User.Status = Model.Status;
+                    User.AlterDate = DateTime.Now;
 
-                    var oCompany = EnterpriseDAO.FindByKey(Model.Enterprise.Id);
+                    var Company = EnterpriseDAO.FindByKey(Model.Enterprise.Id);
 
-                    oCompany.Name = Model.Enterprise.Name ?? "";
-                    oCompany.Address = Model.Enterprise.Address ?? "";
-                    oCompany.AddressNum = Model.Enterprise.AddressNum ?? "";
-                    oCompany.Branch = Model.Enterprise.Branch ?? "";
-                    oCompany.City = Model.Enterprise.City ?? "";
-                    oCompany.Cnpj = Model.Enterprise.Cnpj.Replace(".", "").Replace("/", "").Replace("-", "");
-                    oCompany.MembershipId = Model.Enterprise.MembershipId ?? 1;
-                    oCompany.State = Model.Enterprise.State ?? "";
-                    oCompany.Tel = Model.Enterprise.Tel ?? "";
-                    oCompany.Active = Model.Active;
+                    Company.Name = Model.Enterprise.Name ?? "";
+                    Company.Address = Model.Enterprise.Address ?? "";
+                    Company.AddressNum = Model.Enterprise.AddressNum ?? "";
+                    Company.Branch = Model.Enterprise.Branch ?? "";
+                    Company.City = Model.Enterprise.City ?? "";
+                    Company.Cnpj = Model.Enterprise.Cnpj.Replace(".", "").Replace("/", "").Replace("-", "");
+                    Company.MembershipId = Model.Enterprise.MembershipId ?? 1;
+                    Company.State = Model.Enterprise.State ?? "";
+                    Company.Tel = Model.Enterprise.Tel ?? "";
 
-                    EnterpriseDAO.Update(oCompany);
+                    EnterpriseDAO.Update(Company);
+                    UserDAO.Update(User);
 
                     return new APIResult<object>()
                     {

@@ -53,14 +53,14 @@ namespace Fidelity.Areas.Employes.Controllers
                                 {
                                     Email = Model.Email.ToLower(),
                                     Type = "F",
-                                    Active = "1",
+                                    Status = true,
                                     Password = Encrypt.EncryptPass(Model.Password),
                                     Image = Model.Image,
                                 };
 
                                 UserDAO.SaveUser(user, context);
 
-                                var oEmployee = new Employee()
+                                var Employee = new Employee()
                                 {
                                     UserId = user.Id,
                                     EnterpriseId = Model.Employee.EnterpriseId,
@@ -68,7 +68,7 @@ namespace Fidelity.Areas.Employes.Controllers
                                     AccessType = 1
                                 };
 
-                                EmployeeDAO.SaveEmployee(oEmployee, context);
+                                EmployeeDAO.SaveEmployee(Employee, context);
 
                                 dbContextTransaction.Commit();
 
@@ -145,35 +145,35 @@ namespace Fidelity.Areas.Employes.Controllers
 
                 #endregion
 
-                var oUserList = new List<UserViewModel>();
+                var UserList = new List<UserViewModel>();
 
-                foreach (var item in EmployeeDAO.FindAll().Where(x => x.EnterpriseId == company).ToList())
+                foreach (var item in EmployeeDAO.FindAll().Join(UserDAO.FindAll(), e => e.UserId, u => u.Id, (e, u) => new { E = e, U = u }).Where(EU => EU.E.UserId == EU.U.Id && EU.U.Status && EU.E.EnterpriseId == company).ToList())
                 {
-                    var oEmployee = new EmployeeViewModel()
+                    var Employee = new EmployeeViewModel()
                     {
-                        Id = item.Id,
-                        UserId = item.UserId,
-                        AccessType = item.AccessType,
-                        EnterpriseId = item.EnterpriseId,
-                        Name = item.Name
+                        Id = item.E.Id,
+                        UserId = item.E.UserId,
+                        AccessType = item.E.AccessType,
+                        EnterpriseId = item.E.EnterpriseId,
+                        Name = item.E.Name
                     };
 
-                    var oUser = UserDAO.FindByKey(item.UserId);
+                    var oUser = UserDAO.FindByKey(item.E.UserId);
 
-                    oUserList.Add(new UserViewModel()
+                    UserList.Add(new UserViewModel()
                     {
                         Image = oUser.Image,
-                        Active = oUser.Active == "1" ? true : false,
+                        Status = oUser.Status,
                         Email = oUser.Email,
                         Type = oUser.Type,
-                        Employee = oEmployee,
+                        Employee = Employee,
                     });
                 }
 
                 return new APIResult<object>()
                 {
-                    Result = oUserList,
-                    Count = oUserList.Count
+                    Result = UserList,
+                    Count = UserList.Count
                 };
 
             }
@@ -201,24 +201,25 @@ namespace Fidelity.Areas.Employes.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oUser = UserDAO.FindByKey(Model.Employee.UserId);
+                    var User = UserDAO.FindByKey(Model.Employee.UserId);
 
                     if (Model.Password != null)
                     {
-                        oUser.Password = Encrypt.EncryptPass(Model.Password);
+                        User.Password = Encrypt.EncryptPass(Model.Password);
                     }
 
-                    oUser.Email = Model.Email;
-                    oUser.Image = Model.Image;
-                    oUser.Active = Model.Active ? "1" : "0";
-                    oUser.AlterDate = DateTime.Now;
+                    User.Email = Model.Email;
+                    User.Image = Model.Image;
+                    User.Status = Model.Status;
+                    User.AlterDate = DateTime.Now;
 
-                    var oEmployee = EmployeeDAO.FindByKey(Model.Employee.Id);
-                    oEmployee.Name = Model.Employee.Name;
-                    oEmployee.AccessType = Model.Employee.AccessType;
-                    oEmployee.AlterDate = DateTime.Now;
+                    var Employee = EmployeeDAO.FindByKey(Model.Employee.Id);
+                    Employee.Name = Model.Employee.Name;
+                    Employee.AccessType = Model.Employee.AccessType;
+                    Employee.AlterDate = DateTime.Now;
 
-                    EmployeeDAO.Update(oEmployee);
+                    EmployeeDAO.Update(Employee);
+                    UserDAO.Update(User);
 
                     return new APIResult<object>()
                     {
@@ -249,17 +250,15 @@ namespace Fidelity.Areas.Employes.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oEmployee = EmployeeDAO.FindByKey(Model.Id);
+                    var Employee = EmployeeDAO.FindByKey(Model.Id);
 
-                    EmployeeDAO.Delete(oEmployee);
+                    var User = UserDAO.FindByKey(Employee.UserId);
+                    User.Status = false;
+                    EmployeeDAO.Update(Employee);
 
                     return new APIResult<object>()
                     {
                         Message = "Funcionário deletado com sucesso!"
-
-                        // fazer inativo funcionário
-
-                        // deletar UserId também ou mudar tag para inativo invés de deletar funcionário??
                     };
                 }
             }

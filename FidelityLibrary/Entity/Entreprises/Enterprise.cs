@@ -45,9 +45,6 @@ namespace FidelityLibrary.Entity
         [Column("id_plano")]
         public int? MembershipId { get; set; }
 
-        [Column("ativo")]
-        public bool Active { get; set; }
-
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
 

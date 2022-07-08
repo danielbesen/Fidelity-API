@@ -21,6 +21,9 @@ namespace FidelityLibrary.Entity.Categories
         [Column("id_empresa")]
         public int EnterpriseId { get; set; }
 
+        [Column("status")]
+        public bool Status { get; set; } = true;
+
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
 

@@ -25,8 +25,8 @@ namespace FidelityLibrary.Entity.Users
         [Column("img_usuario")]
         public byte[] Image { get; set; }
 
-        [Column("ativo")]
-        public string Active { get; set; }
+        [Column("status")]
+        public bool Status { get; set; } = true;
 
         [Column("senha_usuario")]
         [Required(ErrorMessage = "A senha do usuário é obrigatória", AllowEmptyStrings = false)]

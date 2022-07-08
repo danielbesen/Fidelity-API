@@ -33,38 +33,37 @@ namespace Fidelity.Areas.Checkpoints.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oListProgressVM = new List<LoyaltProgressViewModel>();
+                    var ListProgressVM = new List<LoyaltProgressViewModel>();
 
                     foreach (var checkpoint in Model.Checkpoints)
                     {
-                        var oFidelity = LoyaltyDAO.FindByKey(checkpoint.LoyaltId);
-                        var oFidelityType = oFidelity.FidelityTypeId;
-                        var oFidelityQtde = oFidelity.Quantity; //Quantidade à ser alcançada
+                        var Fidelity = LoyaltyDAO.FindByKey(checkpoint.LoyaltId);
+                        var FidelityQtde = Fidelity.Quantity; //Quantidade à ser alcançada
 
                         var LastLoyaltProgress = LoyaltProgressDAO.FindAll().LastOrDefault(x => x.ClientId == checkpoint.ClientId && x.LoyaltId == checkpoint.LoyaltId && x.EnterpriseId == checkpoint.EnterpriseId);
-                        double oPoints = 0;
-                        bool oStatus = false;
+                        double Points = 0;
+                        bool CheckPointStatus = false;
 
                         if (LastLoyaltProgress != null)
                         {
-                            oPoints = LastLoyaltProgress.Points + checkpoint.Value;
+                            Points = LastLoyaltProgress.Points + checkpoint.Value;
                         }
                         else
                         {
-                            oPoints = checkpoint.Value;
+                            Points = checkpoint.Value;
                         }
 
-                        if (oPoints >= oFidelityQtde) //Ganhou
+                        if (Points >= FidelityQtde) //Ganhou
                         {
-                            oStatus = true;
-                            oPoints = 0;
+                            CheckPointStatus = true;
+                            Points = 0;
                         }
 
                         var oProgress = new LoyaltProgress()
                         {
                             ClientId = checkpoint.ClientId,
-                            Points = oPoints,
-                            Status = oStatus,
+                            Points = Points,
+                            Status = CheckPointStatus,
                             LoyaltId = checkpoint.LoyaltId,
                             EnterpriseId = checkpoint.EnterpriseId,
                         };
@@ -73,29 +72,29 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         if (LastLoyaltProgress != null)
                         {
                             oLoyaltP = LoyaltProgressDAO.FindByKey(LastLoyaltProgress.Id);
-                            oLoyaltP.Status = oStatus;
-                            oLoyaltP.Points = oPoints;
+                            oLoyaltP.Status = CheckPointStatus;
+                            oLoyaltP.Points = Points;
                             LoyaltProgressDAO.Update(oLoyaltP);
                         } else
                         {
                             LoyaltProgressDAO.Insert(oProgress);
                         }
 
-                        oListProgressVM.Add(new LoyaltProgressViewModel()
+                        ListProgressVM.Add(new LoyaltProgressViewModel()
                         {
                             ClientId = checkpoint.ClientId,
                             LoyaltId = checkpoint.LoyaltId,
                             Id = oProgress.Id != null ? oProgress.Id : oLoyaltP.Id,
-                            Points = oPoints,
-                            Status = oStatus
+                            Points = Points,
+                            Status = CheckPointStatus
                         });
                     }
 
                     return new APIResult<List<LoyaltProgressViewModel>>()
                     {
                         Message = "Checkpoint(s) realizado(s) com sucesso!",
-                        Count = oListProgressVM.Count,
-                        Result = oListProgressVM
+                        Count = ListProgressVM.Count,
+                        Result = ListProgressVM
                     };
                 }
             }
@@ -155,8 +154,8 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         company = Convert.ToInt32(identity.FindFirst("company").Value);
                     }
 
-                    var oClientId = ClientDAO.FindByCPF(cpf).Id;
-                    var ClientProgressList = company == 0 ? LoyaltProgressDAO.FindAll().Where(x => x.ClientId == oClientId).ToList() : LoyaltProgressDAO.FindAll().Where(x => x.ClientId == oClientId && x.EnterpriseId == company).ToList();
+                    var ClientId = ClientDAO.FindByCPF(cpf)?.Id;
+                    var ClientProgressList = company == 0 ? LoyaltProgressDAO.FindAll().Where(x => x.ClientId == ClientId).ToList() : LoyaltProgressDAO.FindAll().Where(x => x.ClientId == ClientId && x.EnterpriseId == company).ToList();
                     var ListProgressListLastVM = new List<LoyaltProgressViewModel>();
 
 
@@ -171,8 +170,8 @@ namespace Fidelity.Areas.Checkpoints.Controllers
 
                     foreach (var item in ClientProgressList)
                     {
-                        var oLoyaltDB = LoyaltyDAO.FindByKey(item.LoyaltId);
-                        var oClientDB = ClientDAO.FindByKey(item.ClientId);
+                        var LoyaltDB = LoyaltyDAO.FindByKey(item.LoyaltId);
+                        var ClientDB = ClientDAO.FindByKey(item.ClientId);
 
                         ListProgressListLastVM.Add(new LoyaltProgressViewModel()
                         {
@@ -183,25 +182,25 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                             Status = item.Status,
                             Client = new Clients.Models.ClientViewModel()
                             {
-                                Name = oClientDB.Name,
-                                Cpf = oClientDB.Cpf,
-                                Id = oClientDB.Id,
-                                UserId = oClientDB.UserId
+                                Name = ClientDB.Name,
+                                Cpf = ClientDB.Cpf,
+                                Id = ClientDB.Id,
+                                UserId = ClientDB.UserId
                             },
                             Loyalt = new LoyaltViewModel()
                             {
-                                Id = oLoyaltDB.Id,
-                                CouponValue = oLoyaltDB.CouponValue,
-                                Name = oLoyaltDB.Name,
-                                Limit = oLoyaltDB.Limit,
-                                ProductId = oLoyaltDB.ProductId,
-                                Description = oLoyaltDB.Description,
-                                EnterpriseId = oLoyaltDB.EnterpriseId,
-                                FidelityTypeId = oLoyaltDB.FidelityTypeId,
-                                PromotionTypeId = oLoyaltDB.PromotionTypeId,
-                                Quantity = oLoyaltDB.Quantity,
-                                StartDate = oLoyaltDB.StartDate,
-                                EndDate = oLoyaltDB.EndDate
+                                Id = LoyaltDB.Id,
+                                CouponValue = LoyaltDB.CouponValue,
+                                Name = LoyaltDB.Name,
+                                Limit = LoyaltDB.Limit,
+                                ProductId = LoyaltDB.ProductId,
+                                Description = LoyaltDB.Description,
+                                EnterpriseId = LoyaltDB.EnterpriseId,
+                                FidelityTypeId = LoyaltDB.FidelityTypeId,
+                                PromotionTypeId = LoyaltDB.PromotionTypeId,
+                                Quantity = LoyaltDB.Quantity,
+                                StartDate = LoyaltDB.StartDate,
+                                EndDate = LoyaltDB.EndDate
                             }
                         });
                     }

@@ -19,7 +19,7 @@ namespace Fidelity.Areas.Enterprises.Models
         public string City { get; set; }
         public string Branch { get; set; }
         public int? MembershipId { get; set; }
-        public bool Active { get; set; }
+        public bool Status { get; set; }
         public DateTime? AlterDate { get; set; }
         public List<LoyaltViewModel> Loyalts { get; set; }
     }

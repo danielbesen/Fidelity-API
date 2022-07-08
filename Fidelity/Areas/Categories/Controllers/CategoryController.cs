@@ -2,6 +2,7 @@
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
 using FidelityLibrary.Persistance.CategoryDAO;
+using FidelityLibrary.Persistance.ProductDAO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,21 +35,22 @@ namespace Fidelity.Areas.Categories.Controllers
                         company = Convert.ToInt32(identity.FindFirst("company").Value);
                     }
 
-                    var oCategoryList = new List<CategoryViewModel>();
-                    foreach (var item in CategoryDAO.FindAll().Where(x => x.EnterpriseId == company).ToList())
+                    var CategoryList = new List<CategoryViewModel>();
+                    foreach (var item in CategoryDAO.FindAll().Where(x => x.EnterpriseId == company && x.Status).ToList())
                     {
-                        oCategoryList.Add(new CategoryViewModel()
+                        CategoryList.Add(new CategoryViewModel()
                         {
                             Id = item.Id,
                             Name = item.Name,
-                            EnterpriseId = item.EnterpriseId
+                            EnterpriseId = item.EnterpriseId,
+                            Status = item.Status
                         });
                     }
 
                     return new APIResult<List<CategoryViewModel>>()
                     {
-                        Result = oCategoryList,
-                        Count = oCategoryList.Count
+                        Result = CategoryList,
+                        Count = CategoryList.Count
                     };
                 }
                 else
@@ -81,13 +83,14 @@ namespace Fidelity.Areas.Categories.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oCategory = new FidelityLibrary.Entity.Categories.Category()
+                    var Category = new FidelityLibrary.Entity.Categories.Category()
                     {
                         Name = Model.Name,
-                        EnterpriseId = Model.EnterpriseId
+                        EnterpriseId = Model.EnterpriseId,
+                        Status = Model.Status 
                     };
 
-                    CategoryDAO.Insert(oCategory);
+                    CategoryDAO.Insert(Category);
 
                     return new APIResult<object>()
                     {
@@ -118,12 +121,13 @@ namespace Fidelity.Areas.Categories.Controllers
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var oCategory = CategoryDAO.FindByKey(Model.Id);
+                    var Category = CategoryDAO.FindByKey(Model.Id);
 
-                    oCategory.Name = Model.Name ?? "";
-                    oCategory.AlterDate = DateTime.Now;
+                    Category.Name = Model.Name ?? "";
+                    Category.AlterDate = DateTime.Now;
+                    Category.Status = Model.Status;
 
-                    CategoryDAO.Update(oCategory);
+                    CategoryDAO.Update(Category);
 
                     return new APIResult<object>()
                     {
@@ -173,9 +177,16 @@ namespace Fidelity.Areas.Categories.Controllers
 
                     if (Id != 0)
                     {
-                        var oCategory = CategoryDAO.FindByKey(Id);
+                        var Category = CategoryDAO.FindByKey(Id);
+                        Category.Status = false;
+                        CategoryDAO.Update(Category);
 
-                        CategoryDAO.Delete(oCategory);
+                        var ListOfProducts = ProductDAO.FindAll().Where(x => x.CategoryId == Id && x.Status).ToList();
+                        foreach (var product in ListOfProducts)
+                        {
+                            product.CategoryId = null;
+                            ProductDAO.Update(product);
+                        }
 
                         return new APIResult<object>()
                         {

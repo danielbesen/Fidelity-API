@@ -36,19 +36,19 @@ namespace Fidelity.Areas.Login.Controllers
             {
                 if (UserDAO.FindAll().ToList().Any(x => x.Email.ToLower() == Model.Email.ToLower() && Encrypt.VerifyPass(Model.Password, x.Password)))
                 {
-                    var oNewUser = UserDAO.GetUser(Model.Email);
+                    var NewUser = UserDAO.GetUser(Model.Email);
 
                     #region Test
 
-                    int oEnterpriseId = oNewUser.Type == "E" ? EnterpriseDAO.FindByUserId(oNewUser.Id).Id : oNewUser.Type == "F" ? EmployeeDAO.FindByUserId(oNewUser.Id).EnterpriseId : -1;
-                    object oToken = null;
+                    int EnterpriseId = NewUser.Type == "E" ? EnterpriseDAO.FindByUserId(NewUser.Id).Id : NewUser.Type == "F" ? EmployeeDAO.FindByUserId(NewUser.Id).EnterpriseId : -1;
+                    object Token = null;
 
-                    if (oEnterpriseId != -1)
+                    if (EnterpriseId != -1)
                     {
-                        oToken = Encrypt.GetTokenCompany(Model.Email, Model.Password, oEnterpriseId);
+                        Token = Encrypt.GetTokenCompany(Model.Email, Model.Password, EnterpriseId);
                     } else
                     {
-                        oToken = Encrypt.GetToken(Model.Email, Model.Password);
+                        Token = Encrypt.GetToken(Model.Email, Model.Password);
                     }
 
                     #endregion
@@ -57,9 +57,9 @@ namespace Fidelity.Areas.Login.Controllers
                     {
                         Result = new LoginResult<Object>()
                         {
-                            Token = oToken,
-                            Property = oNewUser.Type == "C" ? ClientDAO.FindByUserId(oNewUser.Id) : oNewUser.Type == "E" ? EnterpriseDAO.FindByUserId(oNewUser.Id) : EmployeeDAO.FindByUserId(oNewUser.Id),
-                            Type = oNewUser.Type.ToString()
+                            Token = Token,
+                            Property = NewUser.Type == "C" ? ClientDAO.FindByUserId(NewUser.Id) : NewUser.Type == "E" ? EnterpriseDAO.FindByUserId(NewUser.Id) : EmployeeDAO.FindByUserId(NewUser.Id),
+                            Type = NewUser.Type.ToString()
                         },
                         Message = "Usuário logado com sucesso!"
                     };

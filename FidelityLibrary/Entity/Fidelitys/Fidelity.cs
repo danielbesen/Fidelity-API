@@ -21,6 +21,9 @@ namespace FidelityLibrary.Entity.Fidelitys
         [Column("id_produto")]
         public int ConsumedProductId { get; set; }
 
+        [Column("status")]
+        public bool Status { get; set; } = true;
+        
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;
 

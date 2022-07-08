@@ -35,8 +35,6 @@ namespace FidelityLibrary.Entity.Loyalts
 
         [Column("id_produto")]
         public int? ProductId { get; set; }
-        
-        public List<int> ProductIdList { get; set; }
 
         [Column("id_tipo_promocao")]
         public int PromotionTypeId { get; set; }
@@ -48,7 +46,10 @@ namespace FidelityLibrary.Entity.Loyalts
         public double Quantity { get; set; }        
         
         [Column("valor_cupom")]
-        public double? CouponValue { get; set; } 
+        public double? CouponValue { get; set; }
+
+        [Column("status")]
+        public bool Status { get; set; } = true;
 
         [Column("dt_inclusao")]
         public DateTime InsertDate { get; set; } = DateTime.UtcNow;

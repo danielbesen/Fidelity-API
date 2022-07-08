@@ -42,23 +42,23 @@ namespace Fidelity.Areas.Dashboards.Controllers
 
                 if (Loyalts.Count > 0)
                 {
-                    var oDashboardList = new List<EnterpriseDashboardViewModel>();
+                    var DashboardList = new List<EnterpriseDashboardViewModel>();
                     var dict = Loyalts.GroupBy(x => x).ToDictionary(x => x.Key, q => q.Count());
                     foreach (var item in Loyalts.Distinct())
                     {
-                        var oLoyalt = LoyaltyDAO.FindByKey(item);
+                        var Loyalt = LoyaltyDAO.FindByKey(item);
 
-                        oDashboardList.Add(new EnterpriseDashboardViewModel()
+                        DashboardList.Add(new EnterpriseDashboardViewModel()
                         {
-                            Name = oLoyalt.Name,
+                            Name = Loyalt.Name,
                             Number = dict[item]
                         });
                     }
 
                     return new APIResult<object>()
                     {
-                        Result = oDashboardList,
-                        Count = oDashboardList.Count()
+                        Result = DashboardList,
+                        Count = DashboardList.Count()
                     };
                 }
                 else

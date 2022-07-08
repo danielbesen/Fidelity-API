@@ -13,7 +13,7 @@ namespace Fidelity.Areas.Users.Models
         public string Email { get; set; }
         public string Password { get; set; }
         public string Type { get; set; }
-        public bool Active { get; set; } = true;
+        public bool Status { get; set; } = true;
         public byte[] Image { get; set; }
         public ClientViewModel Client { get; set; }
         public EnterpriseViewModel Enterprise { get; set; }

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FidelityLibrary.Persistance.CategoryDAO
 {
-    public class CategoryDAO : GenericDAO<Category, int>
+    public class CategoryDAO : GenericDAO<Category, int?>
     {
         public static void SaveCategory(Category Category, ApplicationDbContext oContext)
         {

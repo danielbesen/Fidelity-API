@@ -13,8 +13,8 @@ namespace Fidelity.Areas.Products.Models
         public int EnterpriseId { get; set; }
         public string Name { get; set; }
         public double Value { get; set; }
-        public int CategoryId { get; set; }
-        public string Status { get; set; }
+        public int? CategoryId { get; set; }
+        public bool Status { get; set; } = true;
         public byte[] Image { get; set; }
         public List<int> LoyaltList { get; set; }
         public CategoryViewModel Category { get; set; }

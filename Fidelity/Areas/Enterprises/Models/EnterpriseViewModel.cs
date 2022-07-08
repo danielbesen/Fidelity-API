@@ -11,6 +11,7 @@ namespace Fidelity.Areas.Enterprises.Models
         public int Id { get; set; }
         public int UserId { get; set; }
         public string Name { get; set; }
+        public string EmployeeName { get; set; }
         public string Cnpj { get; set; }
         public string Tel { get; set; }
         public string Address { get; set; }

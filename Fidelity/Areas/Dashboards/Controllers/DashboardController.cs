@@ -33,40 +33,64 @@ namespace Fidelity.Areas.Dashboards.Controllers
                     company = Convert.ToInt32(identity.FindFirst("company").Value);
                 }
 
-                var Loyalts = new List<int>();
-
                 if (company != 0)
                 {
-                    Loyalts = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company).GroupBy(x => x.LoyaltId).OrderByDescending(y => y.Count()).SelectMany(z => z).Select(a => a.LoyaltId).ToList();
-                }
+                    var Loyalts = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company && x.InsertDate > DateTime.Today.AddDays(-30)).GroupBy(x => x.LoyaltId).OrderByDescending(y => y.Count()).SelectMany(z => z).Select(a => a.LoyaltId).ToList();
+                    var TotalClients = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company).Select(x => x.ClientId).Distinct().Count();
 
-                if (Loyalts.Count > 0)
-                {
-                    var DashboardList = new List<EnterpriseDashboardViewModel>();
-                    var dict = Loyalts.GroupBy(x => x).ToDictionary(x => x.Key, q => q.Count());
-                    foreach (var item in Loyalts.Distinct())
+                    if (Loyalts.Count > 0)
                     {
-                        var Loyalt = LoyaltyDAO.FindByKey(item);
+                        #region Most Used Loyalts
 
-                        DashboardList.Add(new EnterpriseDashboardViewModel()
+                        var MostUsedLoyaltList = new List<MostUsedLoyaltsViewModel>();
+                        var dict = Loyalts.GroupBy(x => x).ToDictionary(x => x.Key, q => q.Count());
+                        foreach (var item in Loyalts.Distinct())
                         {
-                            Name = Loyalt.Name,
-                            Number = dict[item]
-                        });
-                    }
+                            var Loyalt = LoyaltyDAO.FindByKey(item);
 
-                    return new APIResult<object>()
+                            MostUsedLoyaltList.Add(new MostUsedLoyaltsViewModel()
+                            {
+                                Name = Loyalt.Name,
+                                Number = dict[item]
+                            });
+
+                        }
+
+                        var Dashboard = new EnterpriseDashboardViewModel()
+                        {
+                            TotalClients = TotalClients,
+                            MostUsedLoyalts = MostUsedLoyaltList,
+                        };
+
+                        #endregion
+
+                        #region Total Clients
+
+
+
+                        #endregion
+
+                        return new APIResult<object>()
+                        {
+                            Message = "Sucesso ao buscar as fidelidades mais utilizadas nos últimos 30 dias!",
+                            Result = Dashboard,
+                            Count = MostUsedLoyaltList.Count()
+                        };
+                    }
+                    else
                     {
-                        Result = DashboardList,
-                        Count = DashboardList.Count()
-                    };
-                }
-                else
+                        return new APIResult<object>()
+                        {
+                            Success = false,
+                            Message = "Nenhuma fidelidade para essa empresa encontrada!"
+                        };
+                    }
+                } else
                 {
                     return new APIResult<object>()
                     {
                         Success = false,
-                        Message = "Nenhuma fidelidade para essa empresa encontrada!"
+                        Message = "Nenhuma empresa informada!"
                     };
                 }
             }

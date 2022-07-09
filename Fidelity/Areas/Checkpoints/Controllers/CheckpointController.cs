@@ -74,6 +74,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                             oLoyaltP = LoyaltProgressDAO.FindByKey(LastLoyaltProgress.Id);
                             oLoyaltP.Status = CheckPointStatus;
                             oLoyaltP.Points = Points;
+                            oLoyaltP.InsertDate = DateTime.Now;
                             LoyaltProgressDAO.Update(oLoyaltP);
                         } else
                         {

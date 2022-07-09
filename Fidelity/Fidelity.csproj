@@ -234,6 +234,7 @@
     <Compile Include="Areas\Dashboards\Controllers\DashboardController.cs" />
     <Compile Include="Areas\Dashboards\DashboardsAreaRegistration.cs" />
     <Compile Include="Areas\Dashboards\Models\EnterpriseDashboardViewModel.cs" />
+    <Compile Include="Areas\Dashboards\Models\MostUsedLoyaltsViewModel.cs" />
     <Compile Include="Areas\Employes\Controllers\EmployeeController.cs" />
     <Compile Include="Areas\Employes\EmployesAreaRegistration.cs" />
     <Compile Include="Areas\Employes\Models\EmployeeViewModel.cs" />

@@ -7,7 +7,8 @@ namespace Fidelity.Areas.Dashboards.Models
 {
     public class EnterpriseDashboardViewModel
     {
-        public string Name { get; set; }
-        public int Number { get; set; }
+        public List<MostUsedLoyaltsViewModel> MostUsedLoyalts { get; set; }
+        public int TotalClients { get; set; }
+
     }
 }

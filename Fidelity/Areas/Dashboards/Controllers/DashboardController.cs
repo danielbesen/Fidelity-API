@@ -37,7 +37,7 @@ namespace Fidelity.Areas.Dashboards.Controllers
                 {
                     var Loyalts = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company && x.InsertDate > DateTime.Today.AddDays(-30)).GroupBy(x => x.LoyaltId).OrderByDescending(y => y.Count()).SelectMany(z => z).Select(a => a.LoyaltId).ToList();
                     var TotalClients = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company).Select(x => x.ClientId).Distinct().Count();
-
+                    //var BestProduct = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company).Select()
                     if (Loyalts.Count > 0)
                     {
                         #region Most Used Loyalts
@@ -56,19 +56,15 @@ namespace Fidelity.Areas.Dashboards.Controllers
 
                         }
 
+                        #endregion
+
+
+
                         var Dashboard = new EnterpriseDashboardViewModel()
                         {
                             TotalClients = TotalClients,
                             MostUsedLoyalts = MostUsedLoyaltList,
                         };
-
-                        #endregion
-
-                        #region Total Clients
-
-
-
-                        #endregion
 
                         return new APIResult<object>()
                         {

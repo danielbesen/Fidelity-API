@@ -137,17 +137,17 @@ namespace Fidelity.Areas.Products.Controllers
 
                     if (!string.IsNullOrEmpty(name))
                     {
-                        Products = ProductDAO.FindAll().Where(x => x.Description.ToLower().Contains(name) && x.EnterpriseId == company && x.Status).ToList();
+                        Products = ProductDAO.FindAll().Where(x => x.Description.ToLower().Contains(name) && x.EnterpriseId == company).ToList();
                     }
                     else
                     {
                         if (page == 0)
                         {
-                            Products = ProductDAO.FindAll().Where(x => x.EnterpriseId == company && x.Status).ToList();
+                            Products = ProductDAO.FindAll().Where(x => x.EnterpriseId == company).ToList();
                         }
                         else
                         {
-                            Products = ProductDAO.FindAll().Where(x => x.EnterpriseId == company && x.Status).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                            Products = ProductDAO.FindAll().Where(x => x.EnterpriseId == company).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                         }
                     }
 
@@ -155,7 +155,7 @@ namespace Fidelity.Areas.Products.Controllers
                     foreach (var item in Products)
                     {
                         var Category = item.CategoryId != null ? CategoryDAO.FindByKey(item.CategoryId) : null;
-                        var LoyaltListIds = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == item.Id && x.Status).ToList();
+                        var LoyaltListIds = FidelityDAO.FindAll().Where(x => x.ConsumedProductId == item.Id).ToList();
 
                         var LoyaltsVM = new List<LoyaltViewModel>();
 
@@ -176,7 +176,8 @@ namespace Fidelity.Areas.Products.Controllers
                                 EndDate = Loyal.EndDate,
                                 FidelityTypeId = Loyal.FidelityTypeId,
                                 ConsumedProductId = Loyal.FidelityTypeId,
-                                PromotionTypeId = Loyal.PromotionTypeId
+                                PromotionTypeId = Loyal.PromotionTypeId,
+                                Status = Loyal.Status
                             });
                         }
 

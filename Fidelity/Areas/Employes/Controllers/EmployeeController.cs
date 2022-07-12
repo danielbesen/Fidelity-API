@@ -147,7 +147,7 @@ namespace Fidelity.Areas.Employes.Controllers
 
                 var UserList = new List<UserViewModel>();
 
-                foreach (var item in EmployeeDAO.FindAll().Join(UserDAO.FindAll(), e => e.UserId, u => u.Id, (e, u) => new { E = e, U = u }).Where(EU => EU.E.UserId == EU.U.Id && EU.U.Status && EU.E.EnterpriseId == company).ToList())
+                foreach (var item in EmployeeDAO.FindAll().Join(UserDAO.FindAll(), e => e.UserId, u => u.Id, (e, u) => new { E = e, U = u }).Where(EU => EU.E.UserId == EU.U.Id && EU.E.EnterpriseId == company).ToList())
                 {
                     var Employee = new EmployeeViewModel()
                     {

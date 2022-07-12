@@ -155,17 +155,17 @@ namespace Fidelity.Areas.Loyalts.Controllers
 
                     if (!string.IsNullOrEmpty(name))
                     {
-                        LoyaltList = LoyaltyDAO.FindAll().Where(x => x.Name.ToLower().Contains(name) && x.EnterpriseId == company && x.Status).ToList();
+                        LoyaltList = LoyaltyDAO.FindAll().Where(x => x.Name.ToLower().Contains(name) && x.EnterpriseId == company).ToList();
                     }
                     else
                     {
                         if (page == 0)
                         {
-                            LoyaltList = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company && x.Status).ToList();
+                            LoyaltList = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company).ToList();
                         }
                         else
                         {
-                            LoyaltList = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company && x.Status).Skip((page - 1) * pageSize).Take(pageSize).ToList();
+                            LoyaltList = LoyaltyDAO.FindAll().Where(x => x.EnterpriseId == company).Skip((page - 1) * pageSize).Take(pageSize).ToList();
                         }
                     }
 
@@ -178,7 +178,7 @@ namespace Fidelity.Areas.Loyalts.Controllers
 
                         var oProductList = new List<ProductViewModel>();
 
-                        var oFidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == item.Id && x.Status).ToList();
+                        var oFidelities = FidelityDAO.FindAll().Where(x => x.LoyaltId == item.Id).ToList();
                         foreach (var id in oFidelities)
                         {
                             var oProduct = ProductDAO.FindByKey(id.ConsumedProductId);

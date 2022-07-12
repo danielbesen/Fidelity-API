@@ -43,7 +43,7 @@ namespace Fidelity.Areas.Dashboards.Controllers
                         #region Most Used Loyalts
 
                         var MostUsedLoyaltList = new List<MostUsedLoyaltsViewModel>();
-                        var dict = Loyalts.GroupBy(x => x).ToDictionary(x => x.Key, q => q.Count());
+                        var dict = Loyalts.GroupBy(x => x).ToDictionary(x => x.Key, q => q.Count()).Take(3).ToDictionary(k => k.Key, v => v.Value);
                         foreach (var item in Loyalts.Distinct())
                         {
                             var Loyalt = LoyaltyDAO.FindByKey(item);
@@ -57,8 +57,6 @@ namespace Fidelity.Areas.Dashboards.Controllers
                         }
 
                         #endregion
-
-
 
                         var Dashboard = new EnterpriseDashboardViewModel()
                         {

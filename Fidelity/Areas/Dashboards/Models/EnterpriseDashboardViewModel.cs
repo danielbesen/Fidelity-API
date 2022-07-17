@@ -9,6 +9,7 @@ namespace Fidelity.Areas.Dashboards.Models
     {
         public List<MostUsedLoyaltsViewModel> MostUsedLoyalts { get; set; }
         public int TotalClients { get; set; }
+        public int TotalLoyaltAchieved { get; set; }
 
     }
 }

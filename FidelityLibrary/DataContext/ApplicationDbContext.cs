@@ -36,5 +36,6 @@ namespace FidelityLibrary.DataContext
         public virtual DbSet<PromotionType> DbSetPromotionType { get; set; }
         public virtual DbSet<Category> DbSetCategory { get; set; }
         public virtual DbSet<Checkpoint> DbSetCheckpoint { get; set; }
+        public virtual DbSet<CheckpointHistory> DbSetCheckpointHistory { get; set; }
     }
 }

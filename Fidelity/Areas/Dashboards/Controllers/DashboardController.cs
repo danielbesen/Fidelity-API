@@ -2,6 +2,7 @@
 using Fidelity.Areas.Loyalts.Models;
 using Fidelity.Models;
 using FidelityLibrary.Entity.Loyalts;
+using FidelityLibrary.Persistance.CheckpointDAO;
 using FidelityLibrary.Persistance.LoyaltProgressDAO;
 using FidelityLibrary.Persistance.LoyaltyDAO;
 using System;
@@ -37,14 +38,15 @@ namespace Fidelity.Areas.Dashboards.Controllers
                 {
                     var Loyalts = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company && x.InsertDate > DateTime.Today.AddDays(-30)).GroupBy(x => x.LoyaltId).OrderByDescending(y => y.Count()).SelectMany(z => z).Select(a => a.LoyaltId).ToList();
                     var TotalClients = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company).Select(x => x.ClientId).Distinct().Count();
-                    //var BestProduct = LoyaltProgressDAO.FindAll().Where(x => x.EnterpriseId == company).Select()
+                    var TotalLoyaltAchieved = CheckpointHistoryDAO.FindAll().Where(x => x.EnterpriseId == company).Count();
+
                     if (Loyalts.Count > 0)
                     {
                         #region Most Used Loyalts
 
                         var MostUsedLoyaltList = new List<MostUsedLoyaltsViewModel>();
                         var dict = Loyalts.GroupBy(x => x).ToDictionary(x => x.Key, q => q.Count()).Take(3).ToDictionary(k => k.Key, v => v.Value);
-                        foreach (var item in Loyalts.Distinct())
+                        foreach (var item in dict.Keys)
                         {
                             var Loyalt = LoyaltyDAO.FindByKey(item);
 
@@ -62,11 +64,12 @@ namespace Fidelity.Areas.Dashboards.Controllers
                         {
                             TotalClients = TotalClients,
                             MostUsedLoyalts = MostUsedLoyaltList,
+                            TotalLoyaltAchieved= TotalLoyaltAchieved,
                         };
 
                         return new APIResult<object>()
                         {
-                            Message = "Sucesso ao buscar as fidelidades mais utilizadas nos últimos 30 dias!",
+                            Message = "Sucesso ao buscar os indicadores de dashboard!",
                             Result = Dashboard,
                             Count = MostUsedLoyaltList.Count()
                         };
@@ -93,7 +96,7 @@ namespace Fidelity.Areas.Dashboards.Controllers
                 return new APIResult<object>()
                 {
                     Success = false,
-                    Message = "Erro ao buscar dados: " + e.Message + e.InnerException
+                    Message = "Erro ao buscar indicadores: " + e.Message + e.InnerException
                 };
             }
         }

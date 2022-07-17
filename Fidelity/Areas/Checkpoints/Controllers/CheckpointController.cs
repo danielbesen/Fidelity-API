@@ -57,6 +57,15 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         {
                             CheckPointStatus = true;
                             Points = 0;
+
+                            var Historic = new CheckpointHistory()
+                            {
+                                ClientId = checkpoint.ClientId,
+                                EnterpriseId = checkpoint.EnterpriseId,
+                                LoyaltId = checkpoint.LoyaltId,
+                            };
+
+                            CheckpointHistoryDAO.Insert(Historic);
                         }
 
                         var oProgress = new LoyaltProgress()

@@ -1,4 +1,5 @@
 ﻿using Fidelity.Areas.Checkpoints.Models;
+using Fidelity.Areas.Clients.Models;
 using Fidelity.Areas.Loyalts.Models;
 using Fidelity.Models;
 using FidelityLibrary.DataContext;
@@ -126,7 +127,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
         [HttpGet]
         [Authorize]
         [Route("checkpoints")]
-        public APIResult<List<LoyaltProgressViewModel>> Get()
+        public APIResult<Object> Get()
         {
             try
             {
@@ -150,7 +151,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
 
                     if (string.IsNullOrEmpty(cpf))
                     {
-                        return new APIResult<List<LoyaltProgressViewModel>>()
+                        return new APIResult<Object>()
                         {
                             Success = false,
                             Message = "Nenhum cpf informado!"
@@ -164,17 +165,26 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         company = Convert.ToInt32(identity.FindFirst("company").Value);
                     }
 
-                    var ClientId = ClientDAO.FindByCPF(cpf)?.Id;
-                    var ClientProgressList = company == 0 ? LoyaltProgressDAO.FindAll().Where(x => x.ClientId == ClientId).ToList() : LoyaltProgressDAO.FindAll().Where(x => x.ClientId == ClientId && x.EnterpriseId == company).ToList();
+                    var Client = ClientDAO.FindByCPF(cpf);
+                    var ClientProgressList = company == 0 ? LoyaltProgressDAO.FindAll().Where(x => x.ClientId == Client.Id).ToList() : LoyaltProgressDAO.FindAll().Where(x => x.ClientId == Client.Id && x.EnterpriseId == company).ToList();
                     var ListProgressListLastVM = new List<LoyaltProgressViewModel>();
 
 
                     if (!ClientProgressList.Any())
                     {
-                        return new APIResult<List<LoyaltProgressViewModel>>()
+                        var ClientVM = new ClientViewModel()
                         {
-                            Success = false,
+                            Id = Client.Id,
+                            Cpf = Client.Cpf,
+                            Name = Client.Name,
+                            UserId =Client.UserId
+                        };
+
+                        return new APIResult<Object>()
+                        {
                             Message = "Nenhum progresso encontrado!",
+                            Result = ClientVM, 
+                            Count = 1
                         };
                     }
 
@@ -215,7 +225,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         });
                     }
 
-                    return new APIResult<List<LoyaltProgressViewModel>>()
+                    return new APIResult<Object>()
                     {
                         Message = "Busca de progressos realizada com sucesso!",
                         Result = ListProgressListLastVM,
@@ -226,7 +236,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
             }
             catch (Exception e)
             {
-                return new APIResult<List<LoyaltProgressViewModel>>()
+                return new APIResult<Object>()
                 {
                     Success = false,
                     Message = "Erro ao buscar progresso de cliente! " + e.Message + e.InnerException

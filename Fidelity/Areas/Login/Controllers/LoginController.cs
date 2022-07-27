@@ -38,8 +38,6 @@ namespace Fidelity.Areas.Login.Controllers
                 {
                     var NewUser = UserDAO.GetUser(Model.Email);
 
-                    #region Test
-
                     int EnterpriseId = NewUser.Type == "E" ? EnterpriseDAO.FindByUserId(NewUser.Id).Id : NewUser.Type == "F" ? EmployeeDAO.FindByUserId(NewUser.Id).EnterpriseId : -1;
                     object Token = null;
 
@@ -51,14 +49,13 @@ namespace Fidelity.Areas.Login.Controllers
                         Token = Encrypt.GetToken(Model.Email, Model.Password);
                     }
 
-                    #endregion
-
                     return new APIResult<Object>()
                     {
                         Result = new LoginResult<Object>()
                         {
                             Token = Token,
                             Property = NewUser.Type == "C" ? ClientDAO.FindByUserId(NewUser.Id) : NewUser.Type == "E" ? EnterpriseDAO.FindByUserId(NewUser.Id) : EmployeeDAO.FindByUserId(NewUser.Id),
+                            Image = NewUser.Image,
                             Type = NewUser.Type.ToString()
                         },
                         Message = "Usuário logado com sucesso!"

@@ -136,7 +136,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
         [HttpGet]
         [Authorize]
         [Route("enterprises")]
-        public APIResult<List<EnterpriseViewModel>> Get()
+        public APIResult<List<UserViewModel>> Get()
         {
             try
             {
@@ -161,6 +161,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
 
 
                     var EnterpriseList = new List<EnterpriseViewModel>();
+                    var UserList = new List<UserViewModel>();
 
                     if (Id != 0)
                     {
@@ -186,13 +187,15 @@ namespace Fidelity.Areas.Enterprises.Controllers
                             });
                         }
 
-                        EnterpriseList.Add(new EnterpriseViewModel()
+                        var User = UserDAO.FindAll().FirstOrDefault(x => x.Id == Enterprise.UserId);
+
+                        var EnterpriseVM = new EnterpriseViewModel()
                         {
                             Id = Enterprise.Id,
                             UserId = Enterprise.UserId,
                             Name = Enterprise.Name,
                             AlterDate = Enterprise.AlterDate,
-                            Status = UserDAO.FindAll().FirstOrDefault(x => x.Id == Enterprise.UserId).Status,
+                            Status = User.Status,
                             Address = Enterprise.Address,
                             AddressNum = Enterprise.AddressNum,
                             Branch = Enterprise.Branch,
@@ -202,18 +205,29 @@ namespace Fidelity.Areas.Enterprises.Controllers
                             State = Enterprise.State,
                             Tel = Enterprise.Tel,
                             Loyalts = LoyaltList
+                        };
+
+                        UserList.Add(new UserViewModel
+                        {
+                            Image = User.Image,
+                            Status = User.Status,
+                            Email = User.Email,
+                            Type = User.Type,
+                            Enterprise = EnterpriseVM,
                         });
 
-                        return new APIResult<List<EnterpriseViewModel>>()
+                        return new APIResult<List<UserViewModel>>()
                         {
-                            Result = EnterpriseList,
-                            Count = EnterpriseList.Count
+                            Result = UserList,
+                            Count = UserList.Count
                         };
                     }
 
                     foreach (var item in EnterpriseDAO.FindAll().Join(UserDAO.FindAll(), e => e.UserId, u => u.Id, (e, u) => new { E = e, U = u }).Where(EU => EU.E.UserId == EU.U.Id && EU.U.Status).ToList())
                     {
-                        EnterpriseList.Add(new EnterpriseViewModel()
+                        var EnterpriseUser = UserDAO.FindAll().FirstOrDefault(x => x.Id == item.U.Id);
+
+                        var EnterpriseVM = new EnterpriseViewModel()
                         {
                             Name = item.E.Name,
                             AlterDate = item.E.AlterDate,
@@ -228,17 +242,26 @@ namespace Fidelity.Areas.Enterprises.Controllers
                             Tel = item.E.Tel,
                             Id = item.E.Id,
                             UserId = item.U.Id,
+                        };
+
+                        UserList.Add(new UserViewModel
+                        {
+                            Image = EnterpriseUser.Image,
+                            Status = EnterpriseUser.Status,
+                            Email = EnterpriseUser.Email,
+                            Type = EnterpriseUser.Type,
+                            Enterprise = EnterpriseVM,
                         });
                     }
 
-                    return new APIResult<List<EnterpriseViewModel>>()
+                    return new APIResult<List<UserViewModel>>()
                     {
-                        Result = EnterpriseList,
-                        Count = EnterpriseList.Count
+                        Result = UserList,
+                        Count = UserList.Count
                     };
                 }
                 else
-                    return new APIResult<List<EnterpriseViewModel>>()
+                    return new APIResult<List<UserViewModel>>()
                     {
                         Success = false,
                         Message = "Acesso negado!"
@@ -246,7 +269,7 @@ namespace Fidelity.Areas.Enterprises.Controllers
             }
             catch (Exception e)
             {
-                return new APIResult<List<EnterpriseViewModel>>()
+                return new APIResult<List<UserViewModel>>()
                 {
                     Success = false,
                     Message = "Erro ao buscar as empresas participantes: " + e.Message + e.InnerException

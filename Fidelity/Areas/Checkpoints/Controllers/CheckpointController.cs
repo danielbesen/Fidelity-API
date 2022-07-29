@@ -28,13 +28,13 @@ namespace Fidelity.Areas.Checkpoints.Controllers
         [HttpPost]
         [Authorize]
         [Route("checkpoints")]
-        public APIResult<List<LoyaltProgressViewModel>> Add(CheckpointListViewModel Model)
+        public APIResult<List<LoyaltProgressAddViewModel>> Add(CheckpointListViewModel Model)
         {
             try
             {
                 using (var context = new ApplicationDbContext())
                 {
-                    var ListProgressVM = new List<LoyaltProgressViewModel>();
+                    var ListProgressVM = new List<LoyaltProgressAddViewModel>();
 
                     foreach (var checkpoint in Model.Checkpoints)
                     {
@@ -86,12 +86,13 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                             oLoyaltP.Points = Points;
                             oLoyaltP.InsertDate = DateTime.Now;
                             LoyaltProgressDAO.Update(oLoyaltP);
-                        } else
+                        }
+                        else
                         {
                             LoyaltProgressDAO.Insert(oProgress);
                         }
 
-                        ListProgressVM.Add(new LoyaltProgressViewModel()
+                        ListProgressVM.Add(new LoyaltProgressAddViewModel()
                         {
                             ClientId = checkpoint.ClientId,
                             LoyaltId = checkpoint.LoyaltId,
@@ -101,7 +102,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         });
                     }
 
-                    return new APIResult<List<LoyaltProgressViewModel>>()
+                    return new APIResult<List<LoyaltProgressAddViewModel>>()
                     {
                         Message = "Checkpoint(s) realizado(s) com sucesso!",
                         Count = ListProgressVM.Count,
@@ -111,7 +112,7 @@ namespace Fidelity.Areas.Checkpoints.Controllers
             }
             catch (Exception e)
             {
-                return new APIResult<List<LoyaltProgressViewModel>>()
+                return new APIResult<List<LoyaltProgressAddViewModel>>()
                 {
                     Success = false,
                     Message = "Erro ao realizar checkpoint! " + e.Message + e.InnerException
@@ -167,46 +168,37 @@ namespace Fidelity.Areas.Checkpoints.Controllers
 
                     var Client = ClientDAO.FindByCPF(cpf);
                     var ClientProgressList = company == 0 ? LoyaltProgressDAO.FindAll().Where(x => x.ClientId == Client.Id).ToList() : LoyaltProgressDAO.FindAll().Where(x => x.ClientId == Client.Id && x.EnterpriseId == company).ToList();
-                    var ListProgressListLastVM = new List<LoyaltProgressViewModel>();
-
+                    var LoyaltProgressModelList = new List<LoyaltProgressModel>();
 
                     if (!ClientProgressList.Any())
                     {
-                        var ClientVM = new ClientViewModel()
+                        var LoyaltPg = new LoyaltProgressViewModel()
                         {
-                            Id = Client.Id,
-                            Cpf = Client.Cpf,
-                            Name = Client.Name,
-                            UserId =Client.UserId
+                            Client = new Clients.Models.ClientViewModel()
+                            {
+                                Id = Client.Id,
+                                Cpf = Client.Cpf,
+                                Name = Client.Name,
+                                UserId = Client.UserId
+                            }
                         };
 
                         return new APIResult<Object>()
                         {
                             Message = "Nenhum progresso encontrado!",
-                            Result = ClientVM, 
-                            Count = 1
+                            Result = LoyaltPg,
+                            Count = 0
                         };
                     }
 
                     foreach (var item in ClientProgressList)
                     {
                         var LoyaltDB = LoyaltyDAO.FindByKey(item.LoyaltId);
-                        var ClientDB = ClientDAO.FindByKey(item.ClientId);
-
-                        ListProgressListLastVM.Add(new LoyaltProgressViewModel()
+                        LoyaltProgressModelList.Add(new LoyaltProgressModel()
                         {
                             Id = item.Id,
-                            ClientId = item.ClientId,
-                            LoyaltId = item.LoyaltId,
                             Points = item.Points,
                             Status = item.Status,
-                            Client = new Clients.Models.ClientViewModel()
-                            {
-                                Name = ClientDB.Name,
-                                Cpf = ClientDB.Cpf,
-                                Id = ClientDB.Id,
-                                UserId = ClientDB.UserId
-                            },
                             Loyalt = new LoyaltViewModel()
                             {
                                 Id = LoyaltDB.Id,
@@ -225,11 +217,23 @@ namespace Fidelity.Areas.Checkpoints.Controllers
                         });
                     }
 
+                    var LoyaltProgress = new LoyaltProgressViewModel()
+                    {
+                        Client = new Clients.Models.ClientViewModel()
+                        {
+                            Id = Client.Id,
+                            Cpf = Client.Cpf,
+                            Name = Client.Name,
+                            UserId = Client.UserId
+                        },
+                        LoyaltProgress = LoyaltProgressModelList
+                    };
+
                     return new APIResult<Object>()
                     {
                         Message = "Busca de progressos realizada com sucesso!",
-                        Result = ListProgressListLastVM,
-                        Count = ListProgressListLastVM.Count
+                        Result = LoyaltProgress,
+                        Count = LoyaltProgress.LoyaltProgress.Count
                     };
 
                 }

@@ -275,6 +275,8 @@
     <Compile Include="Areas\Login\LoginResult.cs" />
     <Compile Include="Areas\Loyalts\Controllers\LoyaltController.cs" />
     <Compile Include="Areas\Loyalts\LoyaltsAreaRegistration.cs" />
+    <Compile Include="Areas\Loyalts\Models\LoyaltProgressAddViewModel.cs" />
+    <Compile Include="Areas\Loyalts\Models\LoyaltProgressModel.cs" />
     <Compile Include="Areas\Loyalts\Models\LoyaltProgressViewModel.cs" />
     <Compile Include="Areas\Loyalts\Models\LoyaltViewModel.cs" />
     <Compile Include="Areas\Memberships\Controllers\MembershipController.cs" />

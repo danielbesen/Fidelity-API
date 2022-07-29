@@ -8,12 +8,7 @@ namespace Fidelity.Areas.Loyalts.Models
 {
     public class LoyaltProgressViewModel
     {
-        public int? Id { get; set; }
-        public int ClientId { get; set; }
-        public int LoyaltId { get; set; }
-        public double Points { get; set; }
-        public bool Status { get; set; }
-        public LoyaltViewModel Loyalt { get; set; }
         public ClientViewModel Client { get; set; }
+        public List<LoyaltProgressModel> LoyaltProgress { get; set; }
     }
 }
